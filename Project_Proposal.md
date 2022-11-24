@@ -41,14 +41,10 @@ DATA TYPES:
         - #false
         - color
 
-
-        posn
-             - Posn containing the position of the block in the grid
+     position is a Posn containing the position of the block in the grid
 
      is-falling is a boolean
           - this flag is used to check if the block is falling (like the new spawned blocks that fall from the top)
-
-
 
 - PIECE -> Vector<Vector<Block>> vovob [length: 4x4]
      - A piece is the combination of various blocks to form the well known tetrominoes
