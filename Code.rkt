@@ -18,10 +18,8 @@
 (define COLORS (vector YELLOW ORANGE PINK PURPLE BLUE GREEN)) 
 
 ; BACKGROUND
-(define BACKGROUND (overlay (add-line 0 0 0 500 "white")
-                            (add-line 0 0 300 0 "white")
-                            (rectangle 300 500 "solid" "grey")))
-  
+(define BACKGROUND (rectangle 1000 4000 "solid" (color 64 64 64)))
+
 ;; DATA TYPES
 
 ; a Block is a Structure (make-block type position is-falling)
@@ -54,7 +52,13 @@
 ;
 ; Examples
 ;
-(define VECTOR-EXAMPLE (make-vector 4 [(make-vector 4 [FALLING-COLOR-BLOCK FALLING-COLOR-BLOCK FALLING-COLOR-BLOCK FALLING-COLOR-BLOCK])]))
+(define VECTOR-EXAMPLE (make-vector 4 (make-vector 4 FALLING-COLOR-BLOCK)))
 
+
+
+; a Score is a Natural
+;        - It represents the number of lines completed by the user (1 line = 100 points)
+;        - If the user completes more then one line at the same time,
+;          the score will be increased by a special factor (All the way up to 4 lines at the same time)
 
 
