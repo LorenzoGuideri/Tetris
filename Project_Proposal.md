@@ -52,10 +52,8 @@ DATA TYPES:
      - The pieces are constants
 
 - GRID → Vector<Vector<Blocks>>  vovob [10 width, 40 height (only 20 visible)]
-     - (cons Vector<Block> Vector<Vector<Block>>)
      - The grid is the playing field where the pieces will fall
      - The grid is a list of lists of blocks
-     - The main list will be the rows of the grid, each row is a list of blocks
 
 - SCORE → number
      - The score is the number of lines completed by the user (1 line = 100 points)
