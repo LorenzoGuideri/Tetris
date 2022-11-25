@@ -1,4 +1,9 @@
+# Ignore the following files
+
+# Stupid DrRacket files
 *.rkt~
+
+# Fuck fuck Tim Cokk fuck
 .DS_store
 ._.DS_Store
 **/.DS_Store
