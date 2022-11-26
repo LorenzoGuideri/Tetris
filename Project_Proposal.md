@@ -67,6 +67,8 @@ DATA TYPES:
           - if true, a new block is spawned at the top of the grid
      - is-paused is a boolean
           - if true, the game pauses and a menu pops up where you can choose to resume or quit
+     - grid is a Grid
+     - score is a non-negative integer
 
 - PAUSE MENU -> Worldstate
       - is paused is true
