@@ -50,7 +50,6 @@
 ;
 ; Examples
 ;
-(define FEB (make-block EMPTY-COLOR (make-posn 0 0) #true)) ; Falling Empty Block
 (define FYB (make-block YELLOW (make-posn 1 1) #true)) ; Falling Yellow Bloc
 (define FOB (make-block ORANGE (make-posn 1 1) #true)) ; Falling Orange Block
 (define FRB (make-block RED (make-posn 1 1) #true)) ; Falling Red Block
@@ -59,7 +58,7 @@
 (define FBB (make-block BLUE (make-posn 1 1) #true)) ; Falling Blue Block
 (define FGB (make-block GREEN (make-posn 1 1) #true)) ; Falling Green Block
 
-(define NFEB (make-block #false (make-posn 9 8) #false)) ;Non-Falling Empty Block
+(define NFEB (make-block EMPTY-COLOR (make-posn 9 8) #false)) ;Non-Falling Empty Block
 (define NFLB (make-block LILAC (make-posn 3 4) #false)) ;Non-Falling Lilac Block
 
 
@@ -97,7 +96,7 @@
 ;
 ; Examples
 ;
-(define GRID-EXAMPLE (make-vector BLOCKS-IN-WIDTH (make-vector BLOCKS-IN-HEIGHT FEB)))
+(define GRID-EXAMPLE (make-vector BLOCKS-IN-WIDTH (make-vector BLOCKS-IN-HEIGHT NFEB)))
 
 
 
@@ -220,7 +219,6 @@
   (big-bang initial-state
     [to-draw draw]
     ;[on-tick tick]
-    ;[on-mouse handle-mouse]
     ;[on-key handle-key]
     ;[stop-when quit?]
     ))
