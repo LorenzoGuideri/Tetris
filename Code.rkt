@@ -141,17 +141,22 @@
 (define (grid-row grid y)
   (vector-ref grid y))
 
+; GRID-BLOCK FUNCTION
+; takes a grid and x and y and returns the block
+(define (grid-block grid x y)
+  (vector-ref (vector-ref grid x) y))
+
 
 ; GRID-COLUMN FUNCTION
 ; takes a grid and an x coordinate and returns a vector representing the column of the grid
 (define (grid-column grid x)
   (local (
-    (define y 0)
-     (define (get-grid-column x y grid)
-       (if (< y (sub1 BLOCKS-IN-HEIGHT))
-           (vector (vector-ref (vector-ref grid x) y) (get-grid-column x (add1 y) grid))
-           (vector-ref (vector-ref grid x) y))
-    )) (get-grid-column x y grid)))
+          (define y 0)
+          (define (get-grid-column grid x y)
+            (if (= y BLOCKS-IN-HEIGHT)
+                '()
+                (cons (grid-block grid x y) (get-grid-column grid x (add1 y))))
+            )) (list->vector (get-grid-column grid x y))))
 
 
 ; GRID-TO-IMAGE FUNCTION
