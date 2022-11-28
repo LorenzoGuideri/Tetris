@@ -31,6 +31,8 @@
 (define BLOCKS-IN-WIDTH 10)
 (define BLOCKS-IN-HEIGHT 40)
 
+
+
 ;; DATA TYPES
 
 ; a Block is a Structure (make-block color position is-falling)
