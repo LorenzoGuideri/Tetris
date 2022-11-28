@@ -47,7 +47,7 @@
 ;
 ; Examples
 ;
-(define FEB (make-block #false (make-posn 0 0) #true)) ; Falling Empty Block
+(define FEB (make-block EMPTY-COLOR (make-posn 0 0) #true)) ; Falling Empty Block
 (define FYB (make-block YELLOW (make-posn 1 1) #true)) ; Falling Yellow Bloc
 (define FOB (make-block ORANGE (make-posn 1 1) #true)) ; Falling Orange Block
 (define FRB (make-block RED (make-posn 1 1) #true)) ; Falling Red Block
@@ -128,6 +128,7 @@
 
 ; BLOCK-TO-IMAGE FUNCTION
 ; renders a single block with a black outline
+
 (define (block-to-image block)
   (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
 
@@ -135,11 +136,13 @@
 
 ; GRID-ROW FUNCTION
 ; takes a grid and a y coordinate and returns a vector representing the row of the grid
+
 (define (grid-row grid y)
   (vector-ref grid y))
 
 ; GRID-BLOCK FUNCTION
 ; takes a grid and x and y and returns the block
+
 (define (grid-block grid x y)
   (vector-ref (vector-ref grid x) y))
 
@@ -147,6 +150,7 @@
 
 ; GRID-COLUMN FUNCTION
 ; takes a grid and an x coordinate and returns a vector representing the column of the grid
+
 (define (grid-column grid x)
   (local (
           (define y 0)
@@ -184,7 +188,7 @@
 ; (define (add-piece-to-grid grid piece) grid)
 
 (define (add-piece-to-grid grid piece)
-  
+  (vector-copy! grid (- (/ BLOCKS-IN-WIDTH 2) 2) piece))
 
 
 
