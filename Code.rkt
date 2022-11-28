@@ -20,9 +20,13 @@
 (define COLORS (vector YELLOW ORANGE RED PINK LILAC BLUE GREEN)) 
 
 ; BACKGROUND
-(define WIDTH-BG 700)
-(define HEIGHT-BG 1000)
+(define WIDTH-BG 560)
+(define HEIGHT-BG 800)
 (define BACKGROUND (rectangle WIDTH-BG HEIGHT-BG "solid" EMPTY-COLOR))
+
+; BLOCKS IN GRID
+(define BLOCKS-IN-WIDTH 10)
+(define BLOCKS-IN-HEIGHT 40)
 
 ;; DATA TYPES
 
@@ -68,24 +72,9 @@
 (define J-PIECE (vector (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB FLB FLB)))
 (define I-PIECE (vector (vector 4 FBB) (vector 4 NFEB) (vector 4 NFEB) (vector 4 NFEB)))
 (define S-PIECE (vector (vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (vector 4 NFEB)))
-
+;
 ; PIECES-VECTOR
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
-
-
-
-; RANDOM PIECE
-; Retrive a random piece from the Pieces Vector
-
-; random-piece: none -> Piece
-
-; Header
-;(define random-piece O-PIECE)
-
-; Code
-(define (random-piece)
-  (vector-ref PIECES (random 0 6)))
-
 
 
 
@@ -96,8 +85,6 @@
 
 
 
-
-
 ; a Grid is a Vector<Vector<Block>> (make-vector 10 (make-vector 40 Block))
 ;     - It represent a grid of width = 10 blocks, height = 40 blocks (of which only 20 visible) ;(come lo facciamo? boh)
 ;     - The grid is the playing field where the pieces will fall
@@ -105,7 +92,8 @@
 ;
 ; Examples
 ;
-(define GRID-EXAMPLE (make-vector 10 (make-vector 40 FEB)))
+(define GRID-EXAMPLE (make-vector BLOCKS-IN-WIDTH (make-vector BLOCKS-IN-HEIGHT FEB)))
+
 
 
 ; WORLD-STATE
@@ -116,28 +104,46 @@
 ;      should-quit:  Boolean value that represents if the application should quit or not
 ;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
 ;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
-
-; Header of the struct
+;
+; Header 
 (define-struct world-state [background grid score should-quit should-spawn is-paused])
-
+;
 ; Examples of data
 (define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #false #false))
 
-
-
-
 ; BLOCK DIMENSIONS
-; (overlay (rectangle 45 45 "solid" "red") (rectangle 50 50 "solid" "green"))
+;(overlay (rectangle 45 45 "solid" "red") (rectangle 50 50 "solid" "green"))
 
 
 
 
-; ########### WORK IN PROGRESS ############
+;; FUNCTIONS
 
+; DRAW FUNCTION 
 (define (draw world-state)
-  (world-state-background world-state))
+  (overlay/offset (beside (overlay (rectangle 28 28 "solid" PINK) (rectangle 30 30 "solid" "black")) (overlay (rectangle 28 28 "solid" BLUE) (rectangle 30 30 "solid" "black"))) 15 0 (world-state-background world-state)))
 
+; GRID-TO-IMAGE
+; Renders the grid in the world state as an Image
+; Grid-to-image: Vector<Vector<Block>> -> Image
+;
+;(define (grid-to-image grid
 
+; RANDOM PIECE FUNCTION
+;
+; Retrive a random piece from the Pieces Vector
+;
+; random-piece: none -> Piece
+;
+; Header
+;(define random-piece O-PIECE)
+;
+; Code
+(define (random-piece)
+  (vector-ref PIECES (random 0 6)))
+
+; BIG-BANG
+;
 (define (tetris initial-state)
   (big-bang initial-state
     [to-draw draw]
