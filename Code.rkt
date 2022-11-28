@@ -19,10 +19,12 @@
 
 (define COLORS (vector YELLOW ORANGE RED PINK LILAC BLUE GREEN)) 
 
+
 ; BACKGROUND
 (define WIDTH-BG 560)
 (define HEIGHT-BG 800)
 (define BACKGROUND (rectangle WIDTH-BG HEIGHT-BG "solid" EMPTY-COLOR))
+
 
 ; BLOCKS IN GRID
 (define BLOCKS-IN-WIDTH 10)
@@ -41,7 +43,7 @@
 ;                - #true when the block is falling
 ;                - #false when the block is not falling
 ;
-(define-struct block [type position is-falling])
+(define-struct block [color position is-falling])
 ;
 ; Examples
 ;
@@ -94,6 +96,13 @@
 ;
 (define GRID-EXAMPLE (make-vector BLOCKS-IN-WIDTH (make-vector BLOCKS-IN-HEIGHT FEB)))
 
+; SET-GRID-BLOCK
+; takes a Block a Grid and x y coordinates and edith the Grid with a Block at the coordinates given as inputs
+; set-grid-block: Block Grid Number Number -> Void
+
+(define (set-grid-block grid x y block)
+  (vector-set! (vector-ref grid y) x block))
+
 
 
 ; WORLD-STATE
@@ -123,11 +132,35 @@
 (define (draw world-state)
   (overlay/offset (beside (overlay (rectangle 28 28 "solid" PINK) (rectangle 30 30 "solid" "black")) (overlay (rectangle 28 28 "solid" BLUE) (rectangle 30 30 "solid" "black"))) 15 0 (world-state-background world-state)))
 
+; BLOCK-TO-IMAGE
+; renders a single block with a black outline
+(define (block-to-image block)
+  (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
+
+; GRID-ROW
+; takes a grid and a y coordinate and returns a vector representing the row of the grid
+(define (grid-row grid y)
+  (vector-ref grid y))
+
+; GRID-COLUMN
+; takes a grid and an x coordinate and returns a vector representing the column of the grid
+(define (grid-column grid x)
+  (local (
+    (define y 0)
+     (define (get-grid-column x y grid)
+       (if (< y (sub1 BLOCKS-IN-HEIGHT))
+           (vector (vector-ref (vector-ref grid x) y) (get-grid-column x (add1 y) grid))
+           (vector-ref (vector-ref grid x) y))
+    )) (get-grid-column x y grid)))
+    
 ; GRID-TO-IMAGE
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Vector<Vector<Block>> -> Image
 ;
-;(define (grid-to-image grid
+(define (grid-to-image grid x y temp-image)
+  (... (vector-ref x (vector-ref y grid)) ...))
+
+
 
 ; RANDOM PIECE FUNCTION
 ;
@@ -141,6 +174,8 @@
 ; Code
 (define (random-piece)
   (vector-ref PIECES (random 0 6)))
+
+
 
 ; BIG-BANG
 ;
