@@ -125,15 +125,12 @@
   (vector-set! (vector-ref grid y) x block))
 
 
-; DRAW FUNCTION 
-(define (draw world-state)
-  (overlay/offset (beside (overlay (rectangle 28 28 "solid" PINK) (rectangle 30 30 "solid" "black")) (overlay (rectangle 28 28 "solid" BLUE) (rectangle 30 30 "solid" "black"))) 15 0 (world-state-background world-state)))
-
 
 ; BLOCK-TO-IMAGE FUNCTION
 ; renders a single block with a black outline
 (define (block-to-image block)
   (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
+
 
 
 ; GRID-ROW FUNCTION
@@ -145,6 +142,7 @@
 ; takes a grid and x and y and returns the block
 (define (grid-block grid x y)
   (vector-ref (vector-ref grid x) y))
+
 
 
 ; GRID-COLUMN FUNCTION
@@ -159,6 +157,7 @@
             )) (list->vector (get-grid-column grid x y))))
 
 
+
 ; GRID-TO-IMAGE FUNCTION
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Vector<Vector<Block>> -> Image
@@ -168,12 +167,9 @@
 
 
 
-; RANDOM PIECE FUNCTION
-;
+; RANDOM-PIECE FUNCTION
 ; Retrive a random piece from the Pieces Vector
-;
-; random-piece: none -> Piece
-;
+; random-piece: Void -> Piece
 ; Header
 ;(define random-piece O-PIECE)
 ;
@@ -182,6 +178,33 @@
   (vector-ref PIECES (random 0 6)))
 
 
+; ADD-PIECE-TO-GRID FUNCTION
+; Recevies a Grid and a Piece as inputs and returns the Grid with the Piece at the top in the middle
+; add-piece-to-grid: Grid Piece -> Grid
+; (define (add-piece-to-grid grid piece) grid)
+
+(define (add-piece-to-grid grid piece)
+  
+
+
+
+; DRAW FUNCTION 
+(define (draw world-state)
+  (overlay/offset (beside (overlay (rectangle 28 28 "solid" PINK) (rectangle 30 30 "solid" "black"))
+                          (overlay (rectangle 28 28 "solid" BLUE) (rectangle 30 30 "solid" "black")))
+                  15 0 (world-state-background world-state)))
+
+
+
+; TICK FUNCTION
+
+
+
+; HANDLE-KEY FUNCTION
+
+
+
+; QUIT? FUNCTION
 
 ; BIG-BANG
 ;
