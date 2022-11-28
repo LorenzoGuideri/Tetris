@@ -8,7 +8,7 @@
 
 ;; CONSTANTS
 
-; BLOCK COLORS
+; BLOCK COLORS ; Costanza
 (define EMPTY-COLOR (color 64 64 64))
 (define YELLOW (make-color 242 240 184))
 (define ORANGE (make-color 253 207 179))
@@ -21,19 +21,19 @@
 (define COLORS (vector YELLOW ORANGE RED PINK LILAC BLUE GREEN)) 
 
 
-; BACKGROUND
+; BACKGROUND ; Costanza
 (define WIDTH-BG 560)
 (define HEIGHT-BG 800)
 (define BACKGROUND (rectangle WIDTH-BG HEIGHT-BG "solid" EMPTY-COLOR))
 
 
-; BLOCKS IN GRID
+; BLOCKS IN GRID ; Costanza
 (define BLOCKS-IN-WIDTH 10)
 (define BLOCKS-IN-HEIGHT 40)
 
 
 
-;; DATA TYPES
+;; DATA TYPES ; Costanza
 
 ; a Block is a Structure (make-block color position is-falling)
 ; where:
@@ -50,7 +50,6 @@
 ;
 ; Examples
 ;
-(define FEB (make-block EMPTY-COLOR (make-posn 0 0) #true)) ; Falling Empty Block
 (define FYB (make-block YELLOW (make-posn 1 1) #true)) ; Falling Yellow Bloc
 (define FOB (make-block ORANGE (make-posn 1 1) #true)) ; Falling Orange Block
 (define FRB (make-block RED (make-posn 1 1) #true)) ; Falling Red Block
@@ -101,7 +100,7 @@
 
 
 
-; WORLD-STATE
+; WORLD-STATE ; Davide
 ; A world-state is a Structure with the followings elements inside:
 ;      background:   Image that contains the grid, score and all the visual elements
 ;      grid:         The Grid containing all the blocks. empty or not
@@ -120,7 +119,7 @@
 
 ;; FUNCTIONS
 
-; SET-GRID-BLOCK FUNCTION
+; SET-GRID-BLOCK FUNCTION ; Davide
 ; takes a Block a Grid and x y coordinates and edith the Grid with a Block at the coordinates given as inputs
 ; set-grid-block: Block Grid Number Number -> Void
 
@@ -129,7 +128,7 @@
 
 
 
-; BLOCK-TO-IMAGE FUNCTION
+; BLOCK-TO-IMAGE FUNCTION ; Davide
 ; renders a single block with a black outline
 
 (define (block-to-image block)
@@ -137,14 +136,14 @@
 
 
 
-; GRID-ROW FUNCTION
+; GRID-ROW FUNCTION ; Davide and Costanza
 ; takes a grid and a y coordinate and returns a vector representing the row of the grid
 
 (define (grid-row grid y)
   (vector-ref grid y))
 
 
-; GRID-BLOCK FUNCTION
+; GRID-BLOCK FUNCTION ; Costanza
 ; takes a grid and x and y and returns the block
 
 (define (grid-block grid x y)
@@ -152,7 +151,7 @@
 
 
 
-; GRID-COLUMN FUNCTION
+; GRID-COLUMN FUNCTION ; Davide
 ; takes a grid and an x coordinate and returns a vector representing the column of the grid
 
 (define (grid-column grid x)
@@ -166,7 +165,7 @@
 
 
 
-; GRID-TO-IMAGE FUNCTION
+; GRID-TO-IMAGE FUNCTION ; Davide
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Vector<Vector<Block>> -> Image
 ;
@@ -174,32 +173,8 @@
 ;  (... (vector-ref x (vector-ref y grid)) ...))
 
 
-; GRID-ROW-TO-IMAGE
-; Returns the requested row of the given grid as an image
 
-(define (grid-row-image grid y)
-  (local (
-          (define (grid-row-to-image grid x y)
-            (if (< x (sub1 BLOCKS-IN-WIDTH))
-                (beside (block-to-image (grid-block grid x y)) (grid-row-to-image grid (add1 x) y))
-                (block-to-image (grid-block grid x y))
-                )
-            )
-          ) (grid-row-to-image grid 0 y)))
-
-; GRID-TO-IMAGE
-;
-(define (grid-to-image grid)
-  (local (
-          (define (grid-to-image-inner grid y)
-            (if (< y (sub1 BLOCKS-IN-HEIGHT))
-                (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
-                (grid-row-image grid y))))
-    (grid-to-image-inner grid 0)))
-                
-
-; RANDOM PIECE FUNCTION
-;
+; RANDOM-PIECE FUNCTION ; Davide
 ; Retrive a random piece from the Pieces Vector
 ; random-piece: Void -> Piece
 ; Header
@@ -210,8 +185,8 @@
   (vector-ref PIECES (random 0 6)))
 
 
-; ADD-PIECE-TO-GRID FUNCTION
-; Recevies a Grid and a Piece as inputs and returns the Grid with the Piece at the top in the middle
+; ADD-PIECE-TO-GRID FUNCTION ; Costanza
+; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
 ; add-piece-to-grid: Grid Piece -> Grid
 ; (define (add-piece-to-grid grid piece) grid)
 
