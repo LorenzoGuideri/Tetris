@@ -4,6 +4,7 @@
 (require 2htdp/universe)
 (require 2htdp/image)
 (require racket/vector)
+(require racket/base)
 
 ;; CONSTANTS
 
@@ -140,6 +141,7 @@
 (define (grid-row grid y)
   (vector-ref grid y))
 
+
 ; GRID-BLOCK FUNCTION
 ; takes a grid and x and y and returns the block
 
@@ -166,8 +168,8 @@
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Vector<Vector<Block>> -> Image
 ;
-(define (grid-to-image grid x y temp-image)
-  (... (vector-ref x (vector-ref y grid)) ...))
+;(define (grid-to-image grid x y temp-image)
+;  (... (vector-ref x (vector-ref y grid)) ...))
 
 
 
@@ -188,7 +190,7 @@
 ; (define (add-piece-to-grid grid piece) grid)
 
 (define (add-piece-to-grid grid piece)
-  (vector-copy! grid (- (/ BLOCKS-IN-WIDTH 2) 2) piece))
+  (vector-copy! grid (- (/ BLOCKS-IN-WIDTH 2) 2) piece)) 
 
 
 
