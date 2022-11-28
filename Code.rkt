@@ -152,6 +152,7 @@
 
 
 
+
 ; GRID-COLUMN FUNCTION
 ; takes a grid and an x coordinate and returns a vector representing the column of the grid
 
@@ -166,12 +167,17 @@
 
 
 
+
+
 ; GRID-TO-IMAGE FUNCTION
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Vector<Vector<Block>> -> Image
 ;
 ;(define (grid-to-image grid x y temp-image)
 ;  (... (vector-ref x (vector-ref y grid)) ...))
+
+
+
 
 
 ; GRID-ROW-TO-IMAGE
@@ -187,6 +193,9 @@
             )
           ) (grid-row-to-image grid 0 y)))
 
+
+
+
 ; GRID-TO-IMAGE
 ;
 (define (grid-to-image grid)
@@ -196,6 +205,9 @@
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
     (grid-to-image-inner grid 0)))
+
+
+
                 
 
 ; RANDOM PIECE FUNCTION
@@ -209,16 +221,14 @@
 (define (random-piece)
   (vector-ref PIECES (random 0 6)))
 
-; ADD-PIECE-TO-GRID FUNCTION ; Costanza and everyone
+
+
+
+; ADD-PIECE-TO-GRID FUNCTION ;
 ; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
 ; add-piece-to-grid: Grid Piece -> Grid
 ; (define (add-piece-to-grid grid piece) grid)
 
-(define (add-piece-to-grid grid piece n)
-  (cond
-    [(or (> n 6) (< n 3)) grid]
-    [else (vector-set! grid n (vector-ref piece (- n 3)))]))
- 
 
 
 
