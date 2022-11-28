@@ -125,9 +125,29 @@
 ; set-grid-block: Block Grid Number Number -> Void
 
 (define (set-grid-block grid x y block)
-  (vector-set! (vector-ref grid y) x block))
+  (local (
+          (define currentRow (grid-row grid y))
+          (define (set-block grid tempX y block)
+            (cond
+              [(= x tempX) (cons block (set-block grid (add1 tempX) y block))]
+              [(< tempX (vector-length currentRow)) (cons (vector-ref currentRow tempX) (set-block grid (add1 tempX) y block))]
+              [else '()]
+              )
+            )) (vector-set! grid y (list->vector (set-block grid 0 y block)))))
 
-
+; SET-GRID-ROW FUNCTION
+; Takes a vector an y position and a grid and sets the row in the grid to that vector starting from x
+(define (set-grid-row grid y src)
+  (local (
+          (define srcL (vector-length src))
+          (define (set-row tempX)
+              (cond
+                [(< tempX srcL) (cons (vector-ref src tempX) (set-row (add1 tempX)))]
+                [(< tempX BLOCKS-IN-WIDTH) (cons (grid-block grid 0 y) (set-row (add1 tempX)))]
+                [else '()]
+            ))
+          ) (vector-set! grid y (list->vector (set-row 0))))
+  )
 
 ; BLOCK-TO-IMAGE FUNCTION
 ; renders a single block with a black outline
@@ -165,15 +185,6 @@
             )) (list->vector (get-grid-column grid x y))))
 
 
-
-; GRID-TO-IMAGE FUNCTION
-; Renders the grid in the world state as an Image
-; Grid-to-image: Vector<Vector<Block>> -> Image
-;
-;(define (grid-to-image grid x y temp-image)
-;  (... (vector-ref x (vector-ref y grid)) ...))
-
-
 ; GRID-ROW-TO-IMAGE
 ; Returns the requested row of the given grid as an image
 
@@ -187,8 +198,9 @@
             )
           ) (grid-row-to-image grid 0 y)))
 
-; GRID-TO-IMAGE
-;
+; GRID-TO-IMAGE FUNCTION
+; Renders the grid in the world state as an Image
+; Grid-to-image: Vector<Vector<Block>> -> Image
 (define (grid-to-image grid)
   (local (
           (define (grid-to-image-inner grid y)
@@ -214,11 +226,15 @@
 ; add-piece-to-grid: Grid Piece -> Grid
 ; (define (add-piece-to-grid grid piece) grid)
 
-(define (add-piece-to-grid grid piece n)
-  (cond
-    [(or (> n 6) (< n 3)) grid]
-    [else (vector-set! grid n (vector-ref piece (- n 3)))]))
+;(define (add-piece-to-grid grid piece)
+;(local (
+;        (define (add-piece-grid grid piece x)
+;          (if (< x 4)
+;              (vector-copy! (grid-row grid x) (- (/ BLOCKS-IN-WIDTH 2) 2) (vector-ref piece x))
+;  ))) (map (add-piece-grid grid piece 0))
  
+
+; FROM-V-TO-V
 
 
 
