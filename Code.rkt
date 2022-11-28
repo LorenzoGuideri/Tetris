@@ -4,6 +4,7 @@
 (require 2htdp/universe)
 (require 2htdp/image)
 (require racket/vector)
+(require flomat)
 (require racket/base)
 
 ;; CONSTANTS
