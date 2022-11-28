@@ -64,20 +64,20 @@
 (define NFLB (make-block LILAC (make-posn 3 4) #false)) ;Non-Falling Lilac Block
 
 
-; a Piece is a Vector<Vector<Block>> where both vectors have size 4 (make-vector 4 (make-vector 4 Block))
+; a Piece is a Matrix of Blocks
 ;        - A piece is the combination of various blocks to form the well known tetromin
 ;        - This pieces will be spawned on top of the playing field and will fall down until they reach the bottom or another piece
 ;        - The pieces are predefined
 ;
 ; PREDEFINED PIECES
 ;
-(define O-PIECE (vector (make-vector 4 NFEB) (vector NFEB FYB FYB NFEB) (vector NFEB FYB FYB NFEB) (make-vector 4 NFEB)))
-(define L-PIECE (vector (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB FOB NFEB NFEB)))
-(define Z-PIECE (vector (make-vector 4 NFEB) (vector NFEB FRB FRB NFEB) (vector NFEB NFEB FRB FRB) (make-vector 4 NFEB)))
-(define T-PIECE (vector (vector FPB FPB FPB NFEB) (vector NFEB FPB NFEB NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
-(define J-PIECE (vector (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB FLB FLB)))
-(define I-PIECE (vector (make-vector 4 FBB) (make-vector 4 NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
-(define S-PIECE (vector (make-vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (make-vector 4 NFEB)))
+(define O-PIECE (matrix (vector (make-vector 4 NFEB) (vector NFEB FYB FYB NFEB) (vector NFEB FYB FYB NFEB) (make-vector 4 NFEB))))
+(define L-PIECE (matrix (vector (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB FOB NFEB NFEB))))
+(define Z-PIECE (matrix (vector (make-vector 4 NFEB) (vector NFEB FRB FRB NFEB) (vector NFEB NFEB FRB FRB) (make-vector 4 NFEB))))
+(define T-PIECE (matrix (vector (vector FPB FPB FPB NFEB) (vector NFEB FPB NFEB NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB))))
+(define J-PIECE (matrix (vector (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB FLB FLB))))
+(define I-PIECE (matrix (vector (make-vector 4 FBB) (make-vector 4 NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB))))
+(define S-PIECE (matrix (vector (make-vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (make-vector 4 NFEB))))
 ;
 ; PIECES-VECTOR
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
@@ -98,7 +98,7 @@
 ;
 ; Examples
 ;
-(define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
+(define GRID-EXAMPLE (matrix (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB))))
 
 
 
