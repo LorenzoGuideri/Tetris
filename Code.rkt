@@ -69,13 +69,13 @@
 ;
 ; PREDEFINED PIECES
 ;
-(define O-PIECE (vector (vector 4 NFEB) (vector NFEB FYB FYB NFEB) (vector NFEB FYB FYB NFEB) (vector 4 NFEB)))
+(define O-PIECE (vector (make-vector 4 NFEB) (vector NFEB FYB FYB NFEB) (vector NFEB FYB FYB NFEB) (make-vector 4 NFEB)))
 (define L-PIECE (vector (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB FOB NFEB NFEB)))
-(define Z-PIECE (vector (vector 4 NFEB) (vector NFEB FRB FRB NFEB) (vector NFEB NFEB FRB FRB) (vector 4 NFEB)))
-(define T-PIECE (vector (vector FPB FPB FPB NFEB) (vector NFEB FPB NFEB NFEB) (vector 4 NFEB) (vector 4 NFEB)))
+(define Z-PIECE (vector (make-vector 4 NFEB) (vector NFEB FRB FRB NFEB) (vector NFEB NFEB FRB FRB) (make-vector 4 NFEB)))
+(define T-PIECE (vector (vector FPB FPB FPB NFEB) (vector NFEB FPB NFEB NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
 (define J-PIECE (vector (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB FLB FLB)))
-(define I-PIECE (vector (vector 4 FBB) (vector 4 NFEB) (vector 4 NFEB) (vector 4 NFEB)))
-(define S-PIECE (vector (vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (vector 4 NFEB)))
+(define I-PIECE (vector (make-vector 4 FBB) (make-vector 4 NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
+(define S-PIECE (vector (make-vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (make-vector 4 NFEB)))
 ;
 ; PIECES-VECTOR
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
@@ -96,7 +96,7 @@
 ;
 ; Examples
 ;
-(define GRID-EXAMPLE (make-vector BLOCKS-IN-WIDTH (make-vector BLOCKS-IN-HEIGHT NFEB)))
+(define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
 
 
 
@@ -147,7 +147,7 @@
 ; takes a grid and x and y and returns the block
 
 (define (grid-block grid x y)
-  (vector-ref (vector-ref grid x) y))
+  (vector-ref (vector-ref grid y) x))
 
 
 
@@ -185,13 +185,13 @@
   (vector-ref PIECES (random 0 6)))
 
 
-; ADD-PIECE-TO-GRID FUNCTION ; Costanza
-; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
-; add-piece-to-grid: Grid Piece -> Grid
+; ADD-PIECE-TO-GRID FUNCTION
+; Recevies a Grid and a Piece as inputs and returns the Grid with the Piece at the top in the middle
+; add-piece-to-grid: Grid Piece -> Void
 ; (define (add-piece-to-grid grid piece) grid)
 
 (define (add-piece-to-grid grid piece)
-  (vector-copy! grid (- (/ BLOCKS-IN-WIDTH 2) 2) piece)) 
+  (vector-copy! grid (- (/ BLOCKS-IN-WIDTH 2) 2) piece))
 
 
 
