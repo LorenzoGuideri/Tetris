@@ -71,10 +71,10 @@
 ; PREDEFINED PIECES
 ;
 (define O-PIECE (vector (make-vector 4 NFEB) (vector NFEB FYB FYB NFEB) (vector NFEB FYB FYB NFEB) (make-vector 4 NFEB)))
-(define L-PIECE (vector (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB FOB NFEB NFEB)))
+(define L-PIECE (vector (vector NFEB NFEB NFEB FOB) (vector NFEB FOB FOB FOB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
 (define Z-PIECE (vector (make-vector 4 NFEB) (vector NFEB FRB FRB NFEB) (vector NFEB NFEB FRB FRB) (make-vector 4 NFEB)))
 (define T-PIECE (vector (vector FPB FPB FPB NFEB) (vector NFEB FPB NFEB NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
-(define J-PIECE (vector (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB FLB FLB)))
+(define J-PIECE (vector (vector NFEB FLB NFEB NFEB) (vector NFEB FLB FLB FLB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
 (define I-PIECE (vector (make-vector 4 FBB) (make-vector 4 NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
 (define S-PIECE (vector (make-vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (make-vector 4 NFEB)))
 ;
@@ -136,18 +136,42 @@
             )) (vector-set! grid y (list->vector (set-block grid 0 y block)))))
 
 ; SET-GRID-ROW FUNCTION
-; Takes a vector an y position and a grid and sets the row in the grid to that vector starting from x
-(define (set-grid-row grid y src)
+; Takes a vector an x, y position and a grid and sets the row in the grid to that vector starting from x
+(define (set-grid-row grid x y src)
   (local (
           (define srcL (vector-length src))
-          (define (set-row tempX)
-              (cond
-                [(< tempX srcL) (cons (vector-ref src tempX) (set-row (add1 tempX)))]
-                [(< tempX BLOCKS-IN-WIDTH) (cons (grid-block grid 0 y) (set-row (add1 tempX)))]
-                [else '()]
-            ))
-          ) (vector-set! grid y (list->vector (set-row 0))))
+          (define (set-row tempX internalX)
+            (if (< tempX x)
+                (cons (vector-ref (grid-row grid y) tempX) (set-row (add1 tempX) 0))
+                (cond
+                  [(< internalX srcL) (cons (vector-ref src internalX) (set-row (add1 tempX) (add1 internalX)))]
+                  [(< tempX BLOCKS-IN-WIDTH) (cons (grid-block grid tempX y) (set-row (add1 tempX) internalX))]
+                  [else '()])
+                )
+            )
+          ) (vector-set! grid y (list->vector (set-row 0 0))))
   )
+
+; ADD-PIECE-TO-GRID FUNCTION ;
+; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
+; add-piece-to-grid: Grid Piece -> Grid
+; (define (add-piece-to-grid grid piece) grid)
+
+; (Davide here, I know, it looks bad and everything, but I found this way (by my self) to workaround using sequencial calls and variables. It's bad but it works)
+(define tempVector (vector 0))
+(define (add-piece-to-grid grid piece)
+  (for ([i piece])
+    (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) (vector-ref tempVector 0) (vector-ref piece (vector-ref tempVector 0)))
+    (vector-set! tempVector 0 (add1 (vector-ref tempVector 0)))
+    (if (= 3 (vector-ref tempVector 0)) (vector-set! tempVector 0 0) (vector-set! tempVector 0 (vector-ref tempVector 0)))
+    ))
+
+
+
+;(define (add-row0-piece grid piece) (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) 0 (vector-ref piece 0)))
+;(define (add-row1-piece grid piece) (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) 1 (vector-ref piece 1)))
+;(define (add-row2-piece grid piece) (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) 2 (vector-ref piece 2)))
+;(define (add-row3-piece grid piece) (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) 3 (vector-ref piece 3)))
 
 ; BLOCK-TO-IMAGE FUNCTION
 ; renders a single block with a black outline
@@ -224,18 +248,6 @@
 ; Code
 (define (random-piece)
   (vector-ref PIECES (random 0 6)))
-
-
-
-
-; ADD-PIECE-TO-GRID FUNCTION ;
-; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
-; add-piece-to-grid: Grid Piece -> Grid
-; (define (add-piece-to-grid grid piece) grid)
-
-
-; FROM-V-TO-V
-
 
 
 
