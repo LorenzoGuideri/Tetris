@@ -152,33 +152,29 @@
           ) (vector-set! grid y (list->vector (set-row 0 0))))
   )
 
-; ADD-PIECE-TO-GRID FUNCTION ;
+
+
+; ADD-PIECE-TO-GRID FUNCTION
 ; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
 ; add-piece-to-grid: Grid Piece -> Grid
 ; (define (add-piece-to-grid grid piece) grid)
 
-; (Davide here, I know, it looks bad and everything, but I found this way (by my self) to workaround using sequencial calls and variables. It's bad but it works)
+; (Davide here, I know, it looks bad and everything, but I found this thing (by my self), it's like a workaround to use sequencial calls and variables. It's bad but it works)
+; Essentially the for loop enables us to call make sequential calls (for some reason) and using a vector as an accumulator I can achieve what I wanted to do
+; Which is Set-grid-row foreach row in a piece
 (define tempVector (vector 0))
 (define (add-piece-to-grid grid piece)
   (for ([i piece])
     (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) (vector-ref tempVector 0) (vector-ref piece (vector-ref tempVector 0)))
     (vector-set! tempVector 0 (add1 (vector-ref tempVector 0)))
-    (if (= 3 (vector-ref tempVector 0)) (vector-set! tempVector 0 0) (vector-set! tempVector 0 (vector-ref tempVector 0)))
+    (if (= (- (vector-length piece) 1) (vector-ref tempVector 0)) (vector-set! tempVector 0 0) (vector-set! tempVector 0 (vector-ref tempVector 0)))
     ))
-
-
-
-;(define (add-row0-piece grid piece) (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) 0 (vector-ref piece 0)))
-;(define (add-row1-piece grid piece) (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) 1 (vector-ref piece 1)))
-;(define (add-row2-piece grid piece) (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) 2 (vector-ref piece 2)))
-;(define (add-row3-piece grid piece) (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) 3 (vector-ref piece 3)))
 
 ; BLOCK-TO-IMAGE FUNCTION
 ; renders a single block with a black outline
 
 (define (block-to-image block)
   (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
-
 
 
 ; GRID-ROW FUNCTION
@@ -189,12 +185,10 @@
 
 
 ; GRID-BLOCK FUNCTION
-; takes a grid and x and y and returns the block
+; takes a grid, x and y and returns the block
 
 (define (grid-block grid x y)
   (vector-ref (vector-ref grid y) x))
-
-
 
 
 ; GRID-COLUMN FUNCTION

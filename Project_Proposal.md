@@ -74,7 +74,7 @@ DATA TYPES:
       - is paused is true
 
 - MAIN FUNCTIONALITIES
-     - spawn-piece
+     - generate-piece
      - move-piece
      - rotate-piece
      - drop-piece
@@ -83,7 +83,7 @@ DATA TYPES:
           - if a line is completed, the score is increased and the line is removed
           - all the lines above the completed line will drop down n rows (n = number of completed lines)
      - check-game-over
-     - update-grid
+     - add-piece-to-grid
      - update-score
      - update-world-state
      - draw-grid
