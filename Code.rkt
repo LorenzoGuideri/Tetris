@@ -96,13 +96,6 @@
 ;
 (define GRID-EXAMPLE (make-vector BLOCKS-IN-WIDTH (make-vector BLOCKS-IN-HEIGHT FEB)))
 
-; SET-GRID-BLOCK
-; takes a Block a Grid and x y coordinates and edith the Grid with a Block at the coordinates given as inputs
-; set-grid-block: Block Grid Number Number -> Void
-
-(define (set-grid-block grid x y block)
-  (vector-set! (vector-ref grid y) x block))
-
 
 
 ; WORLD-STATE
@@ -120,29 +113,36 @@
 ; Examples of data
 (define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #false #false))
 
-; BLOCK DIMENSIONS
-;(overlay (rectangle 45 45 "solid" "red") (rectangle 50 50 "solid" "green"))
-
-
 
 
 ;; FUNCTIONS
+
+; SET-GRID-BLOCK FUNCTION
+; takes a Block a Grid and x y coordinates and edith the Grid with a Block at the coordinates given as inputs
+; set-grid-block: Block Grid Number Number -> Void
+
+(define (set-grid-block grid x y block)
+  (vector-set! (vector-ref grid y) x block))
+
 
 ; DRAW FUNCTION 
 (define (draw world-state)
   (overlay/offset (beside (overlay (rectangle 28 28 "solid" PINK) (rectangle 30 30 "solid" "black")) (overlay (rectangle 28 28 "solid" BLUE) (rectangle 30 30 "solid" "black"))) 15 0 (world-state-background world-state)))
 
-; BLOCK-TO-IMAGE
+
+; BLOCK-TO-IMAGE FUNCTION
 ; renders a single block with a black outline
 (define (block-to-image block)
   (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
 
-; GRID-ROW
+
+; GRID-ROW FUNCTION
 ; takes a grid and a y coordinate and returns a vector representing the row of the grid
 (define (grid-row grid y)
   (vector-ref grid y))
 
-; GRID-COLUMN
+
+; GRID-COLUMN FUNCTION
 ; takes a grid and an x coordinate and returns a vector representing the column of the grid
 (define (grid-column grid x)
   (local (
@@ -152,8 +152,9 @@
            (vector (vector-ref (vector-ref grid x) y) (get-grid-column x (add1 y) grid))
            (vector-ref (vector-ref grid x) y))
     )) (get-grid-column x y grid)))
-    
-; GRID-TO-IMAGE
+
+
+; GRID-TO-IMAGE FUNCTION
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Vector<Vector<Block>> -> Image
 ;
