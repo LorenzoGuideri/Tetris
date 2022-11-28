@@ -50,6 +50,7 @@
 ;
 ; Examples
 ;
+(define FEB (make-block EMPTY-COLOR (make-posn 0 0) #true)) ; Falling Empty Block
 (define FYB (make-block YELLOW (make-posn 1 1) #true)) ; Falling Yellow Bloc
 (define FOB (make-block ORANGE (make-posn 1 1) #true)) ; Falling Orange Block
 (define FRB (make-block RED (make-posn 1 1) #true)) ; Falling Red Block
@@ -173,8 +174,32 @@
 ;  (... (vector-ref x (vector-ref y grid)) ...))
 
 
+; GRID-ROW-TO-IMAGE
+; Returns the requested row of the given grid as an image
 
-; RANDOM-PIECE FUNCTION
+(define (grid-row-image grid y)
+  (local (
+          (define (grid-row-to-image grid x y)
+            (if (< x (sub1 BLOCKS-IN-WIDTH))
+                (beside (block-to-image (grid-block grid x y)) (grid-row-to-image grid (add1 x) y))
+                (block-to-image (grid-block grid x y))
+                )
+            )
+          ) (grid-row-to-image grid 0 y)))
+
+; GRID-TO-IMAGE
+;
+(define (grid-to-image grid)
+  (local (
+          (define (grid-to-image-inner grid y)
+            (if (< y (sub1 BLOCKS-IN-HEIGHT))
+                (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
+                (grid-row-image grid y))))
+    (grid-to-image-inner grid 0)))
+                
+
+; RANDOM PIECE FUNCTION
+;
 ; Retrive a random piece from the Pieces Vector
 ; random-piece: Void -> Piece
 ; Header
