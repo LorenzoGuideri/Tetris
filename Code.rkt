@@ -209,14 +209,17 @@
 (define (random-piece)
   (vector-ref PIECES (random 0 6)))
 
-
-; ADD-PIECE-TO-GRID FUNCTION
-; Recevies a Grid and a Piece as inputs and returns the Grid with the Piece at the top in the middle
-; add-piece-to-grid: Grid Piece -> Void
+; ADD-PIECE-TO-GRID FUNCTION ; Costanza and everyone
+; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
+; add-piece-to-grid: Grid Piece -> Grid
 ; (define (add-piece-to-grid grid piece) grid)
 
-(define (add-piece-to-grid grid piece)
-  (vector-copy! grid (- (/ BLOCKS-IN-WIDTH 2) 2) piece))
+(define (add-piece-to-grid grid piece n)
+  (cond
+    [(or (> n 6) (< n 3)) grid]
+    [else (vector-set! grid n (vector-ref piece (- n 3)))]))
+ 
+
 
 
 
