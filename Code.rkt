@@ -1,11 +1,13 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname Code) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+(require math)
 (require 2htdp/universe)
 (require 2htdp/image)
 (require racket/vector)
-(require flomat)
+(require math/matrix)
 (require racket/base)
+
 
 ;; CONSTANTS
 
@@ -71,13 +73,13 @@
 ;
 ; PREDEFINED PIECES
 ;
-(define O-PIECE (matrix (vector (make-vector 4 NFEB) (vector NFEB FYB FYB NFEB) (vector NFEB FYB FYB NFEB) (make-vector 4 NFEB))))
-(define L-PIECE (matrix (vector (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB FOB NFEB NFEB))))
-(define Z-PIECE (matrix (vector (make-vector 4 NFEB) (vector NFEB FRB FRB NFEB) (vector NFEB NFEB FRB FRB) (make-vector 4 NFEB))))
-(define T-PIECE (matrix (vector (vector FPB FPB FPB NFEB) (vector NFEB FPB NFEB NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB))))
-(define J-PIECE (matrix (vector (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB FLB FLB))))
-(define I-PIECE (matrix (vector (make-vector 4 FBB) (make-vector 4 NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB))))
-(define S-PIECE (matrix (vector (make-vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (make-vector 4 NFEB))))
+(define O-PIECE (vector (make-vector 4 NFEB) (vector NFEB FYB FYB NFEB) (vector NFEB FYB FYB NFEB) (make-vector 4 NFEB)))
+(define L-PIECE (vector (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB NFEB NFEB NFEB) (vector FOB FOB NFEB NFEB)))
+(define Z-PIECE (vector (make-vector 4 NFEB) (vector NFEB FRB FRB NFEB) (vector NFEB NFEB FRB FRB) (make-vector 4 NFEB)))
+(define T-PIECE (vector (vector FPB FPB FPB NFEB) (vector NFEB FPB NFEB NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
+(define J-PIECE (vector (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB NFEB FLB) (vector NFEB NFEB FLB FLB)))
+(define I-PIECE (vector (make-vector 4 FBB) (make-vector 4 NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
+(define S-PIECE (vector (make-vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (make-vector 4 NFEB)))
 ;
 ; PIECES-VECTOR
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
@@ -98,7 +100,7 @@
 ;
 ; Examples
 ;
-(define GRID-EXAMPLE (matrix (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB))))
+(define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
 
 
 
