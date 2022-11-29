@@ -234,7 +234,7 @@
 ; GRID-TO-IMAGE FUNCTION
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Vector<Vector<Block>> -> Image
-(define (grid-to-image grid)
+(define (grid-to-image grid) 
   (local (
           (define (grid-to-image-inner grid y)
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
@@ -288,7 +288,7 @@
 ; draw: WorldState -> Image
 ; (define (draw world-state) Image)
 (define (draw world-state)
-  (overlay/offset (score-to-image world-state) 0 -350 (overlay (grid-to-image (world-state-grid world-state)) (world-state-background world-state)))) 
+  (overlay/offset (score-to-image world-state) 0 -350 (overlay (grid-to-image (world-state-grid world-state)) (rectangle 302 602 "solid" "black") (world-state-background world-state)))) 
 
 
 
