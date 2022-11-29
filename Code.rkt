@@ -229,7 +229,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 0)))
+    (grid-to-image-inner grid 20)))
 
 
 
@@ -253,14 +253,32 @@
 ; update-score: WordldState Number -> WorldState
 ; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
 ;
+;(check-expect (update-score INITIAL-STATE 100) EXAMPLE-STATE)
+
+(define (update-score world-state n)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state)
+                    n (world-state-should-quit world-state) 
+                    (world-state-should-spawn world-state) (world-state-is-paused world-state))
+  )
+
+
+; SCORE-TO-IMAGE
+; takes a Score and turns it into an Image
+; score-to-image: WorldState -> Image
+; (define (score-to-image (world-state-score world-state) Image)
 ;
+;
+(define (score-to-image world-state)
+  (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 "deep pink"
+            #f 'swiss 'normal 'bold #f))
 
 
 ; DRAW FUNCTION (prendo worldstate, devo fargli fare l'overlay del background con la grid-to-image e lo score)
+; takes a WorldState and renders the background and the grid
+; draw: WorldState -> Image
+; (define (draw world-state) Image)
 (define (draw world-state)
-  (overlay/offset (beside (overlay (rectangle 28 28 "solid" PINK) (rectangle 30 30 "solid" "black"))
-                          (overlay (rectangle 28 28 "solid" BLUE) (rectangle 30 30 "solid" "black")))
-                  15 0 (world-state-background world-state)))
+  (overlay/offset (score-to-image world-state) 0 -350 (overlay (grid-to-image (world-state-grid world-state)) (world-state-background world-state)))) 
 
 
 
