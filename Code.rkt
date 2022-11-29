@@ -70,13 +70,13 @@
 ;
 ; PREDEFINED PIECES
 ;
-(define O-PIECE (vector (make-vector 4 NFEB) (vector NFEB FYB FYB NFEB) (vector NFEB FYB FYB NFEB) (make-vector 4 NFEB)))
-(define L-PIECE (vector (vector NFEB NFEB NFEB FOB) (vector NFEB FOB FOB FOB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
-(define Z-PIECE (vector (make-vector 4 NFEB) (vector NFEB FRB FRB NFEB) (vector NFEB NFEB FRB FRB) (make-vector 4 NFEB)))
-(define T-PIECE (vector (vector FPB FPB FPB NFEB) (vector NFEB FPB NFEB NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
-(define J-PIECE (vector (vector NFEB FLB NFEB NFEB) (vector NFEB FLB FLB FLB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
-(define I-PIECE (vector (make-vector 4 FBB) (make-vector 4 NFEB) (make-vector 4 NFEB) (make-vector 4 NFEB)))
-(define S-PIECE (vector (make-vector 4 NFEB) (vector NFEB FGB FGB NFEB) (vector FGB FGB NFEB NFEB) (make-vector 4 NFEB)))
+(define O-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
+(define L-PIECE (vector (vector NFEB NFEB NFEB NFEB NFEB NFEB FOB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FOB FOB FOB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
+(define Z-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB) (make-vector 10 NFEB)))
+(define T-PIECE (vector (vector NFEB NFEB NFEB FPB FPB FPB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FPB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
+(define J-PIECE (vector (vector NFEB NFEB NFEB NFEB FLB NFEB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FLB FLB FLB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
+(define I-PIECE (vector (vector NFEB NFEB NFEB NFEB NFEB FBB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
+(define S-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
 ;
 ; PIECES-VECTOR
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
@@ -136,24 +136,35 @@
               )
             )) (vector-set! grid y (list->vector (set-block grid 0 y block)))))
 
+
 ; SET-GRID-ROW FUNCTION
 ; Takes a vector an x, y position and a grid and sets the row in the grid to that vector starting from x
-(define (set-grid-row grid x y src)
-  (local (
-          (define srcL (vector-length src))
-          (define (set-row tempX internalX)
-            (if (< tempX x)
-                (cons (vector-ref (grid-row grid y) tempX) (set-row (add1 tempX) 0))
-                (cond
-                  [(< internalX srcL) (cons (vector-ref src internalX) (set-row (add1 tempX) (add1 internalX)))]
-                  [(< tempX BLOCKS-IN-WIDTH) (cons (grid-block grid tempX y) (set-row (add1 tempX) internalX))]
-                  [else '()])
-                )
-            )
-          ) (vector-set! grid y (list->vector (set-row 0 0))))
-  )
+;(define (set-grid-row grid x y src)
+;  (local (
+;          (define srcL (vector-length src))
+;          (define (set-row tempX internalX)
+;            (if (< tempX x)
+;                (cons (vector-ref (grid-row grid y) tempX) (set-row (add1 tempX) 0))
+;                (cond
+;                  [(< internalX srcL) (cons (vector-ref src internalX) (set-row (add1 tempX) (add1 internalX)))]
+;                  [(< tempX BLOCKS-IN-WIDTH) (cons (grid-block grid tempX y) (set-row (add1 tempX) internalX))]
+;                  [else '()])
+;                )
+;            )
+;          ) (vector-set! grid y (list->vector (set-row 0 0))))
+;  )
 
 
+; SET-GRID-ROW FUNCTION V.2
+
+(define (set-grid-row grid y src)
+  (vector-set! grid y src))
+
+
+; ADD-PIECE-TO-GRID FUNCTION V.2
+(define (add-piece-to-grid grid piece) 
+  (for ([i (vector-length piece)])
+    (set-grid-row grid i (vector-ref piece i))))
 
 ; ADD-PIECE-TO-GRID FUNCTION
 ; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
@@ -163,13 +174,13 @@
 ; (Davide here, I know, it looks bad and everything, but I found this thing (by my self), it's like a workaround to use sequencial calls and variables. It's bad but it works)
 ; Essentially the for loop enables us to call make sequential calls (for some reason) and using a vector as an accumulator I can achieve what I wanted to do
 ; Which is Set-grid-row foreach row in a piece
-(define tempVector (vector 0))
-(define (add-piece-to-grid grid piece)
-  (for ([i piece])
-    (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) (vector-ref tempVector 0) (vector-ref piece (vector-ref tempVector 0)))
-    (vector-set! tempVector 0 (add1 (vector-ref tempVector 0)))
-    (if (= (- (vector-length piece) 1) (vector-ref tempVector 0)) (vector-set! tempVector 0 0) (vector-set! tempVector 0 (vector-ref tempVector 0)))
-    ))
+;(define tempVector (vector 0))
+;(define (add-piece-to-grid grid piece)
+;  (for ([i piece])
+;    (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) (vector-ref tempVector 0) (vector-ref piece (vector-ref tempVector 0)))
+;    (vector-set! tempVector 0 (add1 (vector-ref tempVector 0)))
+;    (if (= (- (vector-length piece) 1) (vector-ref tempVector 0)) (vector-set! tempVector 0 0) (vector-set! tempVector 0 (vector-ref tempVector 0)))
+;    ))
 
 ; BLOCK-TO-IMAGE FUNCTION
 ; renders a single block with a black outline
