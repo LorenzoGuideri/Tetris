@@ -269,8 +269,7 @@
 (define (update-score world-state n)
   (make-world-state (world-state-background world-state) (world-state-grid world-state)
                     n (world-state-should-quit world-state) 
-                    (world-state-should-spawn world-state) (world-state-is-paused world-state))
-  )
+                    (world-state-should-spawn world-state) (world-state-is-paused world-state)))
 
 
 ; SCORE-TO-IMAGE
