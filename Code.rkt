@@ -302,6 +302,8 @@
 
 ; QUIT? FUNCTION
 
+
+
 ; BIG-BANG
 ;
 (define (tetris initial-state)
@@ -312,5 +314,24 @@
     ;[stop-when quit?]
     ))
 
+#|
 
+
+TO DO:
+
+* i pezzi si fermano
+* i pezzi si impilano
+* se la riga (y) è completa: sposta giù di uno quello che c'è sopra (set-grid-row)
+* se la riga 20 non ha solo blocchi vuoti: hai perso
+     * non spawnano piu pezzi
+     * ti esce un messaggio
+     * press key to restart (forse)
+* il piece cade da solo (tick)
+* frecce muovono il piece (handle-key)
+* I PEZZI RUOTANO, CAZZO
+* aggiungere il tick interno al worldstate
+
+
+
+|#
 
