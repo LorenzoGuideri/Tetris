@@ -6,6 +6,7 @@
 (require 2htdp/image)
 (require racket/vector)
 (require math/matrix)
+(require flomat)
 (require racket/base)
 
 
