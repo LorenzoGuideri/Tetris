@@ -9,7 +9,7 @@
 ;; CONSTANTS
 
 ; BLOCK COLORS
-(define EMPTY-COLOR (color 64 64 64))
+(define EMPTY-COLOR (make-color 64 64 64))
 (define YELLOW (make-color 242 240 184))
 (define ORANGE (make-color 253 207 179))
 (define RED (make-color 244 113 116))
@@ -87,7 +87,7 @@
 ;        - It represents the number of lines completed by the user (1 line = 100 points)
 ;        - If the user completes more then one line at the same time,
 ;          the score will be increased by a special factor (All the way up to 4 lines at the same time)
-
+(define INITIAL-SCORE 0)
 
 
 ; a Grid is a Vector<Vector<Block>> (make-vector 10 (make-vector 40 Block))
@@ -105,7 +105,7 @@
 ; A world-state is a Structure with the followings elements inside:
 ;      background:   Image that contains the grid, score and all the visual elements
 ;      grid:         The Grid containing all the blocks. empty or not
-;      score:        The score is a non-negative integer which represents the score of the player
+;      Score:        The score is a non-negative integer which represents the score of the player
 ;      should-quit:  Boolean value that represents if the application should quit or not
 ;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
 ;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
@@ -115,13 +115,14 @@
 ;
 ; Examples of data
 (define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #false #false))
+(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
 
 
 
 ;; FUNCTIONS
 
 ; SET-GRID-BLOCK FUNCTION
-; takes a Block a Grid and x y coordinates and edith the Grid with a Block at the coordinates given as inputs
+; takes a Block a Grid and x y coordinates and edits the Grid with a Block at the coordinates given as inputs
 ; set-grid-block: Block Grid Number Number -> Void
 
 (define (set-grid-block grid x y block)
@@ -217,6 +218,8 @@
             )
           ) (grid-row-to-image grid 0 y)))
 
+
+
 ; GRID-TO-IMAGE FUNCTION
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Vector<Vector<Block>> -> Image
@@ -237,7 +240,7 @@
 ; Retrive a random piece from the Pieces Vector
 ; random-piece: Void -> Piece
 ; Header
-;(define random-piece O-PIECE)
+;(define (random-piece) O-PIECE)
 ;
 ; Code
 (define (random-piece)
@@ -245,7 +248,15 @@
 
 
 
-; DRAW FUNCTION 
+; UPDATE-SCORE FUNCTION
+; takes a World State and a Number and updates the Score
+; update-score: WordldState Number -> WorldState
+; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
+;
+;
+
+
+; DRAW FUNCTION (prendo worldstate, devo fargli fare l'overlay del background con la grid-to-image e lo score)
 (define (draw world-state)
   (overlay/offset (beside (overlay (rectangle 28 28 "solid" PINK) (rectangle 30 30 "solid" "black"))
                           (overlay (rectangle 28 28 "solid" BLUE) (rectangle 30 30 "solid" "black")))
