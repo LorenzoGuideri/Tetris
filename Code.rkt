@@ -287,6 +287,8 @@
 ; takes a WorldState and renders the background and the grid
 ; draw: WorldState -> Image
 ; (define (draw world-state) Image)
+;
+;
 (define (draw world-state)
   (overlay/offset (score-to-image world-state) 0 -350 (overlay (grid-to-image (world-state-grid world-state)) (rectangle 302 602 "solid" "black") (world-state-background world-state)))) 
 
@@ -319,6 +321,7 @@
 
 TO DO:
 
+* il piece cade da solo (tick)
 * i pezzi si fermano
 * i pezzi si impilano
 * se la riga (y) è completa: sposta giù di uno quello che c'è sopra (set-grid-row)
@@ -326,11 +329,9 @@ TO DO:
      * non spawnano piu pezzi
      * ti esce un messaggio
      * press key to restart (forse)
-* il piece cade da solo (tick)
 * frecce muovono il piece (handle-key)
 * I PEZZI RUOTANO, CAZZO
 * aggiungere il tick interno al worldstate
-
 
 
 |#
