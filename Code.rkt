@@ -115,7 +115,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; WORLD-STATE
-; A world-state is a Structure with the followings elements inside:
+; A World-state is a Structure with the followings elements inside:
 ;      background:   Image that contains the grid, score and all the visual elements
 ;      grid:         The Grid containing all the blocks. empty or not
 ;      Score:        The score is a non-negative integer which represents the score of the player
@@ -135,6 +135,32 @@
 ;; -------------------------------------------------------------------------------------------------------------------
 
 ;; FUNCTIONS
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                
+
+; RANDOM PIECE FUNCTION
+;
+; Retrive a random piece from the Pieces Vector
+; random-piece: Void -> Piece
+; Header
+;(define (random-piece) O-PIECE)
+
+(define (random-piece)
+  (vector-ref PIECES (random 0 6)))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+; UPDATE-SCORE FUNCTION
+; takes a World State and a Number and updates the Score
+; update-score: WordldState Number -> WorldState
+; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
+
+(define (update-score world-state n)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state)
+                    n (world-state-should-quit world-state) 
+                    (world-state-should-spawn world-state) (world-state-is-paused world-state)))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SET-GRID-BLOCK FUNCTION
 ; takes a Block a Grid and x y coordinates and edits the Grid with a Block at the coordinates given as inputs
@@ -206,26 +232,6 @@
 ;    (if (= (- (vector-length piece) 1) (vector-ref tempVector 0)) (vector-set! tempVector 0 0) (vector-set! tempVector 0 (vector-ref tempVector 0)))
 ;    ))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; BLOCK-TO-IMAGE FUNCTION
-; renders a single Block with a black outline
-; block-to-image: Block -> Image
-; (define (block-to-image block) Image)
-
-(define (block-to-image block)
-  (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-; GRID-ROW FUNCTION
-; takes a Grid and a y coordinate and returns a Vector representing the row of the grid
-; grid-row: Grid Number -> Vector
-; (define (grid-row Grid Number) (make-vector ..))
-
-(define (grid-row grid y)
-  (vector-ref grid y))
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; GRID-BLOCK FUNCTION
@@ -235,6 +241,16 @@
 
 (define (grid-block grid x y)
   (vector-ref (vector-ref grid y) x))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; GRID-ROW FUNCTION
+; takes a Grid and a y coordinate and returns a Vector representing the row of the grid
+; grid-row: Grid Number -> Vector
+; (define (grid-row Grid Number) (make-vector ..))
+
+(define (grid-row grid y)
+  (vector-ref grid y))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -252,9 +268,19 @@
                 (cons (grid-block grid x y) (get-grid-column grid x (add1 y))))
             )) (list->vector (get-grid-column grid x y))))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; BLOCK-TO-IMAGE FUNCTION
+; renders a single Block with a black outline
+; block-to-image: Block -> Image
+; (define (block-to-image block) Image)
+
+(define (block-to-image block)
+  (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-; GRID-ROW-TO-IMAGE
+; GRID-ROW-TO-IMAGE FUNCTION
 ; Returns the requested row of the given grid as an image
 ; grid-row-to-image: Grid Number -> Image
 ; (define (grid-row-to-image Grid Number) Image)
@@ -283,33 +309,9 @@
                 (grid-row-image grid y))))
     (grid-to-image-inner grid 20)))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                
-
-; RANDOM PIECE FUNCTION
-;
-; Retrive a random piece from the Pieces Vector
-; random-piece: Void -> Piece
-; Header
-;(define (random-piece) O-PIECE)
-
-(define (random-piece)
-  (vector-ref PIECES (random 0 6)))
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-; UPDATE-SCORE FUNCTION
-; takes a World State and a Number and updates the Score
-; update-score: WordldState Number -> WorldState
-; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
-
-(define (update-score world-state n)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state)
-                    n (world-state-should-quit world-state) 
-                    (world-state-should-spawn world-state) (world-state-is-paused world-state)))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-; SCORE-TO-IMAGE
+; SCORE-TO-IMAGE FUNCTION
 ; takes a Score and turns it into an Image
 ; score-to-image: WorldState -> Image
 ; (define (score-to-image (world-state-score world-state) Image)
@@ -321,7 +323,7 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-; DRAW FUNCTION (prendo worldstate, devo fargli fare l'overlay del background con la grid-to-image e lo score)
+; DRAW FUNCTION 
 ; takes a WorldState and renders the background and the grid
 ; draw: WorldState -> Image
 ; (define (draw world-state) Image)
@@ -331,6 +333,15 @@
                   (overlay (grid-to-image (world-state-grid world-state))
                            (rectangle 302 602 "solid" "black")
                            (world-state-background world-state)))) 
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; FALLING-PIECE FUNCTION
+; takes a Piece and a WorldState and drops the Piece on the Grid at every t time
+; falling-piece: Piece World-state -> Grid
+; (define (falling-piece World-state Piece) Grid))
+
+mi serve: random-piece che passo a add-piece-to-grid e devo usare for (solo che non so bene come si usa)
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
