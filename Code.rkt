@@ -337,10 +337,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; IS-FALLING? FUNCTION
-; takes a World-state and returns a World-state with the is-falling flag of the Piece changed to #true if the Piece is falling
-; is-falling=: World-state -> World-state
-; (define (is-falling? World-state) World-state)
-
+vabe pd 
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
