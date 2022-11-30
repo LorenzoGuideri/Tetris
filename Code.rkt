@@ -54,7 +54,7 @@
 ;                - #true when the block is falling
 ;                - #false when the block is not falling
 
-(define-struct block [color position is-falling])
+(define-struct block [color position is-falling] #:transparent)
 
 ; Examples
 
@@ -125,7 +125,7 @@
 ;
 ; Header
 
-(define-struct world-state [background grid score should-quit should-spawn is-paused])
+(define-struct world-state [background grid score should-quit should-spawn is-paused] #:transparent)
 ;
 ; Examples
 
