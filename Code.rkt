@@ -337,7 +337,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; IS-FALLING? FUNCTION
-; takes a World-state, checks the Grid and the Piece (....) and returns a WorldState with the Piece changed if it's falling
+; takes a World-state and returns a World-state with the is-falling flag of the Piece changed to #true if the Piece is falling
 ; is-falling=: World-state -> World-state
 ; (define (is-falling? World-state) World-state)
 
