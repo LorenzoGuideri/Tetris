@@ -336,12 +336,12 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; FALLING-PIECE FUNCTION
-; takes a Piece and a WorldState and drops the Piece on the Grid at every t time
-; falling-piece: Piece World-state -> Grid
-; (define (falling-piece World-state Piece) Grid))
+; IS-FALLING? FUNCTION
+; takes a World-state, checks the Grid and the Piece (....) and returns a WorldState with the Piece changed if it's falling
+; is-falling=: World-state -> World-state
+; (define (is-falling? World-state) World-state)
 
-mi serve: random-piece che passo a add-piece-to-grid e devo usare for (solo che non so bene come si usa)
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
