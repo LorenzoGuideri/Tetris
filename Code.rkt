@@ -6,7 +6,11 @@
 (require racket/vector)
 (require racket/base)
 
+;; --------------------------------------------------------------------------
+
 ;; CONSTANTS
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BLOCK COLORS
 (define EMPTY-COLOR (make-color 64 64 64))
@@ -20,20 +24,24 @@
 
 (define COLORS (vector YELLOW ORANGE RED PINK LILAC BLUE GREEN)) 
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BACKGROUND
 (define WIDTH-BG 560)
 (define HEIGHT-BG 800)
 (define BACKGROUND (rectangle WIDTH-BG HEIGHT-BG "solid" EMPTY-COLOR))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BLOCKS IN GRID
 (define BLOCKS-IN-WIDTH 10)
 (define BLOCKS-IN-HEIGHT 40)
 
-
+;; --------------------------------------------------------------------------
 
 ;; DATA TYPES
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; a Block is a Structure (make-block color position is-falling)
 ; where:
@@ -45,11 +53,11 @@
 ;       - is-falling is a Boolean containing the position of the block in the grid
 ;                - #true when the block is falling
 ;                - #false when the block is not falling
-;
+
 (define-struct block [color position is-falling])
-;
+
 ; Examples
-;
+
 (define FEB (make-block EMPTY-COLOR (make-posn 0 0) #true)) ; Falling Empty Block
 (define FYB (make-block YELLOW (make-posn 1 1) #true)) ; Falling Yellow Bloc
 (define FOB (make-block ORANGE (make-posn 1 1) #true)) ; Falling Orange Block
@@ -62,6 +70,7 @@
 (define NFEB (make-block EMPTY-COLOR (make-posn 9 8) #false)) ;Non-Falling Empty Block
 (define NFLB (make-block LILAC (make-posn 3 4) #false)) ;Non-Falling Lilac Block
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; a Piece is a Vector<Vector<Block>> where both vectors have size 4 (make-vector 4 (make-vector 4 Block))
 ;        - A piece is the combination of various blocks to form the well known tetromin
@@ -69,7 +78,7 @@
 ;        - The pieces are predefined
 ;
 ; PREDEFINED PIECES
-;
+
 (define O-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
 (define L-PIECE (vector (vector NFEB NFEB NFEB NFEB NFEB NFEB FOB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FOB FOB FOB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define Z-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB) (make-vector 10 NFEB)))
@@ -79,27 +88,31 @@
 (define S-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
 ;
 ; PIECES-VECTOR
+
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
 
-
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; a Score is a Natural
 ;        - It represents the number of lines completed by the user (1 line = 100 points)
 ;        - If the user completes more then one line at the same time,
 ;          the score will be increased by a special factor (All the way up to 4 lines at the same time)
+; Examples
+
 (define INITIAL-SCORE 0)
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; a Grid is a Vector<Vector<Block>> (make-vector 10 (make-vector 40 Block))
-;     - It represent a grid of width = 10 blocks, height = 40 blocks (of which only 20 visible) ;(come lo facciamo? boh)
+;     - It represent a grid of width = 10 blocks, height = 40 blocks (of which only 20 visible) 
 ;     - The grid is the playing field where the pieces will fall
 ;     - The main list will be the rows of the grid, each row is a list of blocks
 ;
 ; Examples
-;
+
 (define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
 
-
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; WORLD-STATE
 ; A world-state is a Structure with the followings elements inside:
@@ -110,20 +123,27 @@
 ;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
 ;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
 ;
-; Header 
+; Header
+
 (define-struct world-state [background grid score should-quit should-spawn is-paused])
 ;
-; Examples of data
+; Examples
+
 (define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #false #false))
 (define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
 
-
+;; -------------------------------------------------------------------------------------------------------------------
 
 ;; FUNCTIONS
 
 ; SET-GRID-BLOCK FUNCTION
 ; takes a Block a Grid and x y coordinates and edits the Grid with a Block at the coordinates given as inputs
 ; set-grid-block: Block Grid Number Number -> Void
+; (define (set-grid-block grid x y block) )
+; (define (set-grid-block grid x y block)
+;   (block-color block) .... (block-position block) ... (block-is-fallin block)
+;   x .... y ....
+;   (vector-set! ... grid ...) (list->vector ... grid ...)
 
 (define (set-grid-block grid x y block)
   (local (
@@ -136,10 +156,9 @@
               )
             )) (vector-set! grid y (list->vector (set-block grid 0 y block)))))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SET-GRID-ROW FUNCTION
-; Takes a vector an x, y position and a grid and sets the row in the grid to that vector starting from x
-;(define (set-grid-row grid x y src)
 ;  (local (
 ;          (define srcL (vector-length src))
 ;          (define (set-row tempX internalX)
@@ -156,20 +175,25 @@
 
 
 ; SET-GRID-ROW FUNCTION V.2
+; Takes a vector a Number and a soure-grid and sets the row in the grid to that vector starting from x
+; set-grid-row: Grid Number Grid -> Void
+;(define (set-grid-row grid y src)
 
 (define (set-grid-row grid y src)
   (vector-set! grid y src))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; ADD-PIECE-TO-GRID FUNCTION V.2
+; Recevies a Grid and a Piece as inputs and adds the Piece at the top in the middle of the Grid
+; add-piece-to-grid: Grid Piece -> Grid
+; (define (add-piece-to-grid grid piece) grid)
+
 (define (add-piece-to-grid grid piece) 
   (for ([i (vector-length piece)])
     (set-grid-row grid i (vector-ref piece i))))
 
 ; ADD-PIECE-TO-GRID FUNCTION
-; Recevies a Grid and a Piece as inputs adds the Piece at the top in the middle of the Grid
-; add-piece-to-grid: Grid Piece -> Grid
-; (define (add-piece-to-grid grid piece) grid)
 
 ; (Davide here, I know, it looks bad and everything, but I found this thing (by my self), it's like a workaround to use sequencial calls and variables. It's bad but it works)
 ; Essentially the for loop enables us to call make sequential calls (for some reason) and using a vector as an accumulator I can achieve what I wanted to do
@@ -182,29 +206,42 @@
 ;    (if (= (- (vector-length piece) 1) (vector-ref tempVector 0)) (vector-set! tempVector 0 0) (vector-set! tempVector 0 (vector-ref tempVector 0)))
 ;    ))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 ; BLOCK-TO-IMAGE FUNCTION
-; renders a single block with a black outline
+; renders a single Block with a black outline
+; block-to-image: Block -> Image
+; (define (block-to-image block) Image)
 
 (define (block-to-image block)
   (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; GRID-ROW FUNCTION
-; takes a grid and a y coordinate and returns a vector representing the row of the grid
+; takes a Grid and a y coordinate and returns a Vector representing the row of the grid
+; grid-row: Grid Number -> Vector
+; (define (grid-row Grid Number) (make-vector ..))
 
 (define (grid-row grid y)
   (vector-ref grid y))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; GRID-BLOCK FUNCTION
 ; takes a grid, x and y and returns the block
+; grid-block: Grid Number Number -> Block
+; (define (grid-block Grid Number Number) (make-block .. .. ..))
 
 (define (grid-block grid x y)
   (vector-ref (vector-ref grid y) x))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; GRID-COLUMN FUNCTION
-; takes a grid and an x coordinate and returns a vector representing the column of the grid
+; takes a Grid and an x coordinate and returns a Vector representing the column of the Grid
+; grid-column; Grid Number -> Vector
+; (define (grid-column Grid Number) (make-vector ..))
 
 (define (grid-column grid x)
   (local (
@@ -215,9 +252,12 @@
                 (cons (grid-block grid x y) (get-grid-column grid x (add1 y))))
             )) (list->vector (get-grid-column grid x y))))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; GRID-ROW-TO-IMAGE
 ; Returns the requested row of the given grid as an image
+; grid-row-to-image: Grid Number -> Image
+; (define (grid-row-to-image Grid Number) Image)
 
 (define (grid-row-image grid y)
   (local (
@@ -229,11 +269,12 @@
             )
           ) (grid-row-to-image grid 0 y)))
 
-
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; GRID-TO-IMAGE FUNCTION
 ; Renders the grid in the world state as an Image
-; Grid-to-image: Vector<Vector<Block>> -> Image
+; Grid-to-image: Grid -> Image
+
 (define (grid-to-image grid) 
   (local (
           (define (grid-to-image-inner grid y)
@@ -242,9 +283,7 @@
                 (grid-row-image grid y))))
     (grid-to-image-inner grid 20)))
 
-
-
-                
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                
 
 ; RANDOM PIECE FUNCTION
 ;
@@ -252,25 +291,23 @@
 ; random-piece: Void -> Piece
 ; Header
 ;(define (random-piece) O-PIECE)
-;
-; Code
+
 (define (random-piece)
   (vector-ref PIECES (random 0 6)))
 
-
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; UPDATE-SCORE FUNCTION
 ; takes a World State and a Number and updates the Score
 ; update-score: WordldState Number -> WorldState
 ; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
-;
-;(check-expect (update-score INITIAL-STATE 100) EXAMPLE-STATE)
 
 (define (update-score world-state n)
   (make-world-state (world-state-background world-state) (world-state-grid world-state)
                     n (world-state-should-quit world-state) 
                     (world-state-should-spawn world-state) (world-state-is-paused world-state)))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; SCORE-TO-IMAGE
 ; takes a Score and turns it into an Image
@@ -282,29 +319,55 @@
   (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 "deep pink"
             #f 'swiss 'normal 'bold #f))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; DRAW FUNCTION (prendo worldstate, devo fargli fare l'overlay del background con la grid-to-image e lo score)
 ; takes a WorldState and renders the background and the grid
 ; draw: WorldState -> Image
 ; (define (draw world-state) Image)
-;
-;
+
 (define (draw world-state)
-  (overlay/offset (score-to-image world-state) 0 -350 (overlay (grid-to-image (world-state-grid world-state)) (rectangle 302 602 "solid" "black") (world-state-background world-state)))) 
+  (overlay/offset (score-to-image world-state) 0 -350
+                  (overlay (grid-to-image (world-state-grid world-state))
+                           (rectangle 302 602 "solid" "black")
+                           (world-state-background world-state)))) 
 
-
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; TICK FUNCTION
 
 
 
+
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
 ; HANDLE-KEY FUNCTION
 
 
 
+
+
+
+
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
 ; QUIT? FUNCTION
 
 
+
+
+
+
+
+
+
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; BIG-BANG
 ;
@@ -315,6 +378,9 @@
     ;[on-key handle-key]
     ;[stop-when quit?]
     ))
+
+
+
 
 #|
 
