@@ -307,7 +307,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 20)))
+    (grid-to-image-inner grid 20)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -319,7 +319,7 @@
 ;
 (define (score-to-image world-state)
   (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 "deep pink"
-            #f 'swiss 'normal 'bold #f))
+             #f 'swiss 'normal 'bold #f))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -344,7 +344,10 @@
 ; TICK FUNCTION
 
 
-
+(define (tick world-state)
+  world-state
+  ;(if (add-piece-to-grid (world-state-grid world-state) (random-piece)) world-state world-state)
+  )
 
 
 
@@ -381,7 +384,7 @@
 (define (tetris initial-state)
   (big-bang initial-state
     [to-draw draw]
-    ;[on-tick tick]
+    [on-tick tick]
     ;[on-key handle-key]
     ;[stop-when quit?]
     ))
