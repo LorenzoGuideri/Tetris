@@ -84,7 +84,7 @@
 (define Z-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB) (make-vector 10 NFEB)))
 (define T-PIECE (vector (vector NFEB NFEB NFEB FPB FPB FPB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FPB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define J-PIECE (vector (vector NFEB NFEB NFEB NFEB FLB NFEB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FLB FLB FLB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
-(define I-PIECE (vector (vector NFEB NFEB NFEB NFEB NFEB FBB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
+(define I-PIECE (vector (vector NFEB NFEB NFEB FBB FBB FBB FBB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define S-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
 
 ; PIECES-VECTOR
@@ -129,7 +129,7 @@
 ;
 ; Examples
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #false #false))
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false))
 (define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
 
 ;; -------------------------------------------------------------------------------------------------------------------
@@ -147,18 +147,6 @@
 
 (define (random-piece)
   (vector-ref PIECES (random 0 6)))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-; UPDATE-SCORE FUNCTION
-; takes a World State and a Number and updates the Score
-; update-score: WordldState Number -> WorldState
-; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
-
-(define (update-score world-state n)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state)
-                    n (world-state-should-quit world-state) 
-                    (world-state-should-spawn world-state) (world-state-is-paused world-state)))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -307,7 +295,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 20)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART
+    (grid-to-image-inner grid 0)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -345,9 +333,47 @@
 
 
 (define (tick world-state)
-  world-state
-  ;(if (add-piece-to-grid (world-state-grid world-state) (random-piece)) world-state world-state)
-  )
+  ;world-state
+  (if (world-state-should-spawn world-state)
+      (if (add-piece-to-grid (world-state-grid world-state) (random-piece)) (update-should-spawn world-state #false) (update-should-spawn world-state #false))
+      world-state
+      ))
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; AUX SET WORLD-STATE VALUES FUNCTIONS
+
+; UPDATE-SCORE
+; takes a World State and a Number and updates the Score
+; update-score: WordldState Number -> WorldState
+; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
+
+(define (update-score world-state n)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) n
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)))
+
+; SHOULD-QUIT
+(define (update-should-quit world-state value)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    value (world-state-should-spawn world-state) (world-state-is-paused world-state)))
+
+; SHOULD-SPAWN
+(define (update-should-spawn world-state value)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) value (world-state-is-paused world-state)))
+
+; IS-PAUSED
+(define (update-is-paused world-state value)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) value))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+
+
+
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
