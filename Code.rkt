@@ -72,7 +72,7 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; a Piece is a Vector<Vector<Block>> where both vectors have size 4 (make-vector 4 (make-vector 4 Block))
+; a Piece is a Vector<Vector<Block>> where there the first Vector contains 4 Vectors of 10 Blocks each
 ;        - A piece is the combination of various blocks to form the well known tetromin
 ;        - This pieces will be spawned on top of the playing field and will fall down until they reach the bottom or another piece
 ;        - The pieces are predefined
@@ -86,7 +86,7 @@
 (define J-PIECE (vector (vector NFEB NFEB NFEB NFEB FLB NFEB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FLB FLB FLB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define I-PIECE (vector (vector NFEB NFEB NFEB NFEB NFEB FBB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define S-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
-;
+
 ; PIECES-VECTOR
 
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
