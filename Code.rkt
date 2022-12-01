@@ -203,7 +203,7 @@
 ; SET-GRID-ROW FUNCTION V.2
 ; Takes a vector a Number and a soure-grid and sets the row in the grid to that vector starting from x
 ; set-grid-row: Grid Number Grid -> Void
-;(define (set-grid-row grid y src)
+; (define (set-grid-row grid y src)
 
 (define (set-grid-row grid y src)
   (vector-set! grid y src))
@@ -349,6 +349,13 @@
   ;(if (add-piece-to-grid (world-state-grid world-state) (random-piece)) world-state world-state)
   )
 
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; STOP
+; when a Block in given World-state reaches the bottom of the Grid or another NonFallingBlock, it stops falling
+; stop: World-state -> World-state
+; (define (stop world-state) world-state)
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
