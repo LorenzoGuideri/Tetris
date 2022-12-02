@@ -87,6 +87,17 @@
 (define I-PIECE (vector (vector NFEB NFEB NFEB FBB FBB FBB FBB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define S-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
 
+
+; PREDEFINED FALLING-BLOCKS-POSITIONS
+(define O-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 4 2) (make-posn 5 2)))
+(define L-PIECE-POSITIONS (vector (make-posn 6 0) (make-posn 4 1) (make-posn 5 1) (make-posn 6 1)))
+(define Z-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 5 2) (make-posn 6 2)))
+(define T-PIECE-POSITIONS (vector (make-posn 3 0) (make-posn 4 0) (make-posn 5 0) (make-posn 4 1)))
+(define J-PIECE-POSITIONS (vector (make-posn 4 0) (make-posn 4 1) (make-posn 5 1) (make-posn 6 1)))
+(define I-PIECE-POSITIONS (vector (make-posn 3 0) (make-posn 4 0) (make-posn 5 0) (make-posn 6 0)))
+(define S-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 3 2) (make-posn 4 2)))
+
+
 ; PIECES-VECTOR
 
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
@@ -125,12 +136,12 @@
 ;
 ; Header
 
-(define-struct world-state [background grid score should-quit should-spawn is-paused] #:transparent)
+(define-struct world-state [background grid score should-quit should-spawn is-paused falling-blocks] #:transparent)
 ;
 ; Examples
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false))
-(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false '()))
+(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false '()))
 
 ;; -------------------------------------------------------------------------------------------------------------------
 
@@ -346,35 +357,48 @@
 
 ; UPDATE-SCORE
 ; takes a World State and a Number and updates the Score
-; update-score: WordldState Number -> WorldState
+; update-score: Wordld-state Number -> WorldState
 ; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
 
 (define (update-score world-state n)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) n
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state)))
 
 ; SHOULD-QUIT
 (define (update-should-quit world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    value (world-state-should-spawn world-state) (world-state-is-paused world-state)))
+                    value (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
 
 ; SHOULD-SPAWN
 (define (update-should-spawn world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) value (world-state-is-paused world-state)))
+                    (world-state-should-quit world-state) value (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
 
 ; IS-PAUSED
 (define (update-is-paused world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) value))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state)))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; CAN-BLOCK-FALL? FUNCTIONS
+; takes a World-state, x and y coordinates and returns true if the Block (add1 y) at the coordinates x y in the Grid can fall
+; can-block-fall?: World-state Number Number -> Boolean
+; (define (can-block-fall? World-state x y) #true)
+; 
 
+(define (can-block-fall? world-state x y)
+  (cond
+    [(not (< (+ y 1) BLOCKS-IN-HEIGHT)) #false]
+    [(and (not (block-is-falling (grid-block (world-state-grid world-state) x (add1 y))))
+          (not (is-block-empty? (grid-block (world-state-grid world-state) x (add1 y))))) #false]
+    [else #true]))
 
+; AUX IS-BLOCK-EMPTY?
 
-
-
+(define (is-block-empty? block)
+  (equal? (block-color block) EMPTY-COLOR))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -441,7 +465,9 @@ TO DO:
 * frecce muovono il piece (handle-key)
 * I PEZZI RUOTANO, CAZZO
 * aggiungere il tick interno al worldstate
-
+* fare design recipe
+* coqui sistemare tutti gli headers che sei ritardata e li hai fatti male......
+* get grid block e non solo grid block
 
 |#
 
