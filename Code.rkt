@@ -97,6 +97,8 @@
 (define I-PIECE-POSITIONS (vector (make-posn 3 0) (make-posn 4 0) (make-posn 5 0) (make-posn 6 0)))
 (define S-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 3 2) (make-posn 4 2)))
 
+(define FALLING-BLOCKS-POSITIONS (vector O-PIECE-POSITIONS L-PIECE-POSITIONS Z-PIECE-POSITIONS T-PIECE-POSITIONS J-PIECE-POSITIONS I-PIECE-POSITIONS S-PIECE-POSITIONS))
+
 
 ; PIECES-VECTOR
 
@@ -140,8 +142,8 @@
 ;
 ; Examples
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false '()))
-(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false '()))
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0)))
+(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false (make-vector 0)))
 
 ;; -------------------------------------------------------------------------------------------------------------------
 
@@ -379,6 +381,11 @@
 (define (update-is-paused world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state)))
+
+; FALLING-BLOCKS
+(define (update-falling-blocks world-state value)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) value))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
