@@ -193,7 +193,7 @@
 ;                (cons (vector-ref (grid-row grid y) tempX) (set-row (add1 tempX) 0))
 ;                (cond
 ;                  [(< internalX srcL) (cons (vector-ref src internalX) (set-row (add1 tempX) (add1 internalX)))]
-;                  [(< tempX BLOCKS-IN-WIDTH) (cons (grid-block grid tempX y) (set-row (add1 tempX) internalX))]
+;                  [(< tempX BLOCKS-IN-WIDTH) (cons (get-grid-block grid tempX y) (set-row (add1 tempX) internalX))]
 ;                  [else '()])
 ;                )
 ;            )
@@ -204,7 +204,7 @@
 ; SET-GRID-ROW FUNCTION V.2
 ; Takes a vector a Number and a soure-grid and sets the row in the grid to that vector starting from x
 ; set-grid-row: Grid Number Grid -> Void
-; (define (set-grid-row grid y src)
+; (define (set-grid-row grid y src) )
 
 (define (set-grid-row grid y src)
   (vector-set! grid y src))
@@ -214,7 +214,7 @@
 ; ADD-PIECE-TO-GRID FUNCTION V.2
 ; Recevies a Grid and a Piece as inputs and adds the Piece at the top in the middle of the Grid
 ; add-piece-to-grid: Grid Piece -> Grid
-; (define (add-piece-to-grid grid piece) grid)
+; (define (add-piece-to-grid grid piece) GRID-EXAMPLE)
 
 (define (add-piece-to-grid grid piece) 
   (for ([i (vector-length piece)])
@@ -235,12 +235,12 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-; GRID-BLOCK FUNCTION
+; GET-GRID-BLOCK FUNCTION
 ; takes a grid, x and y and returns the block
-; grid-block: Grid Number Number -> Block
-; (define (grid-block Grid Number Number) (make-block .. .. ..))
+; get-grid-block: Grid Number Number -> Block
+; (define (get-grid-block Grid Number Number) FEB)
 
-(define (grid-block grid x y)
+(define (get-grid-block grid x y)
   (vector-ref (vector-ref grid y) x))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -266,7 +266,7 @@
           (define (get-grid-column grid x y)
             (if (= y BLOCKS-IN-HEIGHT)
                 '()
-                (cons (grid-block grid x y) (get-grid-column grid x (add1 y))))
+                (cons (get-grid-block grid x y) (get-grid-column grid x (add1 y))))
             )) (list->vector (get-grid-column grid x y))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -274,7 +274,7 @@
 ; BLOCK-TO-IMAGE FUNCTION
 ; renders a single Block with a black outline
 ; block-to-image: Block -> Image
-; (define (block-to-image block) Image)
+; (define (block-to-image block) (rectangle 28 28 "solid" "black")
 
 (define (block-to-image block)
   (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
@@ -284,14 +284,14 @@
 ; GRID-ROW-TO-IMAGE FUNCTION
 ; Returns the requested row of the given grid as an image
 ; grid-row-to-image: Grid Number -> Image
-; (define (grid-row-to-image Grid Number) Image)
+; (define (grid-row-to-image Grid Number) (rectangle 28 28 "solid" "black"))
 
 (define (grid-row-image grid y)
   (local (
           (define (grid-row-to-image grid x y)
             (if (< x (sub1 BLOCKS-IN-WIDTH))
-                (beside (block-to-image (grid-block grid x y)) (grid-row-to-image grid (add1 x) y))
-                (block-to-image (grid-block grid x y))
+                (beside (block-to-image (get-grid-block grid x y)) (grid-row-to-image grid (add1 x) y))
+                (block-to-image (get-grid-block grid x y))
                 )
             )
           ) (grid-row-to-image grid 0 y)))
@@ -301,6 +301,7 @@
 ; GRID-TO-IMAGE FUNCTION
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Grid -> Image
+; (define (grid-to-image grid) (rectangle 28 28 "solid" "black"))
 
 (define (grid-to-image grid) 
   (local (
@@ -315,7 +316,7 @@
 ; SCORE-TO-IMAGE FUNCTION
 ; takes a Score and turns it into an Image
 ; score-to-image: WorldState -> Image
-; (define (score-to-image (world-state-score world-state) Image)
+; (define (score-to-image (world-state-score world-state) (rectangle 28 28 "solid" "black"))
 ;
 ;
 (define (score-to-image world-state)
@@ -327,7 +328,7 @@
 ; DRAW FUNCTION 
 ; takes a WorldState and renders the background and the grid
 ; draw: WorldState -> Image
-; (define (draw world-state) Image)
+; (define (draw world-state) (rectangle 28 28 "solid" "black"))
 
 (define (draw world-state)
   (overlay/offset (score-to-image world-state) 0 -350
@@ -343,6 +344,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; TICK FUNCTION
+; takes a World-state and moves a Piece down every second
 
 
 (define (tick world-state)
@@ -355,7 +357,7 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; AUX SET WORLD-STATE VALUES FUNCTIONS
+; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA 
 
 ; UPDATE-SCORE
 ; takes a World State and a Number and updates the Score
@@ -389,7 +391,7 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; CAN-BLOCK-FALL? FUNCTIONS
+; CAN-BLOCK-FALL? FUNCTION
 ; takes a World-state, x and y coordinates and returns true if the Block (add1 y) at the coordinates x y in the Grid can fall
 ; can-block-fall?: World-state Number Number -> Boolean
 ; (define (can-block-fall? World-state x y) #true)
@@ -398,8 +400,8 @@
 (define (can-block-fall? world-state x y)
   (cond
     [(not (< (+ y 1) BLOCKS-IN-HEIGHT)) #false]
-    [(and (not (block-is-falling (grid-block (world-state-grid world-state) x (add1 y))))
-          (not (is-block-empty? (grid-block (world-state-grid world-state) x (add1 y))))) #false]
+    [(and (not (block-is-falling (get-grid-block (world-state-grid world-state) x (add1 y))))
+          (not (is-block-empty? (get-get-grid-block (world-state-grid world-state) x (add1 y))))) #false]
     [else #true]))
 
 ; AUX IS-BLOCK-EMPTY?
@@ -412,7 +414,7 @@
 ; STOP
 ; when a Block in given World-state reaches the bottom of the Grid or another NonFallingBlock, it stops falling
 ; stop: World-state -> World-state
-; (define (stop world-state) world-state)
+; (define (stop world-state) INITIAL-STATE)
 
 
 
@@ -471,11 +473,9 @@ TO DO:
      * ti esce un messaggio
      * press key to restart (forse)
 * frecce muovono il piece (handle-key)
-* I PEZZI RUOTANO, CAZZO
+* I PEZZI RUOTANO!!!!!!!! :S 
 * aggiungere il tick interno al worldstate
 * fare design recipe
-* coqui sistemare tutti gli headers che sei ritardata e li hai fatti male......
-* get grid block e non solo grid block
 
 |#
 
