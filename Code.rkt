@@ -174,11 +174,11 @@
 
 (define (set-grid-block grid x y block)
   (local (
-          (define currentRow (grid-row grid y))
+          (define CURRENTROW (grid-row grid y))
           (define (set-block grid tempX y block)
             (cond
               [(= x tempX) (cons block (set-block grid (add1 tempX) y block))]
-              [(< tempX (vector-length currentRow)) (cons (vector-ref currentRow tempX) (set-block grid (add1 tempX) y block))]
+              [(< tempX (vector-length CURRENTROW)) (cons (vector-ref CURRENTROW tempX) (set-block grid (add1 tempX) y block))]
               [else '()]
               )
             )) (vector-set! grid y (list->vector (set-block grid 0 y block)))))
@@ -308,7 +308,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 0)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
+    (grid-to-image-inner grid 20)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -415,6 +415,7 @@
 ; (define (stop world-state) world-state)
 
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; HANDLE-KEY FUNCTION
@@ -453,7 +454,7 @@
     ;[stop-when quit?]
     ))
 
-
+ 
 
 
 #|
