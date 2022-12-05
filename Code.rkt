@@ -201,13 +201,20 @@
 ;  )
 
 
+; VECTOR-SET
+(define (vector-set vec pos value)
+  (vector-ref (vector-append (vector-take vec (sub1 pos)) (vector value) (vector-take-right vec pos)) 0))
+
+
 ; SET-GRID-ROW FUNCTION V.2
 ; Takes a vector a Number and a soure-grid and sets the row in the grid to that vector starting from x
 ; set-grid-row: Grid Number Grid -> Void
 ; (define (set-grid-row grid y src) )
 
 (define (set-grid-row grid y src)
-  (vector-set! grid y src))
+  (if (= y 0)
+      (vector-append src (vector-take-right grid y))
+      (vector-append (vector-take grid (sub1 y)) (vector (vector-set grid y src)) (vector-take-right grid y))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -216,9 +223,31 @@
 ; add-piece-to-grid: Grid Piece -> Grid
 ; (define (add-piece-to-grid grid piece) GRID-EXAMPLE)
 
-(define (add-piece-to-grid grid piece) 
-  (for ([i (vector-length piece)])
-    (set-grid-row grid i (vector-ref piece i))))
+;(define (add-piece-to-grid grid piece)
+;  (for ([i (vector-length piece)])
+;    (set-grid-row grid i (vector-ref piece i)))
+;  )
+
+
+;(define (add-piece-to-grid grid piece)
+;  (local (
+;          (define pieceLength (vector-length piece))
+;          (define tempGrid grid)
+;          (define (add-piece-to-grid-int tempGrid piece y)
+;            (cond
+;              [(= pieceLength (sub1 y)) (set-grid-row tempGrid y (vector-ref piece y))]
+;              [else (add-piece-to-grid-int (set-grid-row tempGrid y (vector-ref piece y)) piece (add1 y))]))) (add-piece-to-grid-int grid piece 0)))
+
+
+(define (add-piece-to-world-state world-state piece)
+  (update-grid world-state
+               (vector-append
+                (vector 
+                 (vector-ref piece 0)
+                 (vector-ref piece 1)
+                 (vector-ref piece 2)
+                 (vector-ref piece 3))
+                (vector-take-right (world-state-grid world-state) 36))))
 
 ; ADD-PIECE-TO-GRID FUNCTION
 
@@ -309,7 +338,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 20)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
+    (grid-to-image-inner grid 0)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -350,7 +379,7 @@
 (define (tick world-state)
   ;world-state
   (if (world-state-should-spawn world-state)
-      (if (add-piece-to-grid (world-state-grid world-state) (random-piece)) (update-should-spawn world-state #false) (update-should-spawn world-state #false))
+      (update-should-spawn (add-piece-to-world-state world-state (random-piece)) #false)
       world-state
       ))
 
@@ -389,6 +418,11 @@
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) value))
 
+; GRID
+(define (update-grid world-state value)
+  (make-world-state (world-state-background world-state) value (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; CAN-BLOCK-FALL? FUNCTION
@@ -401,7 +435,7 @@
   (cond
     [(not (< (+ y 1) BLOCKS-IN-HEIGHT)) #false]
     [(and (not (block-is-falling (get-grid-block (world-state-grid world-state) x (add1 y))))
-          (not (is-block-empty? (get-get-grid-block (world-state-grid world-state) x (add1 y))))) #false]
+          (not (is-block-empty? (get-grid-block (world-state-grid world-state) x (add1 y))))) #false]
     [else #true]))
 
 ; AUX IS-BLOCK-EMPTY?
