@@ -55,7 +55,7 @@
 ;                - #false when the block is not falling
 
 (define-struct block [color position is-falling] #:transparent)
-
+ 
 ; Examples
 
 (define FEB (make-block EMPTY-COLOR (make-posn 0 0) #true)) ; Falling Empty Block
