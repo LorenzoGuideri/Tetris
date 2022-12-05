@@ -164,7 +164,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SET-GRID-BLOCK FUNCTION
-; takes a Block a Grid and x y coordinates and edits the Grid with a Block at the coordinates given as inputs
+; takes a Block, a Grid and x y coordinates and edits the Grid with a Block at the coordinates given as inputs
 ; set-grid-block: Block Grid Number Number -> Void
 ; (define (set-grid-block grid x y block) )
 ; (define (set-grid-block grid x y block)
@@ -338,7 +338,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 0)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
+    (grid-to-image-inner grid 20)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
