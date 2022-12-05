@@ -33,18 +33,18 @@ MILESTONE 1
 MILESTONE 2
 -----------------------------
 NEW FUNCTIONS:
-     - SCORE-TO-IMAGE FUNCTION
-       takes a Score and turns it into an Image
-     - DRAW FUNCTION
-       takes a WorldState and renders the background and the grid
-     - TICK FUNCTION
-       takes a World-state and moves a Piece down every second
-     - AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
-        all take a world-state and a value and insert the new value in the world-state
-        - should-quit
-        - should-spawn
-        - is-paused
-        - falling-blocks
-      - CAN-BLOCK-FALL? FUNCTION
-        takes a World-state, x and y coordinates and returns true if the Block (add1 y) at the coordinates x y in the Grid can fall
-        - AUXILIARY FUNCTION: IS-BLOCK-EMPTY?
+- SCORE-TO-IMAGE FUNCTION
+  - takes a Score and turns it into an Image
+- DRAW FUNCTION
+  - takes a WorldState and renders the background and the grid
+- TICK FUNCTION
+  - takes a World-state and moves a Piece down every second
+- AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
+  - all take a world-state and a value and insert the new value in the world-state
+    - should-quit
+    - should-spawn
+    - is-paused
+    - falling-blocks
+- CAN-BLOCK-FALL? FUNCTION
+  - akes a World-state, x and y coordinates and returns true if the Block (add1 y) at the coordinates x y in the Grid can fall
+- AUXILIARY FUNCTION: IS-BLOCK-EMPTY?
