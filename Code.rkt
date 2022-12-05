@@ -1,6 +1,7 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname Code) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+
 (require 2htdp/universe)
 (require 2htdp/image)
 (require racket/vector)
@@ -184,22 +185,6 @@
             )) (vector-set! grid y (list->vector (set-block grid 0 y block)))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; SET-GRID-ROW FUNCTION
-;  (local (
-;          (define srcL (vector-length src))
-;          (define (set-row tempX internalX)
-;            (if (< tempX x)
-;                (cons (vector-ref (grid-row grid y) tempX) (set-row (add1 tempX) 0))
-;                (cond
-;                  [(< internalX srcL) (cons (vector-ref src internalX) (set-row (add1 tempX) (add1 internalX)))]
-;                  [(< tempX BLOCKS-IN-WIDTH) (cons (get-grid-block grid tempX y) (set-row (add1 tempX) internalX))]
-;                  [else '()])
-;                )
-;            )
-;          ) (vector-set! grid y (list->vector (set-row 0 0))))
-;  )
-
 
 ; VECTOR-SET
 (define (vector-set vec pos value)
