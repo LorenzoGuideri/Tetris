@@ -1,7 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-advanced-reader.ss" "lang")((modname Code) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
-
 (require 2htdp/universe)
 (require 2htdp/image)
 (require racket/vector)
@@ -77,7 +76,7 @@
 ;        - A piece is the combination of various blocks to form the well known tetromin
 ;        - This pieces will be spawned on top of the playing field and will fall down until they reach the bottom or another piece
 ;        - The pieces are predefined
-;
+
 ; PREDEFINED PIECES
 
 (define O-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
@@ -90,6 +89,7 @@
 
 
 ; PREDEFINED FALLING-BLOCKS-POSITIONS
+
 (define O-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 4 2) (make-posn 5 2)))
 (define L-PIECE-POSITIONS (vector (make-posn 6 0) (make-posn 4 1) (make-posn 5 1) (make-posn 6 1)))
 (define Z-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 5 2) (make-posn 6 2)))
@@ -136,6 +136,7 @@
 ;      should-quit:  Boolean value that represents if the application should quit or not
 ;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
 ;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
+;      falling-blocks: Vector or Posn that represents the position of the falling blocks in the grid 
 ;
 ; Header
 
@@ -175,7 +176,7 @@
 
 (define (set-grid-block grid x y block)
   (local (
-          (define CURRENTROW (grid-row grid y))
+          (define CURRENTROW (get-grid-row grid y))
           (define (set-block grid tempX y block)
             (cond
               [(= x tempX) (cons block (set-block grid (add1 tempX) y block))]
@@ -187,42 +188,29 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; VECTOR-SET
+; takes a vector, a position (Number) and a value (Number) and returns a Vector with the new value at the indicated position
+; vector-set: Vector Number Number -> Vector 
 (define (vector-set vec pos value)
   (vector-ref (vector-append (vector-take vec (sub1 pos)) (vector value) (vector-take-right vec pos)) 0))
 
 
 ; SET-GRID-ROW FUNCTION V.2
-; Takes a vector a Number and a soure-grid and sets the row in the grid to that vector starting from x
+; Takes a Vector, a Number and a Grid. At the position Number of the Grid it inserts the Vector given as input
 ; set-grid-row: Grid Number Grid -> Void
 ; (define (set-grid-row grid y src) )
 
-(define (set-grid-row grid y src)
-  (if (= y 0)
-      (vector-append src (vector-take-right grid y))
-      (vector-append (vector-take grid (sub1 y)) (vector (vector-set grid y src)) (vector-take-right grid y))))
+(define (set-grid-row grid y vect)
+  (cond
+    [(= y 0) (vector-append vect (vector-take-right grid 39))]
+    [(= y 39) (vector-append (vector-take (sub1 y)) vect)]
+    [else (vector-append (vector-take grid (sub1 y)) (vector (vector-set grid y vect)) (vector-take-right grid y))]))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-; ADD-PIECE-TO-GRID FUNCTION V.2
-; Recevies a Grid and a Piece as inputs and adds the Piece at the top in the middle of the Grid
-; add-piece-to-grid: Grid Piece -> Grid
-; (define (add-piece-to-grid grid piece) GRID-EXAMPLE)
-
-;(define (add-piece-to-grid grid piece)
-;  (for ([i (vector-length piece)])
-;    (set-grid-row grid i (vector-ref piece i)))
-;  )
-
-
-;(define (add-piece-to-grid grid piece)
-;  (local (
-;          (define pieceLength (vector-length piece))
-;          (define tempGrid grid)
-;          (define (add-piece-to-grid-int tempGrid piece y)
-;            (cond
-;              [(= pieceLength (sub1 y)) (set-grid-row tempGrid y (vector-ref piece y))]
-;              [else (add-piece-to-grid-int (set-grid-row tempGrid y (vector-ref piece y)) piece (add1 y))]))) (add-piece-to-grid-int grid piece 0)))
-
+; ADD-PIECE-TO-WORLD-STATE FUNCTION V.2
+; Receives a World-state and a Piece as inputs and adds the Piece at the top of the Grid
+; add-piece-to-world-state: World-state Piece -> World-state
+; (define (add-piece-to-world-state world-state piece) INITIAL-STATE)
 
 (define (add-piece-to-world-state world-state piece)
   (update-grid world-state
@@ -234,23 +222,11 @@
                  (vector-ref piece 3))
                 (vector-take-right (world-state-grid world-state) 36))))
 
-; ADD-PIECE-TO-GRID FUNCTION
-
-; (Davide here, I know, it looks bad and everything, but I found this thing (by my self), it's like a workaround to use sequencial calls and variables. It's bad but it works)
-; Essentially the for loop enables us to call make sequential calls (for some reason) and using a vector as an accumulator I can achieve what I wanted to do
-; Which is Set-grid-row foreach row in a piece
-;(define tempVector (vector 0))
-;(define (add-piece-to-grid grid piece)
-;  (for ([i piece])
-;    (set-grid-row grid (- 2 (/ 2 BLOCKS-IN-WIDTH)) (vector-ref tempVector 0) (vector-ref piece (vector-ref tempVector 0)))
-;    (vector-set! tempVector 0 (add1 (vector-ref tempVector 0)))
-;    (if (= (- (vector-length piece) 1) (vector-ref tempVector 0)) (vector-set! tempVector 0 0) (vector-set! tempVector 0 (vector-ref tempVector 0)))
-;    ))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; GET-GRID-BLOCK FUNCTION
-; takes a grid, x and y and returns the block
+; takes a Grid, x and y and returns the block
 ; get-grid-block: Grid Number Number -> Block
 ; (define (get-grid-block Grid Number Number) FEB)
 
@@ -259,22 +235,22 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; GRID-ROW FUNCTION
+; GET-GRID-ROW FUNCTION
 ; takes a Grid and a y coordinate and returns a Vector representing the row of the grid
-; grid-row: Grid Number -> Vector
-; (define (grid-row Grid Number) (make-vector ..))
+; get-grid-row: Grid Number -> Vector
+; (define (get-grid-row Grid Number) (make-vector ..))
 
-(define (grid-row grid y)
+(define (get-grid-row grid y)
   (vector-ref grid y))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
-; GRID-COLUMN FUNCTION
+; GET-GRID-COLUMN FUNCTION
 ; takes a Grid and an x coordinate and returns a Vector representing the column of the Grid
 ; grid-column; Grid Number -> Vector
-; (define (grid-column Grid Number) (make-vector ..))
+; (define (get-grid-columns Grid Number) (make-vector ..))
 
-(define (grid-column grid x)
+(define (get-grid-columns grid x)
   (local (
           (define y 0)
           (define (get-grid-column grid x y)
@@ -350,15 +326,14 @@
                            (rectangle 302 602 "solid" "black")
                            (world-state-background world-state)))) 
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; IS-FALLING? FUNCTION
-
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; TICK FUNCTION
-; takes a World-state and moves a Piece down every second
+; takes a World-state and, if flag should-spawn is true adds a Piece to the Grid:
+;     - add-piece-to-world-state with a random piece
+;     - turns to #false should-spawn
+;     - update-falling-blocks with the predefined position of the random piece that was selected
 
 
 (define (tick world-state)
@@ -366,10 +341,13 @@
   (if (world-state-should-spawn world-state)
       (local (
               (define (omegaFunction world-state num)
-                (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state (vector-ref PIECES num)) #false) (vector-ref FALLING-BLOCKS-POSITIONS num))))
+                (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
+                                                                                      (vector-ref PIECES num))
+                                                            #false)
+                                       (vector-ref FALLING-BLOCKS-POSITIONS num))))
         (omegaFunction world-state (random 0 6)))
-  world-state
-  ))
+      world-state
+      ))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -401,7 +379,8 @@
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state)))
 
-; FALLING-BLOCKS
+; UPDATE FALLING-BLOCKS
+; updates falling-blocksS which is a Vector in the World-state
 (define (update-falling-blocks world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) value))
@@ -498,6 +477,7 @@ TO DO:
 * I PEZZI RUOTANO!!!!!!!! :S 
 * aggiungere il tick interno al worldstate
 * fare design recipe
+* togliere is falling al block
 
 |#
 
