@@ -136,7 +136,7 @@
 ;      should-quit:  Boolean value that represents if the application should quit or not
 ;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
 ;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
-;      falling-blocks: Vector or Posn that represents the position of the falling blocks in the grid 
+;      falling-blocks: Vector of Posn that represents the position of the falling blocks in the grid 
 ;
 ; Header
 
@@ -380,7 +380,7 @@
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state)))
 
 ; UPDATE FALLING-BLOCKS
-; updates falling-blocksS which is a Vector in the World-state
+; updates falling-blocks which is a Vector in the World-state
 (define (update-falling-blocks world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) value))
@@ -412,17 +412,32 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; STOP
-; when a Block in given World-state reaches the bottom of the Grid or another NonFallingBlock, it stops falling
-; stop: World-state -> World-state
-; (define (stop world-state) INITIAL-STATE)
+; STOP-END-OF-GRID
+; when a Block in given World-state reaches the bottom of the Grid it stops falling
+; stop-end-of-grid: World-state -> World-state
+; (define (stop-end-of-grid world-state) INITIAL-STATE)
+
+(define (stop world-state x y)
+      (if (= (posn-y (block-position (get-grid-block world-state x y))) 39)
+      (update-falling-blocks world-state (make-posn
+                                          (posn-x (block-position (get-grid-block world-state)))
+                                          (posn-y (block-position (get-grid-block world-state)))))
+      world-state))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; STOP-NFB
+; when a Block in given World-state is above a Non Falling Block, it stops falling
+; stop-nfb: World-state -> World-state
+; (define (stop-nfb world-state) INITIAL-STATE)
+
 
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 ; HANDLE-KEY FUNCTION
-
+;
 
 
 
@@ -477,7 +492,7 @@ TO DO:
 * I PEZZI RUOTANO!!!!!!!! :S 
 * aggiungere il tick interno al worldstate
 * fare design recipe
-* togliere is falling al block
+
 
 |#
 
