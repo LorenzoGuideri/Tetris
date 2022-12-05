@@ -55,7 +55,7 @@
 ;                - #false when the block is not falling
 
 (define-struct block [color position is-falling] #:transparent)
- 
+
 ; Examples
 
 (define FEB (make-block EMPTY-COLOR (make-posn 0 0) #true)) ; Falling Empty Block
@@ -379,9 +379,12 @@
 (define (tick world-state)
   ;world-state
   (if (world-state-should-spawn world-state)
-      (update-should-spawn (add-piece-to-world-state world-state (random-piece)) #false)
-      world-state
-      ))
+      (local (
+              (define (omegaFunction world-state num)
+                (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state (vector-ref PIECES num)) #false) (vector-ref FALLING-BLOCKS-POSITIONS num))))
+        (omegaFunction world-state (random 0 6)))
+  world-state
+  ))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
