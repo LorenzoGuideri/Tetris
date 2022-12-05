@@ -379,13 +379,13 @@
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state)))
 
-; UPDATE FALLING-BLOCKS
+; UPDATE-FALLING-BLOCKS
 ; updates falling-blocks which is a Vector in the World-state
 (define (update-falling-blocks world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) value))
 
-; GRID
+; UPDATE-GRID
 (define (update-grid world-state value)
   (make-world-state (world-state-background world-state) value (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
@@ -414,7 +414,7 @@
 
 ; STOP-END-OF-GRID
 ; when a Block in given World-state reaches the bottom of the Grid it stops falling
-; stop-end-of-grid: World-state -> World-state
+; stop-end-of-grid: World-state Number Number -> World-state
 ; (define (stop-end-of-grid world-state) INITIAL-STATE)
 
 (define (stop world-state x y)
@@ -422,20 +422,22 @@
       (update-falling-blocks world-state (make-posn
                                           (posn-x (block-position (get-grid-block world-state)))
                                           (posn-y (block-position (get-grid-block world-state)))))
-      world-state))
+      (world-state))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; STOP-NFB
 ; when a Block in given World-state is above a Non Falling Block, it stops falling
-; stop-nfb: World-state -> World-state
+; stop-nfb: World-state Number Number -> World-state
 ; (define (stop-nfb world-state) INITIAL-STATE)
 
 
+      
+      
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
+ 
 ; HANDLE-KEY FUNCTION
 ;
 
@@ -491,7 +493,7 @@ TO DO:
 * frecce muovono il piece (handle-key)
 * I PEZZI RUOTANO!!!!!!!! :S 
 * aggiungere il tick interno al worldstate
-* fare design recipe
+* fare template e check-expect
 
 
 |#
