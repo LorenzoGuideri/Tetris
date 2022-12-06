@@ -145,7 +145,7 @@
 ; Examples
 
 (define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0)))
-(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false (make-vector 0)))
+(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS))
 
 ;; -------------------------------------------------------------------------------------------------------------------
 
@@ -183,7 +183,7 @@
               [(< tempX (vector-length CURRENTROW)) (cons (vector-ref CURRENTROW tempX) (set-block grid (add1 tempX) y block))]
               [else '()]
               )
-            )) (vector-set! grid y (list->vector (set-block grid 0 y block)))))
+            )) (vector-set grid y (list->vector (set-block grid 0 y block)))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -349,8 +349,38 @@
       world-state
       ))
 
+; 1. metto il pezzo nel world-state
+; 2. lo passo ad update-should-spawn che mi mette #false in should-spawn,
+; 3. questo nuovo world-state lo passo ad update-falling-blocks insieme al vettore di posn che contiene
+;   le posizioni che il pezzo ha assunto nel mentre cadeva durante tutta la durata del gioco
+;   (questa posizione la recupero dal vettore di vettori di posn che si chiama FALLING-BLOCKS-POSITIONS
+;    grazie al numero che io gli ho dato
+;         (che rappresenta il blocco casuale che ho scelto nella main function))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; CHANGE-POSN-IN-WORLD-STATE FUNCTION
+; Takes a World-state and returns a World-state where the posn-y of the Posns in vector of Posn is shifted down by one
+; change-posn-in-world-state: World-state -> World-state
+; (define (change-posn-in-world-state world-state) INITIAL-STATE)
+
+(define (change-posn-in-world-state world-state)
+  (vector-map
+   (lambda (posn) (make-posn (posn-x posn) (add1 (posn-y posn))))
+   (world-state-falling-blocks world-state)))
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; BLOCK-FALLS-DOWN FUNCTION
+; Takes a World-state and returns a World-state with grid updated according to CHANGE-POSN-IN-WORLD-STATE
+; block-falls-down: World-state -> World-state
+; (define (block-falls-down world-state) EXAMPLE-STATE)
+
+;(define (block-falls-down world-state)
+;  (
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 ; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA 
 
@@ -411,32 +441,6 @@
   (equal? (block-color block) EMPTY-COLOR))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; STOP-END-OF-GRID
-; when a Block in given World-state reaches the bottom of the Grid it stops falling
-; stop-end-of-grid: World-state Number Number -> World-state
-; (define (stop-end-of-grid world-state) INITIAL-STATE)
-
-(define (stop world-state x y)
-      (if (= (posn-y (block-position (get-grid-block world-state x y))) 39)
-      (update-falling-blocks world-state (make-posn
-                                          (posn-x (block-position (get-grid-block world-state)))
-                                          (posn-y (block-position (get-grid-block world-state)))))
-      (world-state))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; STOP-NFB
-; when a Block in given World-state is above a Non Falling Block, it stops falling
-; stop-nfb: World-state Number Number -> World-state
-; (define (stop-nfb world-state) INITIAL-STATE)
-
-
-      
-      
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
  
 ; HANDLE-KEY FUNCTION
 ;
@@ -494,7 +498,7 @@ TO DO:
 * I PEZZI RUOTANO!!!!!!!! :S 
 * aggiungere il tick interno al worldstate
 * fare template e check-expect
-
+* cambiare grid 40
 
 |#
 
