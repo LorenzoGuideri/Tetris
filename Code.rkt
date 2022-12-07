@@ -160,8 +160,9 @@
 ;
 ; Retrive a random piece from the Pieces Vector
 ; random-piece: Void -> Piece
-; Header
-;(define (random-piece) O-PIECE)
+; (define (random-piece) O-PIECE)
+; (define (random-piece)
+;  (vector-ref ... (random ...))
 
 (define (random-piece)
   (vector-ref PIECES (random 0 6)))
@@ -172,9 +173,11 @@
 ; takes a Block, a Grid and a Posn and edits the Grid with a Block at the coordinates given as inputs in the Posn
 ; set-grid-block: Block Grid Posn -> Grid
 
+
 (define (set-grid-block block grid posn)
   (set-grid-row grid (posn-y posn)
                 (vector-set (get-grid-row grid (posn-y posn)) (posn-x posn) block)))
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; VECTOR-SET
@@ -190,6 +193,7 @@
               [else (vector-append (vector-take vec pos) (vector value) (vector-take-right vec (- (sub1 VEC-LEN) pos)))]))
           ) (set-value vec pos value)))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SET-GRID-ROW FUNCTION V.2
 ; Takes a Vector, a Number and a Grid. At the position Number of the Grid it inserts the Vector given as input
@@ -520,7 +524,7 @@ TO DO:
 * I PEZZI RUOTANO!!!!!!!! :S
 * aggiungere il tick interno al worldstate
 * fare template e check-expect
-* togliere posn dai blocks
+
 
 |#
 
