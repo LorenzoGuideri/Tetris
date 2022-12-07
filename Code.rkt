@@ -90,12 +90,13 @@
 ; PREDEFINED FALLING-BLOCKS-POSITIONS
 
 (define O-PIECE-POSITIONS (vector (make-posn 5 2) (make-posn 4 2) (make-posn 5 1) (make-posn 4 1)))
-(define L-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 6 0) (make-posn 4 1) (make-posn 5 1)))
-(define Z-PIECE-POSITIONS (vector (make-posn 6 2) (make-posn 4 1) (make-posn 5 1) (make-posn 5 2)))
-(define T-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 3 0) (make-posn 4 0) (make-posn 5 0)))
-(define J-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 4 0) (make-posn 4 1) (make-posn 5 1)))
-(define I-PIECE-POSITIONS (vector (make-posn 6 0) (make-posn 3 0) (make-posn 4 0) (make-posn 5 0)))
-(define S-PIECE-POSITIONS (vector (make-posn 4 2) (make-posn 4 1) (make-posn 5 1) (make-posn 3 2)))
+(define L-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 5 1) (make-posn 4 1) (make-posn 6 0)))
+(define Z-PIECE-POSITIONS (vector (make-posn 6 2) (make-posn 5 2) (make-posn 5 1) (make-posn 4 1)))
+(define T-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 0) (make-posn 4 0) (make-posn 3 0)))
+(define J-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 5 1) (make-posn 4 1) (make-posn 4 0)))
+(define I-PIECE-POSITIONS (vector (make-posn 6 0) (make-posn 5 0) (make-posn 4 0) (make-posn 3 0)))
+(define S-PIECE-POSITIONS (vector (make-posn 4 2) (make-posn 3 2) (make-posn 5 1) (make-posn 4 1)))
+
 
 (define FALLING-BLOCKS-POSITIONS (vector O-PIECE-POSITIONS L-PIECE-POSITIONS Z-PIECE-POSITIONS T-PIECE-POSITIONS J-PIECE-POSITIONS I-PIECE-POSITIONS S-PIECE-POSITIONS))
 
