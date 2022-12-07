@@ -172,12 +172,9 @@
 ; takes a Block, a Grid and a Posn and edits the Grid with a Block at the coordinates given as inputs in the Posn
 ; set-grid-block: Block Grid Posn -> Grid
 
-;;; (define (set-grid-block block grid posn)
-;;; (cond
-;;; [(= (posn-x posn) 0) ...]
-;;; [(= (posn-x (sub1 BLOCKS-IN-HEIGHT)))...]
-;;; [else (vector-append (vector-take (posn-y posn) (...) (vector-take-right)))])
-;;; )
+(define (set-grid-block block grid posn)
+  (set-grid-row grid (posn-y posn)
+                (vector-set (get-grid-row grid (posn-y posn)) (posn-x posn) block)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; VECTOR-SET
@@ -188,22 +185,22 @@
           (define VEC-LEN (vector-length vec))
           (define (set-value vec pos value)
             (cond
-              [(= pos 0) (vector-ref (vector-append (vector value) (vector-take-right vec (sub1 VEC-LEN))) 0)]
-              [(= pos (sub1 VEC-LEN)) (vector-ref (vector-append (vector-take vec (sub1 VEC-LEN)) (vector value)) 0)]
-              [else (vector-ref (vector-append (vector-take vec pos) (vector value) (vector-take-right vec (- (sub1 VEC-LEN) pos))) 0)]))
+              [(= pos 0) (vector-append (vector value) (vector-take-right vec (sub1 VEC-LEN)))]
+              [(= pos (sub1 VEC-LEN)) (vector-append (vector-take vec (sub1 VEC-LEN)) (vector value))]
+              [else (vector-append (vector-take vec pos) (vector value) (vector-take-right vec (- (sub1 VEC-LEN) pos)))]))
           ) (set-value vec pos value)))
 
 
 ; SET-GRID-ROW FUNCTION V.2
 ; Takes a Vector, a Number and a Grid. At the position Number of the Grid it inserts the Vector given as input
-; set-grid-row: Grid Number Grid -> Void
+; set-grid-row: Grid Number Grid -> Grid
 ; (define (set-grid-row grid y src) )
 
 (define (set-grid-row grid y vect)
   (cond
-    [(= y 0) (vector-append vect (vector-take-right grid (sub1 BLOCKS-IN-HEIGHT)))]
+    [(= y 0) (vector-append (vector vect) (vector-take-right grid (sub1 BLOCKS-IN-HEIGHT)))]
     [(= y (sub1 BLOCKS-IN-HEIGHT)) (vector-append (vector-take (sub1 BLOCKS-IN-HEIGHT)) vect)]
-    [else (vector-append (vector-take grid y) (vector vect) (vector-take-right grid (- (sub1 BLOCKS-IN-HEIGHT) y)))])) 
+    [else (vector-append (vector-take grid y) (vector vect) (vector-take-right grid (- (sub1 BLOCKS-IN-HEIGHT) y)))]))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -379,14 +376,14 @@
 ; (define (block-falls-down world-state) EXAMPLE-STATE)
 
 
-;;; (define (block-falls-down world-state)
-;;;   (local (
-;;;     (define BLOCKS-LENGHT (vector-length (world-state-falling-blocks world-state)))
-;;;     (define (block-falls-down-int world-state x)
-;;;     (cond
-;;;     [(= x (sub1 BLOCKS-LENGHT) (gino world-state (vector-ref (world-state-falling-blocks world-state) x)))]
-;;;     [else (block-falls-down-int (gino world-state (vector-ref (world-state-falling-blocks world-state) x)) (add1 x))]))
-;;;   ) (block-falls-down-int world-state 0)))
+(define (block-falls-down world-state)
+  (local (
+          (define BLOCKS-LENGHT (vector-length (world-state-falling-blocks world-state)))
+          (define (block-falls-down-int world-state x)
+            (cond
+              [(= x (sub1 BLOCKS-LENGHT) (gino world-state (vector-ref (world-state-falling-blocks world-state) x)))]
+              [else (block-falls-down-int (gino world-state (vector-ref (world-state-falling-blocks world-state) x)) (add1 x))]))
+          ) (block-falls-down-int world-state 0)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GINO FUNCTION
@@ -395,8 +392,16 @@
 ; gino: World-state Posn -> World-state
 ; (define (gino world-state posn) EXAMPLE-STATE)
 
-;;; (define (gino world-state posn)
-;;; (update-grid world-state (...vector...posn...)))
+(define (gino world-state posn)
+  (update-grid world-state
+               (set-grid-row
+                (world-state-grid world-state)
+                (vector-ref (set-grid-block (world-state-grid world-state)
+                                            (posn-y posn)
+                                            (get-grid-block
+                                             (world-state-grid world-state)
+                                             (posn-x posn)
+                                             (add1 (posn-y posn))))))))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
