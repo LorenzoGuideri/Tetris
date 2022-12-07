@@ -21,7 +21,7 @@
 (define BLUE (make-color 196 237 245))
 (define GREEN (make-color 200 224 152))
 
-(define COLORS (vector YELLOW ORANGE RED PINK LILAC BLUE GREEN)) 
+(define COLORS (vector YELLOW ORANGE RED PINK LILAC BLUE GREEN))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -40,14 +40,14 @@
 
 ;; DATA TYPES
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; a Block is a Structure (make-block color position is-falling)
 ; where:
 ;       - color is one of predefined BLOCK COLORS
 ;
 ;       - position is a Posn (make-posn Number Number)
-;                - it contains the position of the block in the grid 
+;                - it contains the position of the block in the grid
 ;
 ;       - is-falling is a Boolean containing the position of the block in the grid
 ;                - #true when the block is falling
@@ -89,13 +89,13 @@
 
 ; PREDEFINED FALLING-BLOCKS-POSITIONS
 
-(define O-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 4 2) (make-posn 5 2)))
-(define L-PIECE-POSITIONS (vector (make-posn 6 0) (make-posn 4 1) (make-posn 5 1) (make-posn 6 1)))
-(define Z-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 5 2) (make-posn 6 2)))
-(define T-PIECE-POSITIONS (vector (make-posn 3 0) (make-posn 4 0) (make-posn 5 0) (make-posn 4 1)))
-(define J-PIECE-POSITIONS (vector (make-posn 4 0) (make-posn 4 1) (make-posn 5 1) (make-posn 6 1)))
-(define I-PIECE-POSITIONS (vector (make-posn 3 0) (make-posn 4 0) (make-posn 5 0) (make-posn 6 0)))
-(define S-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 3 2) (make-posn 4 2)))
+(define O-PIECE-POSITIONS (vector (make-posn 5 2) (make-posn 4 2) (make-posn 5 1) (make-posn 4 1)))
+(define L-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 6 0) (make-posn 4 1) (make-posn 5 1)))
+(define Z-PIECE-POSITIONS (vector (make-posn 6 2) (make-posn 4 1) (make-posn 5 1) (make-posn 5 2)))
+(define T-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 3 0) (make-posn 4 0) (make-posn 5 0)))
+(define J-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 4 0) (make-posn 4 1) (make-posn 5 1)))
+(define I-PIECE-POSITIONS (vector (make-posn 6 0) (make-posn 3 0) (make-posn 4 0) (make-posn 5 0)))
+(define S-PIECE-POSITIONS (vector (make-posn 4 2) (make-posn 4 1) (make-posn 5 1) (make-posn 3 2)))
 
 (define FALLING-BLOCKS-POSITIONS (vector O-PIECE-POSITIONS L-PIECE-POSITIONS Z-PIECE-POSITIONS T-PIECE-POSITIONS J-PIECE-POSITIONS I-PIECE-POSITIONS S-PIECE-POSITIONS))
 
@@ -104,7 +104,7 @@
 
 (define PIECES (vector O-PIECE L-PIECE Z-PIECE T-PIECE J-PIECE I-PIECE S-PIECE))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; a Score is a Natural
 ;        - It represents the number of lines completed by the user (1 line = 100 points)
@@ -117,7 +117,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; a Grid is a Vector<Vector<Block>> (make-vector 10 (make-vector 40 Block))
-;     - It represent a grid of width = 10 blocks, height = 40 blocks (of which only 20 visible) 
+;     - It represent a grid of width = 10 blocks, height = 40 blocks (of which only 20 visible)
 ;     - The grid is the playing field where the pieces will fall
 ;     - The main list will be the rows of the grid, each row is a list of blocks
 ;
@@ -125,7 +125,7 @@
 
 (define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; WORLD-STATE
 ; A World-state is a Structure with the followings elements inside:
@@ -135,7 +135,7 @@
 ;      should-quit:  Boolean value that represents if the application should quit or not
 ;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
 ;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
-;      falling-blocks: Vector of Posn that represents the position of the falling blocks in the grid 
+;      falling-blocks: Vector of Posn that represents the position of the falling blocks in the grid
 ;
 ; Header
 
@@ -150,7 +150,7 @@
 
 ;; FUNCTIONS
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -                
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; RANDOM PIECE FUNCTION
 ;
@@ -165,32 +165,29 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SET-GRID-BLOCK FUNCTION
-; takes a Block, a Grid and x y coordinates and edits the Grid with a Block at the coordinates given as inputs
-; set-grid-block: Block Grid Number Number -> Void
-; (define (set-grid-block grid x y block) )
-; (define (set-grid-block grid x y block)
-;   (block-color block) .... (block-position block) ... (block-is-fallin block)
-;   x .... y ....
-;   (vector-set! ... grid ...) (list->vector ... grid ...)
+; takes a Block, a Grid and a Posn and edits the Grid with a Block at the coordinates given as inputs in the Posn
+; set-grid-block: Block Grid Posn -> Grid
 
-(define (set-grid-block grid x y block)
-  (local (
-          (define CURRENTROW (get-grid-row grid y))
-          (define (set-block grid tempX y block)
-            (cond
-              [(= x tempX) (cons block (set-block grid (add1 tempX) y block))]
-              [(< tempX (vector-length CURRENTROW)) (cons (vector-ref CURRENTROW tempX) (set-block grid (add1 tempX) y block))]
-              [else '()]
-              )
-            )) (vector-set grid y (list->vector (set-block grid 0 y block)))))
-
+;;; (define (set-grid-block block grid posn)
+;;; (cond
+;;; [(= (posn-x posn) 0) ...]
+;;; [(= (posn-x (sub1 BLOCKS-IN-HEIGHT)))...]
+;;; [else (vector-append (vector-take (posn-y posn) (...) (vector-take-right)))])
+;;; )
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; VECTOR-SET
 ; takes a vector, a position (Number) and a value (Number) and returns a Vector with the new value at the indicated position
-; vector-set: Vector Number Number -> Vector 
+; vector-set: Vector Number Number -> Vector
 (define (vector-set vec pos value)
-  (vector-ref (vector-append (vector-take vec (sub1 pos)) (vector value) (vector-take-right vec pos)) 0))
+  (local (
+          (define VEC-LEN (vector-length vec))
+          (define (set-value vec pos value)
+            (cond
+              [(= pos 0) (vector-append (vector value) (vector-take-right vec (sub1 VEC-LEN)))]
+              [(= pos (sub1 VEC-LEN)) (vector-append (vector-take vec (sub1 VEC-LEN)) (vector value))]
+              [else (vector-append (vector-take vec pos) (vector value) (vector-take-right vec pos))]))
+          ) (set-value vec pos value)))
 
 
 ; SET-GRID-ROW FUNCTION V.2
@@ -200,11 +197,11 @@
 
 (define (set-grid-row grid y vect)
   (cond
-    [(= y 0) (vector-append vect (vector-take-right grid 39))]
-    [(= y 39) (vector-append (vector-take (sub1 y)) vect)]
-    [else (vector-append (vector-take grid (sub1 y)) (vector (vector-set grid y vect)) (vector-take-right grid y))]))
+    [(= y 0) (vector-append vect (vector-take-right grid (sub1 BLOCKS-IN-HEIGHT)))]
+    [(= y (sub1 BLOCKS-IN-HEIGHT)) (vector-append (vector-take (sub1 BLOCKS-IN-HEIGHT)) vect)]
+    [else (vector-append (vector-take grid y) (vector (vector-set grid y vect)) (vector-take-right grid y))]))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; ADD-PIECE-TO-WORLD-STATE FUNCTION V.2
 ; Receives a World-state and a Piece as inputs and adds the Piece at the top of the Grid
@@ -214,7 +211,7 @@
 (define (add-piece-to-world-state world-state piece)
   (update-grid world-state
                (vector-append
-                (vector 
+                (vector
                  (vector-ref piece 0)
                  (vector-ref piece 1)
                  (vector-ref piece 2)
@@ -222,7 +219,7 @@
                 (vector-take-right (world-state-grid world-state) 36))))
 
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GET-GRID-BLOCK FUNCTION
 ; takes a Grid, x and y and returns the block
@@ -242,7 +239,7 @@
 (define (get-grid-row grid y)
   (vector-ref grid y))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GET-GRID-COLUMN FUNCTION
 ; takes a Grid and an x coordinate and returns a Vector representing the column of the Grid
@@ -268,7 +265,7 @@
 (define (block-to-image block)
   (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GRID-ROW-TO-IMAGE FUNCTION
 ; Returns the requested row of the given grid as an image
@@ -285,14 +282,14 @@
             )
           ) (grid-row-to-image grid 0 y)))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GRID-TO-IMAGE FUNCTION
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Grid -> Image
 ; (define (grid-to-image grid) (rectangle 28 28 "solid" "black"))
 
-(define (grid-to-image grid) 
+(define (grid-to-image grid)
   (local (
           (define (grid-to-image-inner grid y)
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
@@ -300,7 +297,7 @@
                 (grid-row-image grid y))))
     (grid-to-image-inner grid 20)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SCORE-TO-IMAGE FUNCTION
 ; takes a Score and turns it into an Image
@@ -312,9 +309,9 @@
   (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 "deep pink"
              #f 'swiss 'normal 'bold #f))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; DRAW FUNCTION 
+; DRAW FUNCTION
 ; takes a WorldState and renders the background and the grid
 ; draw: WorldState -> Image
 ; (define (draw world-state) (rectangle 28 28 "solid" "black"))
@@ -323,10 +320,10 @@
   (overlay/offset (score-to-image world-state) 0 -350
                   (overlay (grid-to-image (world-state-grid world-state))
                            (rectangle 302 602 "solid" "black")
-                           (world-state-background world-state)))) 
+                           (world-state-background world-state))))
 
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; TICK FUNCTION
 ; takes a World-state and, if flag should-spawn is true adds a Piece to the Grid:
@@ -341,7 +338,7 @@
       (local (
               (define (omegaFunction world-state num)
                 (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
-                                                                                      (vector-ref PIECES num))
+                                                                                      (vector-ref PIECES num)) ; perché nn usiamo random-piece?
                                                             #false)
                                        (vector-ref FALLING-BLOCKS-POSITIONS num))))
         (omegaFunction world-state (random 0 6)))
@@ -372,16 +369,33 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BLOCK-FALLS-DOWN FUNCTION
-; Takes a World-state and returns a World-state with grid updated according to CHANGE-POSN-IN-WORLD-STATE
+; Takes a World-state and returns a World-state with grid updated in the following way:
+; the falling blocks in the grid have been moved down by one
 ; block-falls-down: World-state -> World-state
 ; (define (block-falls-down world-state) EXAMPLE-STATE)
 
-;(define (block-falls-down world-state)
-;  (
+
+;;; (define (block-falls-down world-state)
+;;;   (local (
+;;;     (define BLOCKS-LENGHT (vector-length (world-state-falling-blocks world-state)))
+;;;     (define (block-falls-down-int world-state x)
+;;;     (cond
+;;;     [(= x (sub1 BLOCKS-LENGHT) (gino world-state (vector-ref (world-state-falling-blocks world-state) x)))]
+;;;     [else (block-falls-down-int (gino world-state (vector-ref (world-state-falling-blocks world-state) x)) (add1 x))]))
+;;;   ) (block-falls-down-int world-state 0)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; GINO FUNCTION
+; Takes a World-state and a Posn and returns a World-state in which the grid's piece
+; at Posn coordinates is swapped with the one underneath
+; gino: World-state Posn -> World-state
+; (define (gino world-state posn) EXAMPLE-STATE)
 
-; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA 
+;;; (define (gino world-state posn)
+;;; (update-grid world-state (...vector...posn...)))
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
 
 ; UPDATE-SCORE
 ; takes a World State and a Number and updates the Score
@@ -425,7 +439,7 @@
 ; takes a World-state, x and y coordinates and returns true if the Block (add1 y) at the coordinates x y in the Grid can fall
 ; can-block-fall?: World-state Number Number -> Boolean
 ; (define (can-block-fall? World-state x y) #true)
-; 
+;
 
 (define (can-block-fall? world-state x y)
   (cond
@@ -440,7 +454,7 @@
   (equal? (block-color block) EMPTY-COLOR))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- 
+
 ; HANDLE-KEY FUNCTION
 ;
 
@@ -451,7 +465,7 @@
 
 
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
 
@@ -465,7 +479,7 @@
 
 
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BIG-BANG
 ;
@@ -477,7 +491,7 @@
     ;[stop-when quit?]
     ))
 
- 
+
 
 
 #|
@@ -494,10 +508,11 @@ TO DO:
      * ti esce un messaggio
      * press key to restart (forse)
 * frecce muovono il piece (handle-key)
-* I PEZZI RUOTANO!!!!!!!! :S 
+* I PEZZI RUOTANO!!!!!!!! :S
 * aggiungere il tick interno al worldstate
 * fare template e check-expect
 * cambiare grid 40
+* togliere posn dai blocks
 
 |#
 
