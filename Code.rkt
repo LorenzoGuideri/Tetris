@@ -1,4 +1,7 @@
-#lang htdp/asl
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname Code) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+
 
 (require 2htdp/universe)
 (require 2htdp/image)
@@ -34,7 +37,7 @@
 
 ; BLOCKS IN GRID
 (define BLOCKS-IN-WIDTH 10)
-(define BLOCKS-IN-HEIGHT 40)
+(define BLOCKS-IN-HEIGHT 24)
 
 ;; --------------------------------------------------------------------------
 
@@ -185,9 +188,9 @@
           (define VEC-LEN (vector-length vec))
           (define (set-value vec pos value)
             (cond
-              [(= pos 0) (vector-append (vector value) (vector-take-right vec (sub1 VEC-LEN)))]
-              [(= pos (sub1 VEC-LEN)) (vector-append (vector-take vec (sub1 VEC-LEN)) (vector value))]
-              [else (vector-append (vector-take vec pos) (vector value) (vector-take-right vec pos))]))
+              [(= pos 0) (vector-ref (vector-append (vector value) (vector-take-right vec (sub1 VEC-LEN))) 0)]
+              [(= pos (sub1 VEC-LEN)) (vector-ref (vector-append (vector-take vec (sub1 VEC-LEN)) (vector value)) 0)]
+              [else (vector-ref (vector-append (vector-take vec pos) (vector value) (vector-take-right vec (- (sub1 VEC-LEN) pos))) 0)]))
           ) (set-value vec pos value)))
 
 
@@ -200,7 +203,7 @@
   (cond
     [(= y 0) (vector-append vect (vector-take-right grid (sub1 BLOCKS-IN-HEIGHT)))]
     [(= y (sub1 BLOCKS-IN-HEIGHT)) (vector-append (vector-take (sub1 BLOCKS-IN-HEIGHT)) vect)]
-    [else (vector-append (vector-take grid y) (vector (vector-set grid y vect)) (vector-take-right grid y))]))
+    [else (vector-append (vector-take grid y) (vector vect) (vector-take-right grid (- (sub1 BLOCKS-IN-HEIGHT) y)))])) 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -217,7 +220,7 @@
                  (vector-ref piece 1)
                  (vector-ref piece 2)
                  (vector-ref piece 3))
-                (vector-take-right (world-state-grid world-state) 36))))
+                (vector-take-right (world-state-grid world-state) (- BLOCKS-IN-HEIGHT 4)))))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -296,7 +299,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 20)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 20
+    (grid-to-image-inner grid 4)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 4
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -408,17 +411,17 @@
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state)))
 
-; SHOULD-QUIT
+; UPDATE-SHOULD-QUIT
 (define (update-should-quit world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     value (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
 
-; SHOULD-SPAWN
+; UPDATE-SHOULD-SPAWN
 (define (update-should-spawn world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) value (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
 
-; IS-PAUSED
+; UPDATE-IS-PAUSED
 (define (update-is-paused world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state)))
@@ -512,7 +515,6 @@ TO DO:
 * I PEZZI RUOTANO!!!!!!!! :S
 * aggiungere il tick interno al worldstate
 * fare template e check-expect
-* cambiare grid 40
 * togliere posn dai blocks
 
 |#
