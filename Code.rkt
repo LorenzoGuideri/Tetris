@@ -45,32 +45,29 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; a Block is a Structure (make-block color position is-falling)
+; a Block is a Structure (make-block color is-falling)
 ; where:
 ;       - color is one of predefined BLOCK COLORS
-;
-;       - position is a Posn (make-posn Number Number)
-;                - it contains the position of the block in the grid
 ;
 ;       - is-falling is a Boolean containing the position of the block in the grid
 ;                - #true when the block is falling
 ;                - #false when the block is not falling
 
-(define-struct block [color position is-falling] #:transparent)
+(define-struct block [color is-falling] #:transparent)
 
 ; Examples
 
-(define FEB (make-block EMPTY-COLOR (make-posn 0 0) #true)) ; Falling Empty Block
-(define FYB (make-block YELLOW (make-posn 1 1) #true)) ; Falling Yellow Bloc
-(define FOB (make-block ORANGE (make-posn 1 1) #true)) ; Falling Orange Block
-(define FRB (make-block RED (make-posn 1 1) #true)) ; Falling Red Block
-(define FPB (make-block PINK (make-posn 1 1) #true)) ; Falling Pink Block
-(define FLB (make-block LILAC (make-posn 1 1) #true)) ; Falling Lilac Block
-(define FBB (make-block BLUE (make-posn 1 1) #true)) ; Falling Blue Block
-(define FGB (make-block GREEN (make-posn 1 1) #true)) ; Falling Green Block
+(define FEB (make-block EMPTY-COLOR #true)) ; Falling Empty Block
+(define FYB (make-block YELLOW #true)) ; Falling Yellow Bloc
+(define FOB (make-block ORANGE #true)) ; Falling Orange Block
+(define FRB (make-block RED #true)) ; Falling Red Block
+(define FPB (make-block PINK #true)) ; Falling Pink Block
+(define FLB (make-block LILAC #true)) ; Falling Lilac Block
+(define FBB (make-block BLUE #true)) ; Falling Blue Block
+(define FGB (make-block GREEN #true)) ; Falling Green Block
 
-(define NFEB (make-block EMPTY-COLOR (make-posn 9 8) #false)) ;Non-Falling Empty Block
-(define NFLB (make-block LILAC (make-posn 3 4) #false)) ;Non-Falling Lilac Block
+(define NFEB (make-block EMPTY-COLOR #false)) ;Non-Falling Empty Block
+(define NFLB (make-block LILAC #false)) ;Non-Falling Lilac Block
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -524,7 +521,6 @@ TO DO:
 * I PEZZI RUOTANO!!!!!!!! :S
 * aggiungere il tick interno al worldstate
 * fare template e check-expect
-
 
 |#
 
