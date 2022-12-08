@@ -380,27 +380,29 @@
           (define BLOCKS-LENGHT (vector-length (world-state-falling-blocks world-state)))
           (define (block-falls-down-int world-state x)
             (cond
-              [(= x (sub1 BLOCKS-LENGHT) (gino world-state (vector-ref (world-state-falling-blocks world-state) x)))]
-              [else (block-falls-down-int (gino world-state (vector-ref (world-state-falling-blocks world-state) x)) (add1 x))]))
+              [(= x (sub1 BLOCKS-LENGHT) (swap-block world-state (vector-ref (world-state-falling-blocks world-state) x)))]
+              [else (block-falls-down-int (swap-block world-state (vector-ref (world-state-falling-blocks world-state) x)) (add1 x))]))
           ) (block-falls-down-int world-state 0)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; GINO FUNCTION
-; Takes a World-state and a Posn and returns a World-state in which the grid's piece
-; at Posn coordinates is swapped with the one underneath
-; gino: World-state Posn -> World-state
-; (define (gino world-state posn) EXAMPLE-STATE)
+; swap-block FUNCTION
+; Takes a World-state and a Posn and returns a World-state in which the grid's block
+; at PosnSource coordinates is swapped with the block in the other coordinates
+; swap-block: World-state Posn Posn -> World-state
+; (define (swap-block world-state posnSrc posnDst) EXAMPLE-STATE)
 
-(define (gino world-state posn)
-  (update-grid world-state
-               (set-grid-row
-                (world-state-grid world-state)
-                (vector-ref (set-grid-block (world-state-grid world-state)
-                                            (posn-y posn)
-                                            (get-grid-block
-                                             (world-state-grid world-state)
-                                             (posn-x posn)
-                                             (add1 (posn-y posn))))))))
+(define (swap-block world-state posnSrc posnDst)
+  (local (
+          (define SRC-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posnSrc) (posn-y posnSrc)))
+          (define DST-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posnDst) (posn-y posnDst)))
+          (define (swap)
+            (update-grid
+                world-state
+                (set-grid-block DST-BLOCK (world-state-grid (update-grid world-state (set-grid-block SRC-BLOCK (world-state-grid world-state) posnDst))) posnSrc) ; Block Grid Posn
+             ))
+          ) (swap))
+  )
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
