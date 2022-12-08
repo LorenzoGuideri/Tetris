@@ -1,7 +1,4 @@
-;; The first three lines of this file were inserted by DrRacket. They record metadata
-;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-advanced-reader.ss" "lang")((modname Code) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
-
+#lang htdp/asl
 
 (require 2htdp/universe)
 (require 2htdp/image)
@@ -49,6 +46,19 @@
  (overlay/align/offset 
  "middle" "middle" 
   (text/font "GAME OVER" 60 "Light Red" #f 'swiss 'normal 'bold #f)
+  +15 100
+  BACKGROUND)))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; PAUSE-PAGE
+(define PAUSE-PAGE
+(overlay/align/offset
+ "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
+ +15 -50
+ (overlay/align/offset 
+ "middle" "middle" 
+  (text/font "GAME IS PAUSED" 50 "Light Blue" #f 'swiss 'normal 'bold #f)
   +15 100
   BACKGROUND)))
 
@@ -330,17 +340,20 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; DRAW FUNCTION
-; takes a WorldState and renders the background and the grid
+; takes a WorldState and renders the background and the grid if the 
 ; draw: WorldState -> Image
 ; (define (draw world-state) (rectangle 28 28 "solid" "black"))
 
 ; * if game over is true: render game over page
 
 (define (draw world-state)
-  (overlay/offset (score-to-image world-state) 0 -350
+  (cond 
+  [(world-state-game-over world-state) GAME-OVER-PAGE]
+  [(world-state-is-paused world-state) PAUSE-PAGE]
+  [else (overlay/offset (score-to-image world-state) 0 -350
                   (overlay (grid-to-image (world-state-grid world-state))
                            (rectangle 302 602 "solid" "black")
-                           (world-state-background world-state))))
+                           (world-state-background world-state)))]))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -612,12 +625,14 @@ world-state))
 
 ;;; TO DO:
 
-;;; * i pezzi si fermano
+;;; * stop-falling
 ;;; * i pezzi si impilano
-;;; * se game-over è true:
-;;;      * ti esce un messaggio
-;;;      * press key to restart (forse)
-;;; * frecce muovono il piece (handle-key)
-;;; * I PEZZI RUOTANO!!!!!!!! :S
+;;; * handle-key: 
+;;;   press r to restart 
+;;;   freccia left va a sinistra
+;;;   freccia right va a destra
+;;;   freccia giu va giu veloce
+;;;   freccia su ruota ORARIO
+;;; * rotate
 ;;; * aggiungere il tick interno al worldstate
 ;;; * fare template e check-expect
