@@ -86,7 +86,7 @@
 
 ; PREDEFINED FALLING-BLOCKS-POSITIONS
 
-(define O-PIECE-POSITIONS (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)))
+(define O-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 1) (make-posn 4 0) (make-posn 5 0)))
 (define L-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 5 1) (make-posn 4 1) (make-posn 6 0)))
 (define Z-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 5 1) (make-posn 5 0) (make-posn 4 0)))
 (define T-PIECE-POSITIONS (vector (make-posn 4 1) (make-posn 5 0) (make-posn 4 0) (make-posn 3 0)))
@@ -198,7 +198,7 @@
 (define (set-grid-row grid y vect)
   (cond
     [(= y 0) (vector-append (vector vect) (vector-take-right grid (sub1 BLOCKS-IN-HEIGHT)))]
-    [(= y (sub1 BLOCKS-IN-HEIGHT)) (vector-append (vector-take (sub1 BLOCKS-IN-HEIGHT)) vect)]
+    [(= y (sub1 BLOCKS-IN-HEIGHT)) (vector-append (vector-take grid (sub1 BLOCKS-IN-HEIGHT)) vect)]
     [else (vector-append (vector-take grid y) (vector vect) (vector-take-right grid (- (sub1 BLOCKS-IN-HEIGHT) y)))]))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -338,12 +338,16 @@
       (local (
               (define (omegaFunction world-state num)
                 (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
-                                                                                      (vector-ref PIECES num)) ; perché nn usiamo random-piece?
+                                                                                      (vector-ref PIECES num))
                                                             #false)
                                        (vector-ref FALLING-BLOCKS-POSITIONS num))))
         (omegaFunction world-state (random 0 6)))
-      world-state
-      ))
+      ;world-state
+      (update-score (block-falls-down (change-posn-in-world-state world-state)) (add1 (world-state-score world-state)))
+      )
+  ;(update-score world-state (add1 (world-state-score world-state)))
+  ;(if (not (= (vector-length (world-state-falling-blocks world-state)) 0)) (vector-ref (world-state-falling-blocks world-state) 0) world-state)
+  )
 
 ; 1. metto il pezzo nel world-state
 ; 2. lo passo ad update-should-spawn che mi mette #false in should-spawn,
@@ -361,27 +365,28 @@
 ; (define (change-posn-in-world-state world-state) INITIAL-STATE)
 
 (define (change-posn-in-world-state world-state)
-  (vector-map
-   (lambda (posn) (make-posn (posn-x posn) (add1 (posn-y posn))))
-   (world-state-falling-blocks world-state)))
+  (update-falling-blocks world-state
+                         (vector-map
+                          (lambda (posn) (make-posn (posn-x posn) (add1 (posn-y posn))))
+                          (world-state-falling-blocks world-state))))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BLOCK-FALLS-DOWN FUNCTION
 ; Takes a World-state and returns a World-state with grid updated in the following way:
-; the falling blocks in the grid have been moved down by one
+; the falling blocks in the grid have been moved to the position of falling-blocks
 ; block-falls-down: World-state -> World-state
 ; (define (block-falls-down world-state) EXAMPLE-STATE)
 
 
 (define (block-falls-down world-state)
   (local (
-          (define BLOCKS-LENGHT (vector-length (world-state-falling-blocks world-state)))
+          (define BLOCKS-LENGTH (vector-length (world-state-falling-blocks world-state)))
           (define (block-falls-down-int world-state x)
             (cond
-              [(= x (sub1 BLOCKS-LENGHT) (swap-block world-state (vector-ref (world-state-falling-blocks world-state) x)))]
-              [else (block-falls-down-int (swap-block world-state (vector-ref (world-state-falling-blocks world-state) x)) (add1 x))]))
+              [(= x (sub1 BLOCKS-LENGTH)) (swap-block world-state (make-posn (posn-x (vector-ref (world-state-falling-blocks world-state) x)) (sub1 (posn-y (vector-ref (world-state-falling-blocks world-state) x)))) (vector-ref (world-state-falling-blocks world-state) x))]
+              [else (block-falls-down-int (swap-block world-state (make-posn (posn-x (vector-ref (world-state-falling-blocks world-state) x)) (sub1 (posn-y (vector-ref (world-state-falling-blocks world-state) x)))) (vector-ref (world-state-falling-blocks world-state) x)) (add1 x))]))
           ) (block-falls-down-int world-state 0)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -397,8 +402,8 @@
           (define DST-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posnDst) (posn-y posnDst)))
           (define (swap)
             (update-grid
-                world-state
-                (set-grid-block DST-BLOCK (world-state-grid (update-grid world-state (set-grid-block SRC-BLOCK (world-state-grid world-state) posnDst))) posnSrc) ; Block Grid Posn
+             world-state
+             (set-grid-block DST-BLOCK (world-state-grid (update-grid world-state (set-grid-block SRC-BLOCK (world-state-grid world-state) posnDst))) posnSrc) ; Block Grid Posn
              ))
           ) (swap))
   )
@@ -489,16 +494,16 @@
 
        (cond
          [(vector-member
-          NFEB (get-grid-row (world-state-grid world-state) y))
+           NFEB (get-grid-row (world-state-grid world-state) y))
           (row-full-int world-state (sub1 y))]
 
          [else
           (update-grid world-state (set-grid-row
-           (world-state-grid world-state)
-           y
-           (get-grid-row (world-state-grid world-state)
-                         (sub1 y))))])))
-  (row-full-int world-state y)))
+                                    (world-state-grid world-state)
+                                    y
+                                    (get-grid-row (world-state-grid world-state)
+                                                  (sub1 y))))])))
+    (row-full-int world-state y)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; LOSER FUNCTION
@@ -546,8 +551,6 @@
     ))
 
 
-
-
 #|
 
 
@@ -567,3 +570,4 @@ TO DO:
 
 |#
 
+(tetris INITIAL-STATE)
