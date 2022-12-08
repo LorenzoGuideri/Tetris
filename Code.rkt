@@ -503,10 +503,13 @@
 
 ; LOSER FUNCTION
 ; takes a World-state and checks if the us
+#|
 * se la riga 20 non ha solo blocchi vuoti: hai perso
      * non spawnano piu pezzi
      * ti esce un messaggio
      * press key to restart (forse)
+
+|#
 
 ; HANDLE-KEY FUNCTION
 ;
