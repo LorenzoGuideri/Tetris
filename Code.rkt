@@ -569,28 +569,8 @@ world-state))
     ))
 
 
-<<<<<<< Updated upstream
-#|
-
-
-TO DO:
-
-* il piece cade da solo (tick)
-* i pezzi si fermano
-* i pezzi si impilano
-* se la riga 20 non ha solo blocchi vuoti:
-     * non spawnano piu pezzi
-     * ti esce un messaggio
-     * press key to restart (forse)
-* frecce muovono il piece (handle-key)
-* I PEZZI RUOTANO!!!!!!!! :S
-* aggiungere il tick interno al worldstate
-* fare template e check-expect
-=======
-
 
 ;;; TO DO:
->>>>>>> Stashed changes
 
 ;;; * il piece cade da solo (tick)
 ;;; * i pezzi si fermano
@@ -603,5 +583,3 @@ TO DO:
 ;;; * I PEZZI RUOTANO!!!!!!!! :S
 ;;; * aggiungere il tick interno al worldstate
 ;;; * fare template e check-expect
-
-(tetris INITIAL-STATE)
