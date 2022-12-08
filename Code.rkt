@@ -1,4 +1,7 @@
-#lang htdp/asl
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname Code) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+
 
 (require 2htdp/universe)
 (require 2htdp/image)
@@ -35,6 +38,19 @@
 ; BLOCKS IN GRID
 (define BLOCKS-IN-WIDTH 10)
 (define BLOCKS-IN-HEIGHT 24)
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; GAME-OVER-PAGE
+(define GAME-OVER-PAGE
+(overlay/align/offset
+ "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
+ +15 -50
+ (overlay/align/offset 
+ "middle" "middle" 
+  (text/font "GAME OVER" 60 "Light Red" #f 'swiss 'normal 'bold #f)
+  +15 100
+  BACKGROUND)))
 
 ;; --------------------------------------------------------------------------
 
@@ -145,6 +161,7 @@
 
 (define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false))
 (define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false))
+
 
 ;; -------------------------------------------------------------------------------------------------------------------
 
@@ -316,6 +333,8 @@
 ; takes a WorldState and renders the background and the grid
 ; draw: WorldState -> Image
 ; (define (draw world-state) (rectangle 28 28 "solid" "black"))
+
+; * if game over is true: render game over page
 
 (define (draw world-state)
   (overlay/offset (score-to-image world-state) 0 -350
@@ -596,7 +615,6 @@ world-state))
 ;;; * i pezzi si fermano
 ;;; * i pezzi si impilano
 ;;; * se game-over è true:
-;;;      * non spawnano piu pezzi
 ;;;      * ti esce un messaggio
 ;;;      * press key to restart (forse)
 ;;; * frecce muovono il piece (handle-key)
