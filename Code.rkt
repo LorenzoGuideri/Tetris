@@ -75,13 +75,13 @@
 
 ; PREDEFINED PIECES
 
-(define O-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
+(define O-PIECE (vector (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FYB FYB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define L-PIECE (vector (vector NFEB NFEB NFEB NFEB NFEB NFEB FOB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FOB FOB FOB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
-(define Z-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB) (make-vector 10 NFEB)))
+(define Z-PIECE (vector (vector NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB NFEB FRB FRB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define T-PIECE (vector (vector NFEB NFEB NFEB FPB FPB FPB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FPB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define J-PIECE (vector (vector NFEB NFEB NFEB NFEB FLB NFEB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB NFEB FLB FLB FLB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 (define I-PIECE (vector (vector NFEB NFEB NFEB FBB FBB FBB FBB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
-(define S-PIECE (vector (make-vector 10 NFEB) (vector NFEB NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB)))
+(define S-PIECE (vector (vector NFEB NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB) (vector NFEB NFEB NFEB FGB FGB NFEB NFEB NFEB NFEB NFEB) (make-vector 10 NFEB) (make-vector 10 NFEB)))
 
 
 ; PREDEFINED FALLING-BLOCKS-POSITIONS
@@ -501,6 +501,12 @@
   (row-full-int world-state y)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; LOSER FUNCTION
+; takes a World-state and checks if the us
+* se la riga 20 non ha solo blocchi vuoti: hai perso
+     * non spawnano piu pezzi
+     * ti esce un messaggio
+     * press key to restart (forse)
 
 ; HANDLE-KEY FUNCTION
 ;
@@ -549,8 +555,7 @@ TO DO:
 * il piece cade da solo (tick)
 * i pezzi si fermano
 * i pezzi si impilano
-* se la riga (y) è completa: sposta giù di uno quello che c'è sopra (set-grid-row)
-* se la riga 20 non ha solo blocchi vuoti: hai perso
+* se la riga 20 non ha solo blocchi vuoti:
      * non spawnano piu pezzi
      * ti esce un messaggio
      * press key to restart (forse)
