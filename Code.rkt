@@ -510,6 +510,7 @@
                                     (get-grid-row (world-state-grid world-state)
                                                   (sub1 y))))])))
     (row-full-int world-state y)))
+    
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; LOSER FUNCTION
@@ -528,7 +529,6 @@ world-state))
 
 (define (is-block-nonempty? block)
 (not (equal? (block-color block) EMPTY-COLOR)))
-
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -572,10 +572,9 @@ world-state))
 
 ;;; TO DO:
 
-;;; * il piece cade da solo (tick)
 ;;; * i pezzi si fermano
 ;;; * i pezzi si impilano
-;;; * se la riga 20 non ha solo blocchi vuoti:
+;;; * se game-over è true:
 ;;;      * non spawnano piu pezzi
 ;;;      * ti esce un messaggio
 ;;;      * press key to restart (forse)
