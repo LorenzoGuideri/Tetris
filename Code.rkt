@@ -503,20 +503,11 @@
 
 ; LOSER FUNCTION
 ; takes a World-state and checks if the us
-<<<<<<< Updated upstream
-#|
-* se la riga 20 non ha solo blocchi vuoti: hai perso
-     * non spawnano piu pezzi
-     * ti esce un messaggio
-     * press key to restart (forse)
-=======
 ; * se la riga 20 non ha solo blocchi vuoti: hai perso
 ; * non spawnano piu pezzi
 ; * ti esce un messaggio
 ; * press key to restart (forse)
->>>>>>> Stashed changes
 
-|#
 
 ; HANDLE-KEY FUNCTION
 ;
