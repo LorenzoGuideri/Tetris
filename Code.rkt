@@ -508,13 +508,18 @@
                                     (get-grid-row (world-state-grid world-state)
                                                   (sub1 y))))])))
     (row-full-int world-state y)))
-    
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; LOSER FUNCTION
 ; takes a World-state and checks if the 21st row has Blocks whose color is not EMPTY-COLOR
 ; if true: returns World-state with game-over turned to #true, should-spawn turned to #false
-
+; (define (loser world-state) EXAMPLE-STATE)
+; (define (loser world-state)
+; (if 
+; (... (get-grid-row (world-state-grid world-state) ... )
+; (update-game-over world-state #true)
+; world-state))
 
 (define (loser world-state)
 (if 
@@ -527,6 +532,11 @@ world-state))
 
 (define (is-block-nonempty? block)
 (not (equal? (block-color block) EMPTY-COLOR)))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; 
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
