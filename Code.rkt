@@ -135,15 +135,16 @@
 ;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
 ;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
 ;      falling-blocks: Vector of Posn that represents the position of the falling blocks in the grid
+;      game-over:    Boolean value that represents if the player lost (#true) or not (#false)
 ;
 ; Header
 
-(define-struct world-state [background grid score should-quit should-spawn is-paused falling-blocks] #:transparent)
+(define-struct world-state [background grid score should-quit should-spawn is-paused falling-blocks game-over] #:transparent)
 ;
 ; Examples
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0)))
-(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS))
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false))
+(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false))
 
 ;; -------------------------------------------------------------------------------------------------------------------
 
@@ -413,38 +414,43 @@
 ; UPDATE-SCORE
 ; takes a World State and a Number and updates the Score
 ; update-score: Wordld-state Number -> WorldState
-; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false))
+; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false #false))
 
 (define (update-score world-state n)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) n
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state)))
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-SHOULD-QUIT
 (define (update-should-quit world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    value (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
+                    value (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-SHOULD-SPAWN
 (define (update-should-spawn world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) value (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
+                    (world-state-should-quit world-state) value (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-IS-PAUSED
 (define (update-is-paused world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-FALLING-BLOCKS
 ; updates falling-blocks which is a Vector in the World-state
 (define (update-falling-blocks world-state value)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) value))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) value (world-state-game-over world-state)))
 
 ; UPDATE-GRID
 (define (update-grid world-state value)
   (make-world-state (world-state-background world-state) value (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+
+; UPDATE-GAME-OVER
+(define (update-game-over world-state value)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) value))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -502,23 +508,32 @@
                                     (get-grid-row (world-state-grid world-state)
                                                   (sub1 y))))])))
     (row-full-int world-state y)))
+    
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; LOSER FUNCTION
-; takes a World-state and checks if the us
-#|
-* se la riga 20 non ha solo blocchi vuoti: hai perso
-     * non spawnano piu pezzi
-     * ti esce un messaggio
-     * press key to restart (forse)
+; takes a World-state and checks if the 21st row has Blocks whose color is not EMPTY-COLOR
+; if true: returns World-state with game-over turned to #true, should-spawn turned to #false
 
 
-|#
+(define (loser world-state)
+(if 
+(vector-member #true (vector-map is-block-nonempty? 
+                                  (get-grid-row (world-state-grid world-state) (sub1 BLOCKS-IN-HEIGHT)))) 
+(update-game-over world-state #true)
+world-state))
+
+; AUX IS-BLOCK-NONEMPTY?
+
+(define (is-block-nonempty? block)
+(not (equal? (block-color block) EMPTY-COLOR)))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; HANDLE-KEY FUNCTION
 ;
 
-
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 
@@ -552,23 +567,16 @@
     ))
 
 
-#|
 
+;;; TO DO:
 
-TO DO:
-
-* il piece cade da solo (tick)
-* i pezzi si fermano
-* i pezzi si impilano
-* se la riga 20 non ha solo blocchi vuoti:
-     * non spawnano piu pezzi
-     * ti esce un messaggio
-     * press key to restart (forse)
-* frecce muovono il piece (handle-key)
-* I PEZZI RUOTANO!!!!!!!! :S
-* aggiungere il tick interno al worldstate
-* fare template e check-expect
-
-|#
-
-;(tetris INITIAL-STATE)
+;;; * i pezzi si fermano
+;;; * i pezzi si impilano
+;;; * se game-over è true:
+;;;      * non spawnano piu pezzi
+;;;      * ti esce un messaggio
+;;;      * press key to restart (forse)
+;;; * frecce muovono il piece (handle-key)
+;;; * I PEZZI RUOTANO!!!!!!!! :S
+;;; * aggiungere il tick interno al worldstate
+;;; * fare template e check-expect
