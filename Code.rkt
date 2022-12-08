@@ -586,7 +586,18 @@ world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; HANDLE-KEY FUNCTION
-;
+; swap-block: World-state Posn Posn -> World-state
+; takes a World-state and a key-event and returns an updated World-state in the following way:
+; if key-event is left, moves non-empty blocks that are in grid to the left
+; if key-event is right, moves non-empty blocks that are in grid to the right
+; if key-event is down, moves non-empty blocks that are in grid faster down 
+; if key-event is up, rotates piece clock-wise
+
+;;; (define (handle-key-int world-state n)
+;;; (add1 posn-x (vector-ref (world-state-falling-blocks world-state) (add1 n))))
+;;; (vector-map handle-key-int world-state 0)
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
