@@ -122,6 +122,7 @@
 ; Examples
 
 (define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
+(define FULL-ROW-EXAMPLE (make-vector BLOCKS-IN-WIDTH FPB))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -189,7 +190,7 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; SET-GRID-ROW FUNCTION V.2
+; SET-GRID-ROW FUNCTION
 ; Takes a Vector, a Number and a Grid. At the position Number of the Grid it inserts the Vector given as input
 ; set-grid-row: Grid Number Grid -> Grid
 ; (define (set-grid-row grid y src) )
@@ -462,8 +463,40 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; FULL-LINE FUNCTION
+; ROW-FULL FUNCTION
+; takes a World-state and determines if there are any full rows (if there is a row where all the blocks have a color
+; that is not EMPTY-COLOR), it returns the number of the row that is full
+; row-full: World-state -> Number
+; (define (row-full world-state) EXAMPLE-STATE)
 
+;;; prendo la grid dal world-state,
+;;; prendo l'ultima row (y = 23) (che è un vettore di block)
+;;; e faccio vector-member della row e gli passo il NFEB, se mi returna true vado a quella dopo
+;;; se mi returna false gli faccio mettere set-grid-row con la grid, la y e get-grid-row della grid e (sub1 y)
+
+(define CIPPI (set-grid-row (world-state-grid EXAMPLE-STATE) 17 FULL-ROW-EXAMPLE))
+(define CIPPI-WORLD-STATE (update-grid EXAMPLE-STATE CIPPI))
+; (check-expect (row-full CIPPI-WORLD-STATE) (make-world-state BACKGROUND ...))
+
+(define (row-full world-state)
+
+  (local
+    ((define y (sub1 BLOCKS-IN-HEIGHT))
+
+     (define (row-full-int world-state y)
+
+       (cond
+         [(vector-member
+          NFEB (get-grid-row (world-state-grid world-state) y))
+          (row-full-int world-state (sub1 y))]
+
+         [else
+          (update-grid world-state (set-grid-row
+           (world-state-grid world-state)
+           y
+           (get-grid-row (world-state-grid world-state)
+                         (sub1 y))))])))
+  (row-full-int world-state y)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
