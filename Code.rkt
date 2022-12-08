@@ -333,7 +333,6 @@
 
 
 (define (tick world-state)
-  ;world-state
   (if (world-state-should-spawn world-state)
       (local (
               (define (omegaFunction world-state num)
@@ -342,7 +341,6 @@
                                                             #false)
                                        (vector-ref FALLING-BLOCKS-POSITIONS num))))
         (omegaFunction world-state (random 0 6)))
-      ;world-state
       (update-score (block-falls-down (change-posn-in-world-state world-state)) (add1 (world-state-score world-state)))
       )
   ;(update-score world-state (add1 (world-state-score world-state)))
@@ -573,4 +571,4 @@ TO DO:
 
 |#
 
-(tetris INITIAL-STATE)
+;(tetris INITIAL-STATE)
