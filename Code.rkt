@@ -514,6 +514,7 @@
 ; LOSER FUNCTION
 ; takes a World-state and checks if the 21st row has Blocks whose color is not EMPTY-COLOR
 ; if true: returns World-state with game-over turned to #true, should-spawn turned to #false
+; loser: World-state -> World-state 
 ; (define (loser world-state) EXAMPLE-STATE)
 ; (define (loser world-state)
 ; (if 
@@ -535,7 +536,19 @@ world-state))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; 
+; IF-GAME-OVER-DONT-SPAWN 
+; takes a world-state and checks if the user lost, if they did 
+; it returns a world-state with the should-spawn flag changed to #false 
+; if-game-over-dont-spawn: World-state -> World-state
+; (define (if-game-over-dont-spawn) CIPPI-WORLD-STATE)
+; (define (if-game-over-dont-spawn) 
+;    (if 
+;     (world-state-game-over)... (update-should-spawn) world-state))
+
+(define (if-game-over-dont-spawn world-state)
+(if (world-state-game-over world-state) 
+    (update-should-spawn world-state #false) 
+    world-state))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
