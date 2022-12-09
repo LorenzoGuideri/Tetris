@@ -26,6 +26,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BACKGROUND
+
 (define WIDTH-BG 560)
 (define HEIGHT-BG 800)
 (define BACKGROUND (rectangle WIDTH-BG HEIGHT-BG "solid" EMPTY-COLOR))
@@ -33,12 +34,14 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BLOCKS IN GRID
+
 (define BLOCKS-IN-WIDTH 10)
 (define BLOCKS-IN-HEIGHT 24)
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GAME-OVER-PAGE
+
 (define GAME-OVER-PAGE
 (overlay/align/offset
  "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
@@ -52,6 +55,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; PAUSE-PAGE
+
 (define PAUSE-PAGE
 (overlay/align/offset
  "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
@@ -199,6 +203,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SET-GRID-BLOCK FUNCTION
+
 ; takes a Block, a Grid and a Posn and edits the Grid with a Block at the coordinates given as inputs in the Posn
 ; set-grid-block: Block Grid Posn -> Grid
 
@@ -210,6 +215,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; VECTOR-SET
+
 ; takes a vector, a position (Number) and a value (Number) and returns a Vector with the new value at the indicated position
 ; vector-set: Vector Number Number -> Vector
 (define (vector-set vec pos value)
@@ -225,6 +231,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SET-GRID-ROW FUNCTION
+
 ; Takes a Vector, a Number and a Grid. At the position Number of the Grid it inserts the Vector given as input
 ; set-grid-row: Grid Number Grid -> Grid
 ; (define (set-grid-row grid y src) )
@@ -237,7 +244,8 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; ADD-PIECE-TO-WORLD-STATE FUNCTION V.2
+; ADD-PIECE-TO-WORLD-STATE FUNCTION
+
 ; Receives a World-state and a Piece as inputs and adds the Piece at the top of the Grid
 ; add-piece-to-world-state: World-state Piece -> World-state
 ; (define (add-piece-to-world-state world-state piece) INITIAL-STATE)
@@ -256,6 +264,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GET-GRID-BLOCK FUNCTION
+
 ; takes a Grid, x and y and returns the block
 ; get-grid-block: Grid Number Number -> Block
 ; (define (get-grid-block Grid Number Number) FEB)
@@ -266,6 +275,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GET-GRID-ROW FUNCTION
+
 ; takes a Grid and a y coordinate and returns a Vector representing the row of the grid
 ; get-grid-row: Grid Number -> Vector
 ; (define (get-grid-row Grid Number) (make-vector ..))
@@ -276,6 +286,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GET-GRID-COLUMN FUNCTION
+
 ; takes a Grid and an x coordinate and returns a Vector representing the column of the Grid
 ; grid-column; Grid Number -> Vector
 ; (define (get-grid-columns Grid Number) (make-vector ..))
@@ -292,6 +303,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BLOCK-TO-IMAGE FUNCTION
+
 ; renders a single Block with a black outline
 ; block-to-image: Block -> Image
 ; (define (block-to-image block) (rectangle 28 28 "solid" "black")
@@ -302,6 +314,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GRID-ROW-TO-IMAGE FUNCTION
+
 ; Returns the requested row of the given grid as an image
 ; grid-row-to-image: Grid Number -> Image
 ; (define (grid-row-to-image Grid Number) (rectangle 28 28 "solid" "black"))
@@ -319,6 +332,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; GRID-TO-IMAGE FUNCTION
+
 ; Renders the grid in the world state as an Image
 ; Grid-to-image: Grid -> Image
 ; (define (grid-to-image grid) (rectangle 28 28 "solid" "black"))
@@ -334,6 +348,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; SCORE-TO-IMAGE FUNCTION
+
 ; takes a Score and turns it into an Image
 ; score-to-image: WorldState -> Image
 ; (define (score-to-image (world-state-score world-state) (rectangle 28 28 "solid" "black"))
@@ -346,6 +361,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; DRAW FUNCTION
+
 ; takes a WorldState and renders the background and the grid if the 
 ; draw: WorldState -> Image
 ; (define (draw world-state) (rectangle 28 28 "solid" "black"))
@@ -365,6 +381,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; TICK FUNCTION
+
 ; takes a World-state and, if flag should-spawn is true adds a Piece to the Grid:
 ;     - add-piece-to-world-state with a random piece
 ;     - turns to #false should-spawn
@@ -397,6 +414,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; CHANGE-POSN-Y-IN-WORLD-STATE FUNCTION
+
 ; Takes a World-state and returns a World-state where the posn-y of the Posns in vector of Posn is shifted down by one
 ; change-posn-y-in-world-state: World-state -> World-state
 ; (define (change-posn-y-in-world-state world-state) INITIAL-STATE)
@@ -411,6 +429,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BLOCK-FALLS-DOWN FUNCTION
+
 ; Takes a World-state and returns a World-state with grid updated in the following way:
 ; the falling blocks in the grid have been moved to the position of falling-blocks
 ; block-falls-down: World-state -> World-state
@@ -427,7 +446,8 @@
           ) (block-falls-down-int world-state 0)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; swap-block FUNCTION
+; SWAP FUNCTION
+
 ; Takes a World-state and a Posn and returns a World-state in which the grid's block
 ; at Posn-src coordinates is swapped with the block in the other coordinates
 ; swap-block: World-state Posn Posn -> World-state
@@ -456,38 +476,44 @@
 ; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false #false))
 
 ; UPDATE-SCORE
+
 (define (update-score world-state number)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) number
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-SHOULD-QUIT
+
 (define (update-should-quit world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     boolean (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-SHOULD-SPAWN
+
 (define (update-should-spawn world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) boolean (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-IS-PAUSED
+
 (define (update-is-paused world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) boolean (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-FALLING-BLOCKS
-; updates falling-blocks which is a Vector in the World-state
+
 (define (update-falling-blocks world-state vopsn)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) vector-of-posn (world-state-game-over world-state)))
 
 ; UPDATE-GRID
+
 (define (update-grid world-state vovob)
   (make-world-state (world-state-background world-state) vovob (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-GAME-OVER
+
 (define (update-game-over world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) boolean))
@@ -495,6 +521,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; CAN-BLOCK-FALL? FUNCTION
+
 ; takes a World-state, x and y coordinates and returns true if the Block (add1 y) at the coordinates x y in the Grid can fall
 ; can-block-fall?: World-state Number Number -> Boolean
 ; (define (can-block-fall? World-state x y) #true)
@@ -515,6 +542,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; ROW-FULL FUNCTION
+
 ; takes a World-state and determines if there are any full rows (if there is a row where all the blocks have a color
 ; that is not EMPTY-COLOR), it returns World-state with the Grid updated in the following way:
 ; if any row was full, it's removed and all the rows above pushed down by 1
@@ -549,6 +577,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; LOSER FUNCTION
+
 ; takes a World-state and checks if the 21st row has Blocks whose color is not EMPTY-COLOR
 ; if true: returns World-state with game-over turned to #true, should-spawn turned to #false
 ; loser: World-state -> World-state 
@@ -574,6 +603,7 @@ world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; IF-GAME-OVER-DONT-SPAWN 
+
 ; takes a World-state and checks if the user lost, if they did 
 ; it returns a World-state with the should-spawn flag changed to #false 
 ; if-game-over-dont-spawn: World-state -> World-state
@@ -591,33 +621,62 @@ world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; HANDLE-KEY FUNCTION
-; swap-block: World-state Posn Posn -> World-state
+
 ; takes a World-state and a key-event and returns an updated World-state in the following way:
 ; if key-event is left, moves non-empty FALLING blocks that are in grid to the left
 ; if key-event is right, moves non-empty FALLING blocks that are in grid to the right
 ; if key-event is down, moves non-empty FALLING blocks that are in grid faster down 
 ; if key-event is up, rotates FALLING PIECE clock-wise
 
-;;; (define (handle-key-int world-state n)
-;;; (add1 posn-x (vector-ref (world-state-falling-blocks world-state) (add1 n))))
-;;; (vector-map handle-key-int world-state 0)
+(define (handle-key world-state key)
+(cond
+[(key=? key "left") (move-left world-state)]
+[(key=? key "right") (move-right world-state)]
+;[(key=? key "down") (move-down world-state)]
+;[(key=? key "up") (rotate world-state)]
+[(key=? key "r") (tetris INITIAL-STATE)]))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; MOVE-RIGHT
+
+; takes a World-state and returns a World-state where blocks in grid are moved to the right by 1
+; move-right: World-state -> World-state
+; (define (move-right world-state) CIPPI-WORLD-STATE)
+
+(define (move-right world-state)
+(swap world-state 
+      (vector-ref falling-blocks 0) 
+      (make-posn (add1 (posn-x (vector-ref falling-block-0))) 
+                 (posn-y (vector-ref falling-block-0)))))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; MOVE-LEFT
+
+; takes a World-state and returns a World-state where blocks in grid are moved to the right by 1
+; move-leftt: World-state -> World-state
+; (define (move-right world-state) CIPPI-WORLD-STATE)
+
+(define (move-left world-state)
+(swap world-state 
+      (vector-ref falling-blocks 0) 
+      (make-posn (sub1 (posn-x (vector-ref falling-block-0))) 
+                 (posn-y (vector-ref falling-block-0)))))
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; MOVE-DOWN
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-
-
-
+; ROTATE 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
-
-
-
-
 
 
 
@@ -644,11 +703,7 @@ world-state))
 ;;; * stop-falling
 ;;; * i pezzi si impilano
 ;;; * handle-key: 
-;;;   press r to restart 
-;;;   freccia left va a sinistra
-;;;   freccia right va a destra
-;;;   freccia giu va giu veloce
-;;;   freccia su ruota ORARIO
-;;; * rotate
+;;;   (move-down) freccia giu va giu veloce
+;;;   (rotate) freccia su ruota in senso orario
 ;;; * aggiungere il tick interno al worldstate
 ;;; * fare template e check-expect
