@@ -90,7 +90,13 @@
 (define FGB (make-block GREEN #true)) ; Falling Green Block
 
 (define NFEB (make-block EMPTY-COLOR #false)) ;Non-Falling Empty Block
-(define NFLB (make-block LILAC #false)) ;Non-Falling Lilac Block
+(define NFYB (make-block YELLOW #false)) ; Non-Falling Yellow Bloc
+(define NFOB (make-block ORANGE #false)) ; Non-Falling Orange Block
+(define NFRB (make-block RED #false)) ; Non-Falling Red Block
+(define NFPB (make-block PINK #false)) ; Non-Falling Pink Block
+(define NFLB (make-block LILAC #false)) ; Non-Falling Lilac Block
+(define NFBB (make-block BLUE #false)) ; Non-Falling Blue Block
+(define NFGB (make-block GREEN #false)) ; Non-Falling Green Block
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -423,14 +429,14 @@
 
 ; swap-block FUNCTION
 ; Takes a World-state and a Posn and returns a World-state in which the grid's block
-; at PosnSource coordinates is swapped with the block in the other coordinates
+; at Posn-src coordinates is swapped with the block in the other coordinates
 ; swap-block: World-state Posn Posn -> World-state
-; (define (swap-block world-state posnSrc posnDst) EXAMPLE-STATE)
+; (define (swap-block world-state posn-src posn-dst) EXAMPLE-STATE)
 
-(define (swap-block world-state posnSrc posnDst)
+(define (swap-block world-state posn-src posn-dst)
   (local (
-          (define SRC-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posnSrc) (posn-y posnSrc)))
-          (define DST-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posnDst) (posn-y posnDst)))
+          (define SRC-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posn-src) (posn-y posn-src)))
+          (define DST-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posn-dst) (posn-y posn-dst)))
           (define (swap)
             (update-grid
              world-state
@@ -443,46 +449,48 @@
 
 ; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
 
-; UPDATE-SCORE
-; takes a World State and a Number and updates the Score
-; update-score: Wordld-state Number -> WorldState
+; All the functions take a World-state and a value return a World-state 
+; The element of the world-state the function is named after is updated with the value given as input.
+; Value can be: Boolean, Number, Vector<Posn> (vopsn) or Vector<Vector<Block>>(vovob)
+; update-xx: World-state 
 ; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false #false))
 
-(define (update-score world-state n)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) n
+; UPDATE-SCORE
+(define (update-score world-state number)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) number
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-SHOULD-QUIT
-(define (update-should-quit world-state value)
+(define (update-should-quit world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    value (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+                    boolean (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-SHOULD-SPAWN
-(define (update-should-spawn world-state value)
+(define (update-should-spawn world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) value (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+                    (world-state-should-quit world-state) boolean (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-IS-PAUSED
-(define (update-is-paused world-state value)
+(define (update-is-paused world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) value (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) boolean (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-FALLING-BLOCKS
 ; updates falling-blocks which is a Vector in the World-state
-(define (update-falling-blocks world-state value)
+(define (update-falling-blocks world-state vopsn)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) value (world-state-game-over world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) vector-of-posn (world-state-game-over world-state)))
 
 ; UPDATE-GRID
-(define (update-grid world-state value)
-  (make-world-state (world-state-background world-state) value (world-state-score world-state)
+(define (update-grid world-state vovob)
+  (make-world-state (world-state-background world-state) vovob (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
 
 ; UPDATE-GAME-OVER
-(define (update-game-over world-state value)
+(define (update-game-over world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) value))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) boolean))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -508,14 +516,11 @@
 
 ; ROW-FULL FUNCTION
 ; takes a World-state and determines if there are any full rows (if there is a row where all the blocks have a color
-; that is not EMPTY-COLOR), it returns the number of the row that is full
+; that is not EMPTY-COLOR), it returns World-state with the Grid updated in the following way:
+; if any row was full, it's removed and all the rows above pushed down by 1
 ; row-full: World-state -> Number
 ; (define (row-full world-state) EXAMPLE-STATE)
 
-;;; prendo la grid dal world-state,
-;;; prendo l'ultima row (y = 23) (che è un vettore di block)
-;;; e faccio vector-member della row e gli passo il NFEB, se mi returna true vado a quella dopo
-;;; se mi returna false gli faccio mettere set-grid-row con la grid, la y e get-grid-row della grid e (sub1 y)
 
 (define CIPPI (set-grid-row (world-state-grid EXAMPLE-STATE) 17 FULL-ROW-EXAMPLE))
 (define CIPPI-WORLD-STATE (update-grid EXAMPLE-STATE CIPPI))
@@ -569,8 +574,8 @@ world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; IF-GAME-OVER-DONT-SPAWN 
-; takes a world-state and checks if the user lost, if they did 
-; it returns a world-state with the should-spawn flag changed to #false 
+; takes a World-state and checks if the user lost, if they did 
+; it returns a World-state with the should-spawn flag changed to #false 
 ; if-game-over-dont-spawn: World-state -> World-state
 ; (define (if-game-over-dont-spawn) CIPPI-WORLD-STATE)
 ; (define (if-game-over-dont-spawn) 
@@ -588,10 +593,10 @@ world-state))
 ; HANDLE-KEY FUNCTION
 ; swap-block: World-state Posn Posn -> World-state
 ; takes a World-state and a key-event and returns an updated World-state in the following way:
-; if key-event is left, moves non-empty blocks that are in grid to the left
-; if key-event is right, moves non-empty blocks that are in grid to the right
-; if key-event is down, moves non-empty blocks that are in grid faster down 
-; if key-event is up, rotates piece clock-wise
+; if key-event is left, moves non-empty FALLING blocks that are in grid to the left
+; if key-event is right, moves non-empty FALLING blocks that are in grid to the right
+; if key-event is down, moves non-empty FALLING blocks that are in grid faster down 
+; if key-event is up, rotates FALLING PIECE clock-wise
 
 ;;; (define (handle-key-int world-state n)
 ;;; (add1 posn-x (vector-ref (world-state-falling-blocks world-state) (add1 n))))
