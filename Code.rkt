@@ -160,7 +160,7 @@
 
 (define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
 (define FULL-ROW-EXAMPLE (make-vector BLOCKS-IN-WIDTH FPB))
-
+(define EMPTY-GRID (make-vector 0 (make-vector 0)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; WORLD-STATE
@@ -182,7 +182,8 @@
 
 (define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false))
 (define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false))
-
+(define GAME-OVER-STATE (make-world-state GAME-OVER-PAGE EMPTY-GRID 0 #false #false #false (make-vector 0) #true))
+(define PAUSED-STATE (make-world-state PAUSE-PAGE EMPTY-GRID 0 #false #false #true (make-vector 0) #false))
 
 ;; -------------------------------------------------------------------------------------------------------------------
 
@@ -635,8 +636,12 @@ world-state))
 [(key=? key "left") (move-left world-state)]
 [(key=? key "right") (move-right world-state)]
 ;[(key=? key "down") (move-down world-state)]
-;[(key=? key "up") (rotate world-state)]
-[(key=? key "r") (tetris INITIAL-STATE)]))
+;[(key=? key "up") (rotate-front world-state)]
+;[(key=? key "z") (rotate-back world-state)]
+;[(key=? key "h") (hard-drop world-state)]
+[(key=? key "r") (tetris INITIAL-STATE)]
+[(key=? key "escape") (tetris PAUSED-STATE)]
+[(key=? key "q") (update-should-quit world-state #true)]))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -673,7 +678,15 @@ world-state))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; ROTATE FUNCTION
+; ROTATE-FRONT FUNCTION
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; ROTATE-BACK FUNCTION
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; HARD-DROP FUNCTION
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -687,7 +700,7 @@ world-state))
   (big-bang initial-state
     [to-draw draw]
     [on-tick tick]
-    ;[on-key handle-key]
+    [on-key handle-key]
     ;[stop-when quit?]
     ))
 
@@ -702,3 +715,8 @@ world-state))
 ;;;   (rotate) freccia su ruota in senso orario
 ;;; * aggiungere il tick interno al worldstate
 ;;; * fare template e check-expect
+
+
+;;; * README
+;;; * user guide
+;;; * developer guide

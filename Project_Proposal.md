@@ -24,8 +24,7 @@ USER EXPERIENCE:
     - hard drop the piece with the space bar (Drop the piece instantly)
 - The user can pause the game with the escape key
 - The user can quit the game with the "Q" key
-- (MAYBE) The user will see the next piece in the top right corner of the screen
-- The user will see the score on the top of the screen
+- The user will see the score on the screen
 
 LIBRARIES:
 - 2htdp/image to manipulate images
