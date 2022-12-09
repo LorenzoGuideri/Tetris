@@ -12,6 +12,7 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BLOCK COLORS
+
 (define EMPTY-COLOR (make-color 64 64 64))
 (define YELLOW (make-color 242 240 184))
 (define ORANGE (make-color 253 207 179))
@@ -552,6 +553,7 @@
 
 (define CIPPI (set-grid-row (world-state-grid EXAMPLE-STATE) 17 FULL-ROW-EXAMPLE))
 (define CIPPI-WORLD-STATE (update-grid EXAMPLE-STATE CIPPI))
+
 ; (check-expect (row-full CIPPI-WORLD-STATE) (make-world-state BACKGROUND ...))
 
 (define (row-full world-state)
@@ -638,7 +640,7 @@ world-state))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; MOVE-RIGHT
+; MOVE-RIGHT FUNCTION
 
 ; takes a World-state and returns a World-state where blocks in grid are moved to the right by 1
 ; move-right: World-state -> World-state
@@ -652,7 +654,7 @@ world-state))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; MOVE-LEFT
+; MOVE-LEFT FUNCTION
 
 ; takes a World-state and returns a World-state where blocks in grid are moved to the right by 1
 ; move-leftt: World-state -> World-state
@@ -667,27 +669,20 @@ world-state))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; MOVE-DOWN
+; MOVE-DOWN FUNCTION
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
-; ROTATE 
+; ROTATE FUNCTION
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
 
-
-
-
-
-
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; BIG-BANG
-;
+
 (define (tetris initial-state)
   (big-bang initial-state
     [to-draw draw]
