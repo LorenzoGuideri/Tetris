@@ -668,8 +668,8 @@
 
 (define (handle-key world-state key)
   (cond
-    [(key=? key "left") (move-left world-state)]
-    [(key=? key "right") (move-right world-state)]
+    ;[(key=? key "left") (move-left world-state)]
+    ;[(key=? key "right") (move-right world-state)]
     ;[(key=? key "down") (move-down world-state)]
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
