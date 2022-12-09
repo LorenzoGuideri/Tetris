@@ -380,7 +380,7 @@
                                                             #false)
                                        (vector-ref FALLING-BLOCKS-POSITIONS num))))
         (omegaFunction world-state (random 0 6)))
-      (update-score (block-falls-down (change-posn-in-world-state world-state)) (add1 (world-state-score world-state)))
+      (update-score (block-falls-down (change-posn-y-in-world-state world-state)) (add1 (world-state-score world-state)))
       )
   ;(update-score world-state (add1 (world-state-score world-state)))
   ;(if (not (= (vector-length (world-state-falling-blocks world-state)) 0)) (vector-ref (world-state-falling-blocks world-state) 0) world-state)
@@ -396,12 +396,12 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; CHANGE-POSN-IN-WORLD-STATE FUNCTION
+; CHANGE-POSN-Y-IN-WORLD-STATE FUNCTION
 ; Takes a World-state and returns a World-state where the posn-y of the Posns in vector of Posn is shifted down by one
-; change-posn-in-world-state: World-state -> World-state
-; (define (change-posn-in-world-state world-state) INITIAL-STATE)
+; change-posn-y-in-world-state: World-state -> World-state
+; (define (change-posn-y-in-world-state world-state) INITIAL-STATE)
 
-(define (change-posn-in-world-state world-state)
+(define (change-posn-y-in-world-state world-state)
   (update-falling-blocks world-state
                          (vector-map
                           (lambda (posn) (make-posn (posn-x posn) (add1 (posn-y posn))))
