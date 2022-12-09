@@ -1,4 +1,7 @@
-#lang htdp/asl
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-advanced-reader.ss" "lang")((modname Code) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
+
 
 (require 2htdp/universe)
 (require 2htdp/image)
@@ -374,10 +377,17 @@
   (cond 
   [(world-state-game-over world-state) GAME-OVER-PAGE]
   [(world-state-is-paused world-state) PAUSE-PAGE]
-  [else (overlay/offset (score-to-image world-state) 0 -350
-                  (overlay (grid-to-image (world-state-grid world-state))
-                           (rectangle 302 602 "solid" "black")
-                           (world-state-background world-state)))]))
+  [else (overlay/offset 
+            (text/font "press 'q' to quit"  15 "white"
+             #f 'swiss 'normal 'bold #f)
+            0
+            -350
+            (overlay/offset (score-to-image world-state)
+                            150
+                            350
+                            (overlay (grid-to-image (world-state-grid world-state))
+                                     (rectangle 302 602 "solid" "black")
+                                     (world-state-background world-state))))]))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -448,7 +458,7 @@
           ) (block-falls-down-int world-state 0)))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; SWAP FUNCTION
+; SWAP-BLOCK FUNCTION
 
 ; Takes a World-state and a Posn and returns a World-state in which the grid's block
 ; at Posn-src coordinates is swapped with the block in the other coordinates
@@ -462,7 +472,7 @@
           (define (swap)
             (update-grid
              world-state
-             (set-grid-block DST-BLOCK (world-state-grid (update-grid world-state (set-grid-block SRC-BLOCK (world-state-grid world-state) posnDst))) posnSrc) ; Block Grid Posn
+             (set-grid-block DST-BLOCK (world-state-grid (update-grid world-state (set-grid-block SRC-BLOCK (world-state-grid world-state) posn-dst))) posn-src) ; Block Grid Posn
              ))
           ) (swap))
   )
@@ -506,7 +516,7 @@
 
 (define (update-falling-blocks world-state vopsn)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) vector-of-posn (world-state-game-over world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) vopsn (world-state-game-over world-state)))
 
 ; UPDATE-GRID
 
@@ -652,10 +662,10 @@ world-state))
 ; (define (move-right world-state) CIPPI-WORLD-STATE)
 
 (define (move-right world-state)
-(swap world-state 
-      (vector-ref falling-blocks 0) 
-      (make-posn (add1 (posn-x (vector-ref falling-block-0))) 
-                 (posn-y (vector-ref falling-block-0)))))
+(swap-block world-state 
+      (vector-ref (world-state-falling-blocks world-state) 0) 
+      (make-posn (add1 (posn-x (vector-ref (world-state-falling-blocks world-state) 0))) 
+                 (posn-y (vector-ref (world-state-falling-blocks world-state) 0)))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -666,10 +676,10 @@ world-state))
 ; (define (move-right world-state) CIPPI-WORLD-STATE)
 
 (define (move-left world-state)
-(swap world-state 
-      (vector-ref falling-blocks 0) 
-      (make-posn (sub1 (posn-x (vector-ref falling-block-0))) 
-                 (posn-y (vector-ref falling-block-0)))))
+(swap-block world-state 
+      (vector-ref (world-state-falling-blocks world-state) 0) 
+      (make-posn (sub1 (posn-x (vector-ref (world-state-falling-blocks world-state) 0))) 
+                 (posn-y (vector-ref (world-state-falling-blocks world-state) 0)))))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
