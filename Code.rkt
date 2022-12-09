@@ -1,5 +1,4 @@
 #lang htdp/asl
-
 (require 2htdp/universe)
 (require 2htdp/image)
 (require racket/vector)
@@ -678,39 +677,6 @@
     [(key=? key "r") (tetris INITIAL-STATE)]
     [(key=? key "escape") (tetris PAUSED-STATE)]
     [(key=? key "q") (update-should-quit world-state #true)]))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; MOVE-RIGHT FUNCTION
-
-; takes a World-state and returns a World-state where blocks in grid are moved to the right by 1
-; move-right: World-state -> World-state
-; (define (move-right world-state) CIPPI-WORLD-STATE)
-
-(define (move-right world-state)
-  (swap-block world-state 
-              (vector-ref (world-state-falling-blocks world-state) 0) 
-              (make-posn (add1 (posn-x (vector-ref (world-state-falling-blocks world-state) 0))) 
-                         (posn-y (vector-ref (world-state-falling-blocks world-state) 0)))))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; MOVE-LEFT FUNCTION
-
-; takes a World-state and returns a World-state where blocks in grid are moved to the right by 1
-; move-leftt: World-state -> World-state
-; (define (move-right world-state) CIPPI-WORLD-STATE)
-
-(define (move-left world-state)
-  (swap-block world-state 
-              (vector-ref (world-state-falling-blocks world-state) 0) 
-              (make-posn (sub1 (posn-x (vector-ref (world-state-falling-blocks world-state) 0))) 
-                         (posn-y (vector-ref (world-state-falling-blocks world-state) 0)))))
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; MOVE-DOWN FUNCTION
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
