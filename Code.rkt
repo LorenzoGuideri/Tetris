@@ -1,7 +1,4 @@
-;; The first three lines of this file were inserted by DrRacket. They record metadata
-;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-advanced-reader.ss" "lang")((modname Code) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #t #t none #f () #f)))
-
+#lang htdp/asl
 
 (require 2htdp/universe)
 (require 2htdp/image)
@@ -47,28 +44,28 @@
 ; GAME-OVER-PAGE
 
 (define GAME-OVER-PAGE
-(overlay/align/offset
- "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
- +15 -50
- (overlay/align/offset 
- "middle" "middle" 
-  (text/font "GAME OVER" 60 "Light Red" #f 'swiss 'normal 'bold #f)
-  +15 100
-  BACKGROUND)))
+  (overlay/align/offset
+   "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
+   +15 -50
+   (overlay/align/offset 
+    "middle" "middle" 
+    (text/font "GAME OVER" 60 "Light Red" #f 'swiss 'normal 'bold #f)
+    +15 100
+    BACKGROUND)))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; PAUSE-PAGE
 
 (define PAUSE-PAGE
-(overlay/align/offset
- "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
- +15 -50
- (overlay/align/offset 
- "middle" "middle" 
-  (text/font "GAME IS PAUSED" 50 "Light Blue" #f 'swiss 'normal 'bold #f)
-  +15 100
-  BACKGROUND)))
+  (overlay/align/offset
+   "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
+   +15 -50
+   (overlay/align/offset 
+    "middle" "middle" 
+    (text/font "GAME IS PAUSED" 50 "Light Blue" #f 'swiss 'normal 'bold #f)
+    +15 100
+    BACKGROUND)))
 
 ;; --------------------------------------------------------------------------
 
@@ -179,14 +176,14 @@
 ;
 ; Header
 
-(define-struct world-state [background grid score should-quit should-spawn is-paused falling-blocks game-over] #:transparent)
+(define-struct world-state [background grid score should-quit should-spawn is-paused falling-blocks game-over tick tick-delay] #:transparent)
 ;
 ; Examples
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false))
-(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false))
-(define GAME-OVER-STATE (make-world-state GAME-OVER-PAGE EMPTY-GRID 0 #false #false #false (make-vector 0) #true))
-(define PAUSED-STATE (make-world-state PAUSE-PAGE EMPTY-GRID 0 #false #false #true (make-vector 0) #false))
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 10))
+(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false 0 10))
+(define GAME-OVER-STATE (make-world-state GAME-OVER-PAGE EMPTY-GRID 0 #false #false #false (make-vector 0) #true 0 10))
+(define PAUSED-STATE (make-world-state PAUSE-PAGE EMPTY-GRID 0 #false #false #true (make-vector 0) #false 0 10))
 
 ;; -------------------------------------------------------------------------------------------------------------------
 
@@ -375,19 +372,19 @@
 
 (define (draw world-state)
   (cond 
-  [(world-state-game-over world-state) GAME-OVER-PAGE]
-  [(world-state-is-paused world-state) PAUSE-PAGE]
-  [else (overlay/offset 
-            (text/font "press 'q' to quit"  15 "white"
-             #f 'swiss 'normal 'bold #f)
-            0
-            -350
-            (overlay/offset (score-to-image world-state)
-                            150
-                            350
-                            (overlay (grid-to-image (world-state-grid world-state))
-                                     (rectangle 302 602 "solid" "black")
-                                     (world-state-background world-state))))]))
+    [(world-state-game-over world-state) GAME-OVER-PAGE]
+    [(world-state-is-paused world-state) PAUSE-PAGE]
+    [else (overlay/offset 
+           (text/font "press 'q' to quit"  15 "white"
+                      #f 'swiss 'normal 'bold #f)
+           0
+           -350
+           (overlay/offset (score-to-image world-state)
+                           150
+                           350
+                           (overlay (grid-to-image (world-state-grid world-state))
+                                    (rectangle 302 602 "solid" "black")
+                                    (world-state-background world-state))))]))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -401,18 +398,19 @@
 
 
 (define (tick world-state)
-  (if (world-state-should-spawn world-state)
-      (local (
-              (define (omegaFunction world-state num)
-                (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
-                                                                                      (vector-ref PIECES num))
-                                                            #false)
-                                       (vector-ref FALLING-BLOCKS-POSITIONS num))))
-        (omegaFunction world-state (random 0 6)))
-      (update-score (block-falls-down (change-posn-y-in-world-state world-state)) (add1 (world-state-score world-state)))
-      )
-  ;(update-score world-state (add1 (world-state-score world-state)))
-  ;(if (not (= (vector-length (world-state-falling-blocks world-state)) 0)) (vector-ref (world-state-falling-blocks world-state) 0) world-state)
+  (update-tick
+   (if (= 0 (modulo (world-state-tick world-state) (world-state-tick-delay world-state)))
+       (if (world-state-should-spawn world-state)
+           (local (
+                   (define (omegaFunction world-state num)
+                     (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
+                                                                                           (vector-ref PIECES num))
+                                                                 #false)
+                                            (vector-ref FALLING-BLOCKS-POSITIONS num))))
+             (omegaFunction world-state (random 0 6)))
+           (block-falls-down (change-posn-y-in-world-state world-state)))
+       world-state)
+   (add1 (world-state-tick world-state)))
   )
 
 ; 1. metto il pezzo nel world-state
@@ -492,43 +490,61 @@
 (define (update-score world-state number)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) number
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) (world-state-tick-delay world-state)))
 
 ; UPDATE-SHOULD-QUIT
 
 (define (update-should-quit world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    boolean (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+                    boolean (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) (world-state-tick-delay world-state)))
 
 ; UPDATE-SHOULD-SPAWN
 
 (define (update-should-spawn world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) boolean (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+                    (world-state-should-quit world-state) boolean (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) (world-state-tick-delay world-state)))
 
 ; UPDATE-IS-PAUSED
 
 (define (update-is-paused world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) boolean (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) boolean
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) (world-state-tick-delay world-state)))
 
 ; UPDATE-FALLING-BLOCKS
 
 (define (update-falling-blocks world-state vopsn)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) vopsn (world-state-game-over world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    vopsn (world-state-game-over world-state) (world-state-tick world-state) (world-state-tick-delay world-state)))
 
 ; UPDATE-GRID
 
 (define (update-grid world-state vovob)
   (make-world-state (world-state-background world-state) vovob (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) (world-state-game-over world-state)))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) (world-state-tick-delay world-state)))
 
 ; UPDATE-GAME-OVER
 
 (define (update-game-over world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state) (world-state-falling-blocks world-state) boolean))
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) boolean (world-state-tick world-state) (world-state-tick-delay world-state)))
+
+; UPDATE-TICK
+(define (update-tick world-state number)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) number (world-state-tick-delay world-state)))
+
+; UPDATE-TICK-DELAY
+(define (update-tick-delay world-state number)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) number))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -602,16 +618,16 @@
 ; world-state))
 
 (define (loser world-state)
-(if 
-(vector-member #true (vector-map is-block-nonempty? 
-                                  (get-grid-row (world-state-grid world-state) (sub1 BLOCKS-IN-HEIGHT)))) 
-(update-game-over world-state #true)
-world-state))
+  (if 
+   (vector-member #true (vector-map is-block-nonempty? 
+                                    (get-grid-row (world-state-grid world-state) (sub1 BLOCKS-IN-HEIGHT)))) 
+   (update-game-over world-state #true)
+   world-state))
 
 ; AUX IS-BLOCK-NONEMPTY?
 
 (define (is-block-nonempty? block)
-(not (equal? (block-color block) EMPTY-COLOR)))
+  (not (equal? (block-color block) EMPTY-COLOR)))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -626,9 +642,9 @@ world-state))
 ;     (world-state-game-over)... (update-should-spawn) world-state))
 
 (define (if-game-over-dont-spawn world-state)
-(if (world-state-game-over world-state) 
-    (update-should-spawn world-state #false) 
-    world-state))
+  (if (world-state-game-over world-state) 
+      (update-should-spawn world-state #false) 
+      world-state))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -642,16 +658,16 @@ world-state))
 ; if key-event is up, rotates FALLING PIECE clock-wise
 
 (define (handle-key world-state key)
-(cond
-[(key=? key "left") (move-left world-state)]
-[(key=? key "right") (move-right world-state)]
-;[(key=? key "down") (move-down world-state)]
-;[(key=? key "up") (rotate-front world-state)]
-;[(key=? key "z") (rotate-back world-state)]
-;[(key=? key "h") (hard-drop world-state)]
-[(key=? key "r") (tetris INITIAL-STATE)]
-[(key=? key "escape") (tetris PAUSED-STATE)]
-[(key=? key "q") (update-should-quit world-state #true)]))
+  (cond
+    [(key=? key "left") (move-left world-state)]
+    [(key=? key "right") (move-right world-state)]
+    ;[(key=? key "down") (move-down world-state)]
+    ;[(key=? key "up") (rotate-front world-state)]
+    ;[(key=? key "z") (rotate-back world-state)]
+    ;[(key=? key "h") (hard-drop world-state)]
+    [(key=? key "r") (tetris INITIAL-STATE)]
+    [(key=? key "escape") (tetris PAUSED-STATE)]
+    [(key=? key "q") (update-should-quit world-state #true)]))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -662,10 +678,10 @@ world-state))
 ; (define (move-right world-state) CIPPI-WORLD-STATE)
 
 (define (move-right world-state)
-(swap-block world-state 
-      (vector-ref (world-state-falling-blocks world-state) 0) 
-      (make-posn (add1 (posn-x (vector-ref (world-state-falling-blocks world-state) 0))) 
-                 (posn-y (vector-ref (world-state-falling-blocks world-state) 0)))))
+  (swap-block world-state 
+              (vector-ref (world-state-falling-blocks world-state) 0) 
+              (make-posn (add1 (posn-x (vector-ref (world-state-falling-blocks world-state) 0))) 
+                         (posn-y (vector-ref (world-state-falling-blocks world-state) 0)))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -676,10 +692,10 @@ world-state))
 ; (define (move-right world-state) CIPPI-WORLD-STATE)
 
 (define (move-left world-state)
-(swap-block world-state 
-      (vector-ref (world-state-falling-blocks world-state) 0) 
-      (make-posn (sub1 (posn-x (vector-ref (world-state-falling-blocks world-state) 0))) 
-                 (posn-y (vector-ref (world-state-falling-blocks world-state) 0)))))
+  (swap-block world-state 
+              (vector-ref (world-state-falling-blocks world-state) 0) 
+              (make-posn (sub1 (posn-x (vector-ref (world-state-falling-blocks world-state) 0))) 
+                         (posn-y (vector-ref (world-state-falling-blocks world-state) 0)))))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
