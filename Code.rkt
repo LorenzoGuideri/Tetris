@@ -1,4 +1,5 @@
 #lang htdp/asl
+
 (require 2htdp/universe)
 (require 2htdp/image)
 (require racket/vector)
@@ -407,7 +408,7 @@
                                                                  #false)
                                             (vector-ref FALLING-BLOCKS-POSITIONS num))))
              (omegaFunction world-state (random 0 6)))
-           (move-blocks-offset world-state 0 1))
+           (if (check-new-posn-offset world-state 0 1) (move-blocks-offset world-state 0 1) world-state))
        world-state)
    (add1 (world-state-tick world-state)))
   )
@@ -422,11 +423,26 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; CHECK-NEW-POSN-OFFSET
+(define (check-new-posn-offset world-state xOffset yOffset)
+  (local (
+          (define FALLING-BLOCKS-TEMP (world-state-falling-blocks world-state))
+          (define POSN-LEN (vector-length FALLING-BLOCKS-TEMP))
+          (define (check-if-valid x)
+            (cond
+              [(= x (sub1 POSN-LEN)) (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT))]
+              [else (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (check-if-valid (add1 x)))]
+              ))
+          ) (check-if-valid 0)))
+  
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 ; CHANGE-POSN-IN-WORLD-STATE FUNCTION
 
-; Takes a World-state and returns a World-state where the posn-y of the Posns in vector of Posn is shifted down by one
-; change-posn-in-world-state: World-state -> World-state
-; (define (change-posn-in-world-state world-state) INITIAL-STATE)
+; Takes a World-state and returns a World-state where the posn-x and posn-x of the Posns in vector of Posn are shifted by offSet
+; change-posn-in-world-state: World-state Number Number -> World-state
+; (define (change-posn-in-world-state world-state 0 1) INITIAL-STATE)
 
 (define (change-posn-in-world-state world-state xOffset yOffset)
   (update-falling-blocks world-state
