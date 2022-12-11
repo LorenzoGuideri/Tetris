@@ -241,7 +241,7 @@
 (define (set-grid-row grid y vect)
   (cond
     [(= y 0) (vector-append (vector vect) (vector-take-right grid (sub1 BLOCKS-IN-HEIGHT)))]
-    [(= y (sub1 BLOCKS-IN-HEIGHT)) (vector-append (vector-take grid (sub1 BLOCKS-IN-HEIGHT)) vect)]
+    [(= y (sub1 BLOCKS-IN-HEIGHT)) (vector-append (vector-take grid (sub1 BLOCKS-IN-HEIGHT)) (vector vect))]
     [else (vector-append (vector-take grid y) (vector vect) (vector-take-right grid (- (sub1 BLOCKS-IN-HEIGHT) y)))]))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
