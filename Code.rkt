@@ -180,7 +180,7 @@
 ;
 ; Examples
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 3))
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 10))
 (define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false 0 10))
 (define GAME-OVER-STATE (make-world-state GAME-OVER-PAGE EMPTY-GRID 0 #false #false #false (make-vector 0) #true 0 10))
 (define PAUSED-STATE (make-world-state PAUSE-PAGE EMPTY-GRID 0 #false #false #true (make-vector 0) #false 0 10))
@@ -712,7 +712,7 @@
   (cond
     ;[(key=? key "left") (move-left world-state)]
     ;[(key=? key "right") (move-right world-state)]
-    ;[(key=? key "down") (move-down world-state)]
+    [(key=? key "down") (update-tick-delay world-state 1)]
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
@@ -736,6 +736,15 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; HANDLE-RELEASE
+; takes a World-state and a String and returns the world-state with the tick-delay updated to 1
+; handle-release: World-state String -> World-state
+; (define (handle-release world-state key) CIPPI-WORLD-STATE)
+
+;;; (define (handle-release world-state key)
+;;; (if (equal? key "down") (update-tick-delay world-state 1) world-state))
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 ; QUIT? FUNCTION
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -747,6 +756,7 @@
     [to-draw draw]
     [on-tick tick]
     [on-key handle-key]
+    ;[on-release handle-release]
     ;[stop-when quit?]
     ))
 
