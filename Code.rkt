@@ -434,8 +434,8 @@
           (define POSN-LEN (vector-length FALLING-BLOCKS-TEMP))
           (define (check-if-valid x)
             (cond
-              [(= x (sub1 POSN-LEN)) (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT))]
-              [else (and (can-block-fall? world-state (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) (posn-y (vector-ref FALLING-BLOCKS-TEMP x))) (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (check-if-valid (add1 x)))]
+              [(= x (sub1 POSN-LEN)) (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset)))]
+              [else (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset)) (check-if-valid (add1 x)))]
               ))
           ) (check-if-valid 0)))
   
