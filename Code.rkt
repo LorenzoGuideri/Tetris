@@ -395,6 +395,7 @@
 ;     - add-piece-to-world-state with a random piece
 ;     - turns to #false should-spawn
 ;     - update-falling-blocks with the predefined position of the random piece that was selected
+; Every tick increments the world-state tick by 1. After world-state-tick-delay ticks the game advances once.
 
 
 (define (tick world-state)
@@ -408,7 +409,10 @@
                                                                  #false)
                                             (vector-ref FALLING-BLOCKS-POSITIONS num))))
              (omegaFunction world-state (random 0 6)))
-           (if (check-new-posn-offset world-state 0 1) (move-blocks-offset world-state 0 1) world-state))
+           (if (check-new-posn-offset world-state 0 1)
+               (move-blocks-offset world-state 0 1)
+               (update-should-spawn world-state #true)
+               ))
        world-state)
    (add1 (world-state-tick world-state)))
   )
@@ -431,7 +435,7 @@
           (define (check-if-valid x)
             (cond
               [(= x (sub1 POSN-LEN)) (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT))]
-              [else (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (check-if-valid (add1 x)))]
+              [else (and (can-block-fall? world-state (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) (posn-y (vector-ref FALLING-BLOCKS-TEMP x))) (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (check-if-valid (add1 x)))]
               ))
           ) (check-if-valid 0)))
   
@@ -582,9 +586,8 @@
 
 (define (can-block-fall? world-state x y)
   (cond
-    [(not (< (+ y 1) BLOCKS-IN-HEIGHT)) #false]
-    [(and (not (block-is-falling (get-grid-block (world-state-grid world-state) x (add1 y))))
-          (not (is-block-empty? (get-grid-block (world-state-grid world-state) x (add1 y))))) #false]
+    [(and (not (block-is-falling (get-grid-block (world-state-grid world-state) x y)))
+          (not (is-block-empty? (get-grid-block (world-state-grid world-state) x y)))) #false]
     [else #true]))
 
 ; AUX IS-BLOCK-EMPTY?
@@ -692,7 +695,9 @@
     ;[(key=? key "h") (hard-drop world-state)]
     [(key=? key "r") (tetris INITIAL-STATE)]
     [(key=? key "escape") (tetris PAUSED-STATE)]
-    [(key=? key "q") (update-should-quit world-state #true)]))
+    [(key=? key "q") (update-should-quit world-state #true)]
+    [else world-state]
+    ))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
