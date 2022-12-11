@@ -417,14 +417,38 @@
    (add1 (world-state-tick world-state)))
   )
 
-; 1. metto il pezzo nel world-state
-; 2. lo passo ad update-should-spawn che mi mette #false in should-spawn,
-; 3. questo nuovo world-state lo passo ad update-falling-blocks insieme al vettore di posn che contiene
-;   le posizioni che il pezzo ha assunto nel mentre cadeva durante tutta la durata del gioco
-;   (questa posizione la recupero dal vettore di vettori di posn che si chiama FALLING-BLOCKS-POSITIONS
-;    grazie al numero che io gli ho dato
-;         (che rappresenta il blocco casuale che ho scelto nella main function))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; FB-TO-NFB
+; takes a World-state and returns a World-state where the falling blocks that reach the bottom of the grid
+; are turned into non falling blocks
+; FB-TO-NFB World-state -> World-state
+; (define (fb-to-nfb world-state) CIPPI-WORLD-STATE)
+
+(define (fb-to-nfb world-state)
+(local (
+  (define FALLING-BLOCKS (world-state-falling-blocks world-state))
+  (define LEN (vector-length FALLING-BLOCKS))
+  (define (intra world-state x)
+  (cond
+  [(= x (sub1 LEN)) (update-grid world-state 
+                                (set-grid-block (make-block 
+                                                            (block-color (get-grid-block (world-state-grid world-state) 
+                                                                                         (posn-x (vector-ref FALLING-BLOCKS x)) 
+                                                                                         (posn-y (vector-ref FALLING-BLOCKS x))))
+                                                            #false)
+                                                (world-state-grid world-state)
+                                                (vector-ref FALLING-BLOCKS x)))]
+    [else (update-grid (intra world-state (add1 x)) 
+                                (set-grid-block (make-block 
+                                                            (block-color (get-grid-block (world-state-grid world-state) 
+                                                                                         (posn-x (vector-ref FALLING-BLOCKS x)) 
+                                                                                         (posn-y (vector-ref FALLING-BLOCKS x))))
+                                                            #false)
+                                                (world-state-grid world-state)
+                                                (vector-ref FALLING-BLOCKS x)))]
+                                                            ))) (intra world-state 0) ))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; CHECK-NEW-POSN-OFFSET
