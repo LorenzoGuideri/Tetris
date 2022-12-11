@@ -180,7 +180,7 @@
 ;
 ; Examples
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 10))
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 3))
 (define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false 0 10))
 (define GAME-OVER-STATE (make-world-state GAME-OVER-PAGE EMPTY-GRID 0 #false #false #false (make-vector 0) #true 0 10))
 (define PAUSED-STATE (make-world-state PAUSE-PAGE EMPTY-GRID 0 #false #false #true (make-vector 0) #false 0 10))
@@ -411,7 +411,7 @@
              (omegaFunction world-state (random 0 6)))
            (if (check-new-posn-offset world-state 0 1)
                (move-blocks-offset world-state 0 1)
-               (update-should-spawn world-state #true)
+               (update-should-spawn (fb-to-nfb world-state) #true)
                ))
        world-state)
    (add1 (world-state-tick world-state)))
@@ -427,28 +427,27 @@
 ; (define (fb-to-nfb world-state) CIPPI-WORLD-STATE)
 
 (define (fb-to-nfb world-state)
-(local (
-  (define FALLING-BLOCKS (world-state-falling-blocks world-state))
-  (define LEN (vector-length FALLING-BLOCKS))
-  (define (intra world-state x)
-  (cond
-  [(= x (sub1 LEN)) (update-grid world-state 
-                                (set-grid-block (make-block 
-                                                            (block-color (get-grid-block (world-state-grid world-state) 
-                                                                                         (posn-x (vector-ref FALLING-BLOCKS x)) 
-                                                                                         (posn-y (vector-ref FALLING-BLOCKS x))))
-                                                            #false)
-                                                (world-state-grid world-state)
-                                                (vector-ref FALLING-BLOCKS x)))]
-    [else (update-grid (intra world-state (add1 x)) 
-                                (set-grid-block (make-block 
-                                                            (block-color (get-grid-block (world-state-grid world-state) 
-                                                                                         (posn-x (vector-ref FALLING-BLOCKS x)) 
-                                                                                         (posn-y (vector-ref FALLING-BLOCKS x))))
-                                                            #false)
-                                                (world-state-grid world-state)
-                                                (vector-ref FALLING-BLOCKS x)))]
-                                                            ))) (intra world-state 0) ))
+  (local (
+          (define FALLING-BLOCKS (world-state-falling-blocks world-state))
+          (define LEN (vector-length FALLING-BLOCKS))
+          (define (intra world-state x)
+            (cond
+              [(= x (sub1 LEN)) (update-grid world-state 
+                                             (set-grid-block (make-block 
+                                                              (block-color (get-grid-block (world-state-grid world-state) 
+                                                                                           (posn-x (vector-ref FALLING-BLOCKS x)) 
+                                                                                           (posn-y (vector-ref FALLING-BLOCKS x))))
+                                                              #false)
+                                                             (world-state-grid world-state) (vector-ref FALLING-BLOCKS x)))]
+              [else (update-grid world-state
+                                 (set-grid-block (make-block 
+                                                  (block-color (get-grid-block (world-state-grid world-state) 
+                                                                               (posn-x (vector-ref FALLING-BLOCKS x)) 
+                                                                               (posn-y (vector-ref FALLING-BLOCKS x))))
+                                                  #false)
+                                                 (world-state-grid (intra world-state (add1 x))) (vector-ref FALLING-BLOCKS x)
+                                                 ))]
+              ))) (intra world-state 0) ))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; CHECK-NEW-POSN-OFFSET
