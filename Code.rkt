@@ -741,8 +741,8 @@
 ; handle-release: World-state String -> World-state
 ; (define (handle-release world-state key) CIPPI-WORLD-STATE)
 
-;;; (define (handle-release world-state key)
-;;; (if (equal? key "down") (update-tick-delay world-state 1) world-state))
+(define (handle-release world-state key)
+  (if (equal? key "down") (update-tick-delay world-state 10) world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
@@ -756,7 +756,7 @@
     [to-draw draw]
     [on-tick tick]
     [on-key handle-key]
-    ;[on-release handle-release]
+    [on-release handle-release]
     ;[stop-when quit?]
     ))
 
