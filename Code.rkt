@@ -345,7 +345,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 0)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 4
+    (grid-to-image-inner grid 4)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 4
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
