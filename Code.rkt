@@ -11,9 +11,9 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; BLOCK COLORS
+; COLORS
 
-(define EMPTY-COLOR (make-color 64 64 64))
+(define EMPTY-COLOR (make-color 30 30 30))
 (define YELLOW (make-color 242 240 184))
 (define ORANGE (make-color 253 207 179))
 (define RED (make-color 244 113 116))
@@ -21,6 +21,8 @@
 (define LILAC (make-color 176 189 245))
 (define BLUE (make-color 196 237 245))
 (define GREEN (make-color 200 224 152))
+(define GREY (make-color 200 200 200))
+(define SCORE-COLOR (make-color 249 140 182))
 
 (define COLORS (vector YELLOW ORANGE RED PINK LILAC BLUE GREEN))
 
@@ -45,14 +47,14 @@
 
 (define GAME-OVER-PAGE
   (overlay/align/offset
-   "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
+   "middle" "middle" (text/font "press 'r' to restart" 30 ORANGE #f 'swiss 'normal 'bold #f)
    +15 -50
    (overlay/align/offset
-   "middle" "middle" (text/font "press 'q' to quit" 30 PINK #f 'swiss 'normal 'bold #f)
+   "middle" "middle" (text/font "press 'q' to quit" 30 YELLOW #f 'swiss 'normal 'bold #f)
    +15 -100
    (overlay/align/offset
     "middle" "middle"
-    (text/font "GAME OVER" 60 "Light Red" #f 'swiss 'normal 'bold #f)
+    (text/font "GAME OVER" 60 RED #f 'swiss 'normal 'bold #f)
     +15 100
     BACKGROUND))))
 
@@ -60,20 +62,38 @@
 
 ; PAUSE-PAGE
 
-; PAUSE-PAGE
-
 (define PAUSE-PAGE
   (overlay/align/offset
-   "middle" "middle" (text/font "press 'esc' to resume" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
+   "middle" "middle" (text/font "press 'esc' to resume" 30 PINK #f 'swiss 'normal 'bold #f)
    +15 -50
    (overlay/align/offset
-   "middle" "middle" (text/font "press 'r' to restart" 30 PINK #f 'swiss 'normal 'bold #f)
+   "middle" "middle" (text/font "press 'r' to restart" 30 LILAC #f 'swiss 'normal 'bold #f)
    +15 -100
    (overlay/align/offset
     "middle" "middle"
-    (text/font "GAME IS PAUSED" 50 "Light Blue" #f 'swiss 'normal 'bold #f)
+    (text/font "GAME IS PAUSED" 50 BLUE #f 'swiss 'normal 'bold #f)
     +15 100
     BACKGROUND))))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; WELCOME
+
+(define WELCOME
+   (overlay/align/offset
+   "middle" "middle" (text/font "press 'space' to start" 30 "white" #f 'swiss 'normal 'bold #f)
+   +15 -50
+   (overlay/align/offset
+    "middle" "middle"
+    (beside (text/font "T " 60 YELLOW #f 'swiss 'normal 'bold #f)
+            (text/font "E " 60 ORANGE #f 'swiss 'normal 'bold #f)
+            (text/font "T " 60 PINK #f 'swiss 'normal 'bold #f)
+            (text/font "R " 60 LILAC #f 'swiss 'normal 'bold #f)
+            (text/font "I " 60 BLUE #f 'swiss 'normal 'bold #f)
+            (text/font "S" 60 GREEN #f 'swiss 'normal 'bold #f))
+    +15 100
+    BACKGROUND)))
+
 
 ;; --------------------------------------------------------------------------
 
@@ -365,10 +385,10 @@
 ;
 ;
 (define (score-to-image world-state)
-  (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 (make-color 249 140 182)
-             #f 'swiss 'normal 'bold #f))
+   (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 SCORE-COLOR #f 'swiss 'normal 'bold #f))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 ; DRAW FUNCTION
 
@@ -383,16 +403,21 @@
     [(world-state-game-over world-state) GAME-OVER-PAGE]
     [(world-state-is-paused world-state) PAUSE-PAGE]
     [else (overlay/offset
-           (text/font "press 'q' to quit"  15 "white"
+           (text/font "press 'q' to quit"  15 GREY
                       #f 'swiss 'normal 'bold #f)
            0
-           -350
+           -360
+           (overlay/offset
+           (text/font "press 'esc' to pause"  15 "white"
+                      #f 'swiss 'normal 'bold #f)
+           0
+           -330
            (overlay/offset (score-to-image world-state)
                            150
                            350
                            (overlay (grid-to-image (world-state-grid world-state))
                                     (rectangle 302 602 "solid" "black")
-                                    (world-state-background world-state))))]))
+                                    (world-state-background world-state)))))]))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -831,8 +856,7 @@
     ))
 
 (define (run funct arg) (if (funct arg) (display "Bye bye!\n") (display "Bye bye!\n")))
-(run tetris INITIAL-STATE)
-;(tetris INITIAL-STATE)
+(tetris INITIAL-STATE)
 
 ;;; TO DO:
 
