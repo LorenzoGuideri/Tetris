@@ -637,10 +637,9 @@
 ; ROW-FULL FUNCTION
 
 ; takes a World-state and determines if there are any full rows (if there is a row where all the blocks have a color
-; that is not EMPTY-COLOR), it returns World-state with the Grid updated in the following way:
-; if any row was full, it's removed and all the rows above pushed down by 1
-; row-full: World-state -> Number
-; (define (row-full world-state) EXAMPLE-STATE)
+; that is not EMPTY-COLOR), it returns the number of row that is full or #false if there are now full rows
+; row-full: World-state -> Number/Boolean
+; (define (row-full world-state) 5)
 
 
 (define CIPPI (set-grid-row (world-state-grid EXAMPLE-STATE) 17 FULL-ROW-EXAMPLE))
@@ -651,28 +650,44 @@
 (define (row-full world-state)
 
   (local
-    ((define y (sub1 BLOCKS-IN-HEIGHT))
-
+    (
      (define (row-full-int world-state y)
 
        (cond
          [(vector-member
-           NFEB (get-grid-row (world-state-grid world-state) y))
-          (row-full-int world-state (sub1 y))]
+           NFEB (get-grid-row (world-state-grid world-state) y)) y]
 
-         [else
-          (update-grid world-state (set-grid-row
-                                    (world-state-grid world-state)
-                                    y
-                                    (get-grid-row (world-state-grid world-state)
-                                                  (sub1 y))))])))
-    (row-full-int world-state y)))
+         [else #false])))
+    (row-full-int world-state (sub1 BLOCKS-IN-HEIGHT))))
+
+
+; PUSH-DOWN-ROWS
+; take a World-state and a y and returns a World-state where the whole grid, from y upwards, has been 
+; pushed down by one
+; push-down-rows: World-state -> World-state
+; (define (push-down-rows world-state) EXAMPLE-STATE)
+
+(define (push-down-rows world-state y)
+(cond 
+[(= y 4) (vector-append (vector-take (world-state-grid world-state) 4) 
+                        (make-vector 10 NFEB)
+                        (vector-take-right (world-state-grid world-state) (- BLOCKS-IN-HEIGHT 5)))]
+[else (vector-append (vector-take (world-state-grid world-state) 4) 
+                        (make-vector 10 NFEB)
+                        (vector-copy (world-state-grid world-state) [4 y]))]))
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; ANY-FULL-ROWS
+;;; SE ROWU FULL MI RETURNA Y, ESEGUI PUSH-WODN-ROWS, E RIESEGUI ROW-FULL
+;;; SE ROW FULL MI RETURNA BOOL, RETURNA WORLD-STATE
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; LOSER FUNCTION
 
-; takes a World-state and checks if the 21st row has Blocks whose color is not EMPTY-COLOR
+; takes a World-state and checks if the 4th row has Blocks whose color is not EMPTY-COLOR
 ; if true: returns World-state with game-over turned to #true, should-spawn turned to #false
 ; loser: World-state -> World-state 
 ; (define (loser world-state) EXAMPLE-STATE)
@@ -814,12 +829,14 @@
 
 ;;; TO DO:
 
-;;; * stop-falling
-;;; * i pezzi si impilano
+
+;;; * any-full-rows
 ;;; * handle-key: 
-;;;   (move-down) freccia giu va giu veloce
-;;;   (rotate) freccia su ruota in senso orario
-;;; * aggiungere il tick interno al worldstate
+;;;   move-right 
+;;;   move-left
+;;;   rotate 
+;;; * la situa dello score 
+;;; * quit
 ;;; * fare template e check-expect
 
 
