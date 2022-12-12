@@ -753,7 +753,6 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-<<<<<<< HEAD
 ; MOVE-X
 (define (move-x world-state direction) ;1 right, -1 left
   (if (check-new-posn-offset world-state direction 0)
@@ -761,35 +760,6 @@
       world-state)
   )
 
-=======
-; MOVE-RIGHT
-
-; takes a World-state and returnes a World-state with the falling pieces moved right by 1
-; move-right: World-state -> World-state
-; (define (move-right world-state) CIPPI-WORLD-STATE)
-
-(define (move-right world-state)
-  (if (check-new-posn-offset world-state 1 0)
-      (move-blocks-offset world-state 1 0)
-      world-state)
-  )
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; MOVE-LEFT
-
-; takes a World-state and returnes a World-state with the falling pieces moved left by 1
-; move-left: World-state -> World-state
-; (define (move-left world-state) CIPPI-WORLD-STATE)
-
-(define (move-left world-state)
-  (if (check-new-posn-offset world-state -1 0)
-      (move-blocks-offset world-state -1 0)
-      world-state)
-  )
-
-
->>>>>>> aea2e1beb7fff78c3ad25b1605db028f728562ec
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; HANDLE-KEY FUNCTION
