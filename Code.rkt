@@ -827,7 +827,7 @@
     [close-on-stop #true]
     ))
 
-(define (run funct arg) (if (funct arg) #T #T))
+(define (run funct arg) (if (funct arg) (display "Bye bye!\n") (display "Bye bye!\n")))
 (run tetris INITIAL-STATE)
 ;(tetris INITIAL-STATE)
 
