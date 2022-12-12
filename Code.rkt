@@ -60,15 +60,20 @@
 
 ; PAUSE-PAGE
 
+; PAUSE-PAGE
+
 (define PAUSE-PAGE
   (overlay/align/offset
-   "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
+   "middle" "middle" (text/font "press 'esc' to resume" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
    +15 -50
+   (overlay/align/offset
+   "middle" "middle" (text/font "press 'r' to restart" 30 PINK #f 'swiss 'normal 'bold #f)
+   +15 -100
    (overlay/align/offset
     "middle" "middle"
     (text/font "GAME IS PAUSED" 50 "Light Blue" #f 'swiss 'normal 'bold #f)
     +15 100
-    BACKGROUND)))
+    BACKGROUND))))
 
 ;; --------------------------------------------------------------------------
 
