@@ -798,7 +798,7 @@
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
-    [(key=? key "r") (if (world-state-game-over world-state) INITIAL-STATE world-state)]
+    [(key=? key "r") (if (or (world-state-game-over world-state) (world-state-is-paused world-state)) INITIAL-STATE world-state)]
     [(key=? key "escape") (if (world-state-game-over world-state) world-state (update-is-paused world-state (not (world-state-is-paused world-state))))]
     [(key=? key "q") (update-should-quit world-state #true)]
     [else world-state]
