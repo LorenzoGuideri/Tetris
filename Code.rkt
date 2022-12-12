@@ -760,7 +760,7 @@
     ;[stop-when quit?]
     ))
 
-
+(tetris INITIAL-STATE)
 
 ;;; TO DO:
 
