@@ -760,6 +760,37 @@
       world-state)
   )
 
+<<<<<<< Updated upstream
+=======
+; MOVE-RIGHT
+
+; takes a World-state and returnes a World-state with the falling pieces moved right by 1
+; move-right: World-state -> World-state
+; (define (move-right world-state) CIPPI-WORLD-STATE)
+
+(define (move-right world-state)
+  (if (check-new-posn-offset world-state 1 0)
+      (move-blocks-offset world-state 1 0)
+      world-state)
+  )
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; MOVE-LEFT
+
+; takes a World-state and returnes a World-state with the falling pieces moved left by 1
+; move-left: World-state -> World-state
+; (define (move-left world-state) CIPPI-WORLD-STATE)
+
+(define (move-left world-state)
+  (if (check-new-posn-offset world-state -1 0)
+      (move-blocks-offset world-state -1 0)
+      world-state)
+  )
+
+
+
+>>>>>>> Stashed changes
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; HANDLE-KEY FUNCTION
@@ -824,8 +855,11 @@
     [on-key handle-key]
     [on-release handle-release]
     [stop-when quit?]
+    [close-on-stop #true]
     ))
 
+(define (run funct arg) (if (funct arg) #T #T))
+(run tetris INITIAL-STATE)
 ;(tetris INITIAL-STATE)
 
 ;;; TO DO:
