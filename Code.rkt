@@ -766,26 +766,11 @@
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
-    [(key=? key "r") (if (world-state-game-over world-state) (restart world-state) world-state)]
+    [(key=? key "r") (if (world-state-game-over world-state) INITIAL-STATE world-state)]
     [(key=? key "escape") (tetris PAUSED-STATE)]
     [(key=? key "q") (update-should-quit world-state #true)]
     [else world-state]
     ))
-
-; RESTART FUNCTION
-(define (restart world-state)
-  (update-game-over ; Gameover set to #false
-   (update-should-spawn ; Should spawn set to #true
-    (update-grid         ; Grid set to empty
-     (update-score       ; Score set to 0
-      (update-tick
-       world-state
-       0) ; Tick to 0
-      0)  ; score to 0
-     GRID-EXAMPLE) ; grid to empty
-    #true) ; should-spawn to #true
-   #false) ; gameover to #false
-  )
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -832,8 +817,6 @@
 
 ;;; * any-full-rows
 ;;; * handle-key: 
-;;;   move-right 
-;;;   move-left
 ;;;   rotate 
 ;;; * la situa dello score 
 ;;; * quit
