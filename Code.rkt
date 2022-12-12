@@ -401,18 +401,23 @@
 (define (tick world-state)
   (update-tick
    (if (= 0 (modulo (world-state-tick world-state) (world-state-tick-delay world-state)))
-       (if (world-state-should-spawn world-state)
-           (local (
-                   (define (omegaFunction world-state num)
-                     (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
-                                                                                           (vector-ref PIECES num))
-                                                                 #false)
-                                            (vector-ref FALLING-BLOCKS-POSITIONS num))))
-             (omegaFunction world-state (random 0 6)))
-           (if (check-new-posn-offset world-state 0 1)
-               (move-blocks-offset world-state 0 1)
-               (update-should-spawn (fb-to-nfb world-state) #true)
-               ))
+       (if (world-state-game-over world-state)
+           world-state
+           (if (world-state-should-spawn world-state)
+               (local (
+                       (define (omegaFunction world-state num)
+                         (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
+                                                                                               (vector-ref PIECES num))
+                                                                     #false)
+                                                (vector-ref FALLING-BLOCKS-POSITIONS num))))
+                 (omegaFunction world-state (random 0 6)))
+               (if (check-new-posn-offset world-state 0 1)
+                   (move-blocks-offset world-state 0 1)
+                   (if (world-state-game-over (loser world-state))
+                       (update-should-spawn (fb-to-nfb (loser world-state)) #false)
+                       (update-should-spawn (fb-to-nfb (loser world-state)) #true))
+                   ))
+           )
        world-state)
    (add1 (world-state-tick world-state)))
   )
@@ -680,7 +685,7 @@
 (define (loser world-state)
   (if 
    (vector-member #true (vector-map is-block-nonempty? 
-                                    (get-grid-row (world-state-grid world-state) (sub1 BLOCKS-IN-HEIGHT)))) 
+                                    (get-grid-row (world-state-grid world-state) 3))) 
    (update-game-over world-state #true)
    world-state))
 
@@ -746,11 +751,26 @@
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
-    [(key=? key "r") (tetris INITIAL-STATE)]
+    [(key=? key "r") (if (world-state-game-over world-state) (restart world-state) world-state)]
     [(key=? key "escape") (tetris PAUSED-STATE)]
     [(key=? key "q") (update-should-quit world-state #true)]
     [else world-state]
     ))
+
+; RESTART FUNCTION
+(define (restart world-state)
+  (update-game-over ; Gameover set to #false
+   (update-should-spawn ; Should spawn set to #true
+    (update-grid         ; Grid set to empty
+     (update-score       ; Score set to 0
+      (update-tick
+       world-state
+       0) ; Tick to 0
+      0)  ; score to 0
+     GRID-EXAMPLE) ; grid to empty
+    #true) ; should-spawn to #true
+   #false) ; gameover to #false
+  )
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -783,8 +803,8 @@
 
 (define (tetris initial-state)
   (big-bang initial-state
-    [to-draw draw]
     [on-tick tick]
+    [to-draw draw]
     [on-key handle-key]
     [on-release handle-release]
     ;[stop-when quit?]
