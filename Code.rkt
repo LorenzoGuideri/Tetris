@@ -413,7 +413,7 @@
                                                                                                (vector-ref PIECES num))
                                                                      #false)
                                                 (vector-ref FALLING-BLOCKS-POSITIONS num))))
-                 (omegaFunction world-state (random 0 6)))
+                 (omegaFunction world-state (random 7)))
                (if (check-new-posn-offset world-state 0 1)
                    (move-blocks-offset world-state 0 1)
                    (if (world-state-game-over (loser world-state))
