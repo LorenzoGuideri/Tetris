@@ -345,7 +345,7 @@
             (if (< y (sub1 BLOCKS-IN-HEIGHT))
                 (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
                 (grid-row-image grid y))))
-    (grid-to-image-inner grid 4)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 4
+    (grid-to-image-inner grid 0)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 4
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -457,8 +457,8 @@
           (define POSN-LEN (vector-length FALLING-BLOCKS-TEMP))
           (define (check-if-valid x)
             (cond
-              [(= x (sub1 POSN-LEN)) (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset)))]
-              [else (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset)) (check-if-valid (add1 x)))]
+              [(= x (sub1 POSN-LEN)) (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (>= (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) 0) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (> (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) 0) (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset)))]
+              [else (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) BLOCKS-IN-WIDTH) (>= (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) 0) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) BLOCKS-IN-HEIGHT) (> (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset) 0) (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) xOffset) (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) yOffset)) (check-if-valid (add1 x)))]
               ))
           ) (check-if-valid 0)))
   
@@ -700,6 +700,27 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; MOVE-RIGHT
+(define (move-right world-state)
+  (if (check-new-posn-offset world-state 1 0)
+      (move-blocks-offset world-state 1 0)
+      world-state)
+  )
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; MOVE-LEFT
+(define (move-left world-state)
+  (if (check-new-posn-offset world-state -1 0)
+      (move-blocks-offset world-state -1 0)
+      world-state)
+  )
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
 ; HANDLE-KEY FUNCTION
 
 ; takes a World-state and a key-event and returns an updated World-state in the following way:
@@ -710,8 +731,8 @@
 
 (define (handle-key world-state key)
   (cond
-    ;[(key=? key "left") (move-left world-state)]
-    ;[(key=? key "right") (move-right world-state)]
+    [(key=? key "left") (move-left world-state)]
+    [(key=? key "right") (move-right world-state)]
     [(key=? key "down") (update-tick-delay world-state 1)]
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
