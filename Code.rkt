@@ -94,7 +94,6 @@
     +15 100
     BACKGROUND)))
 
-
 ;; --------------------------------------------------------------------------
 
 ;; DATA TYPES
@@ -236,11 +235,22 @@
 
 ; takes a Block, a Grid and a Posn and edits the Grid with a Block at the coordinates given as inputs in the Posn
 ; set-grid-block: Block Grid Posn -> Grid
+; (define (set-grid-block FGB CIPPI-GRID (make-posn 3 2) CIPPI-GRID2)
+;(define (set-grid-block block grid posn)
+;  (set-grid-row grid (... posn)
+;                (... (get-grid-row grid (... posn)) (... posn) block)))
 
+(check-expect (set-grid-block FPB GRID-EXAMPLE (make-posn 9 9))
+              (shared ((-1- (vector -2- -2- -2- -2- -2- -2- -2- -2- -2- -2-))
+                       (-2- (make-block (make-color 30 30 30 255) #false)))
+                (vector -1- -1- -1- -1- -1- -1- -1- -1- -1-
+                        (vector -2- -2- -2- -2- -2- -2- -2- -2- -2-
+                                (make-block (make-color 246 207 250 255) #true)) -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1-)))
 
 (define (set-grid-block block grid posn)
   (set-grid-row grid (posn-y posn)
                 (vector-set (get-grid-row grid (posn-y posn)) (posn-x posn) block)))
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -248,6 +258,11 @@
 
 ; takes a vector, a position (Number) and a value (Number) and returns a Vector with the new value at the indicated position
 ; vector-set: Vector Number Number -> Vector
+; (define (vector-set (vector 1 2 3) 3 4)) (vector 1 2 4)
+
+(check-expect (vector-set (vector 1 2 3 4 5) 3 4)
+(vector 1 2 3 4 5))
+
 (define (vector-set vec pos value)
   (local (
           (define VEC-LEN (vector-length vec))
@@ -660,18 +675,22 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; FOR TESTS
+
+(define CIPPI-GRID (set-grid-row (world-state-grid EXAMPLE-STATE) 17 FULL-ROW-EXAMPLE))
+(define CIPPI-WORLD-STATE (update-grid EXAMPLE-STATE CIPPI-GRID))
+
+(define CIPPI-GRID2 (set-grid-row (world-state-grid EXAMPLE-STATE) 4 FULL-ROW-EXAMPLE))
+(define CIPPI-WORLD-STATE2 (update-grid EXAMPLE-STATE CIPPI-GRID2))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 ; ROW-FULL FUNCTION
 
 ; takes a World-state and determines if there are any full rows (if there is a row where all the blocks have a color
 ; that is not EMPTY-COLOR), it returns the number of row that is full or #false if there are now full rows
 ; row-full: World-state -> Number/Boolean
 ; (define (row-full world-state) 5)
-
-(define CIPPI (set-grid-row (world-state-grid EXAMPLE-STATE) 17 FULL-ROW-EXAMPLE))
-(define CIPPI-WORLD-STATE (update-grid EXAMPLE-STATE CIPPI))
-
-(define CIPPI2 (set-grid-row (world-state-grid EXAMPLE-STATE) 4 FULL-ROW-EXAMPLE))
-(define CIPPI-WORLD-STATE2 (update-grid EXAMPLE-STATE CIPPI2))
 
 (check-expect (row-full CIPPI-WORLD-STATE) 17)
 (check-expect (row-full CIPPI-WORLD-STATE2) 4)
@@ -856,7 +875,7 @@
     ))
 
 (define (run funct arg) (if (funct arg) (display "Bye bye!\n") (display "Bye bye!\n")))
-(tetris INITIAL-STATE)
+;(tetris INITIAL-STATE)
 
 ;;; TO DO:
 
