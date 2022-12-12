@@ -48,10 +48,13 @@
    "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
    +15 -50
    (overlay/align/offset
+   "middle" "middle" (text/font "press 'q' to quit" 30 PINK #f 'swiss 'normal 'bold #f)
+   +15 -100
+   (overlay/align/offset
     "middle" "middle"
     (text/font "GAME OVER" 60 "Light Red" #f 'swiss 'normal 'bold #f)
     +15 100
-    BACKGROUND)))
+    BACKGROUND))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
