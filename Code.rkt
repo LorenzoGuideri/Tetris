@@ -729,23 +729,12 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; MOVE-RIGHT
-(define (move-right world-state)
-  (if (check-new-posn-offset world-state 1 0)
-      (move-blocks-offset world-state 1 0)
+; MOVE-X
+(define (move-x world-state direction) ;1 right, -1 left
+  (if (check-new-posn-offset world-state direction 0)
+      (move-blocks-offset world-state direction 0)
       world-state)
   )
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; MOVE-LEFT
-(define (move-left world-state)
-  (if (check-new-posn-offset world-state -1 0)
-      (move-blocks-offset world-state -1 0)
-      world-state)
-  )
-
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -760,8 +749,8 @@
 
 (define (handle-key world-state key)
   (cond
-    [(key=? key "left") (move-left world-state)]
-    [(key=? key "right") (move-right world-state)]
+    [(key=? key "left") (move-x world-state -1)]
+    [(key=? key "right") (move-x world-state 1)]
     [(key=? key "down") (update-tick-delay world-state 1)]
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
