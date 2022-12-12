@@ -401,7 +401,7 @@
 (define (tick world-state)
   (update-tick
    (if (= 0 (modulo (world-state-tick world-state) (world-state-tick-delay world-state)))
-       (if (world-state-game-over world-state)
+       (if (or (world-state-is-paused world-state) (world-state-game-over world-state))
            world-state
            (if (world-state-should-spawn world-state)
                (local (
@@ -767,7 +767,7 @@
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
     [(key=? key "r") (if (world-state-game-over world-state) INITIAL-STATE world-state)]
-    [(key=? key "escape") (tetris PAUSED-STATE)]
+    [(key=? key "escape") (if (world-state-game-over world-state) world-state (update-is-paused world-state (not (world-state-is-paused world-state))))]
     [(key=? key "q") (update-should-quit world-state #true)]
     [else world-state]
     ))
