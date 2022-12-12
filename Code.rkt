@@ -828,6 +828,8 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
+(define (quit? world-state)
+  (world-state-should-quit world-state))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -839,7 +841,7 @@
     [to-draw draw]
     [on-key handle-key]
     [on-release handle-release]
-    ;[stop-when quit?]
+    [stop-when quit?]
     ))
 
 ;(tetris INITIAL-STATE)
