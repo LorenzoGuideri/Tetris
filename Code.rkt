@@ -824,8 +824,11 @@
     [on-key handle-key]
     [on-release handle-release]
     [stop-when quit?]
+    [close-on-stop #true]
     ))
 
+(define (run funct arg) (if (funct arg) #T #T))
+(run tetris INITIAL-STATE)
 ;(tetris INITIAL-STATE)
 
 ;;; TO DO:
