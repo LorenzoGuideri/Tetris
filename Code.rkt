@@ -60,15 +60,20 @@
 
 ; PAUSE-PAGE
 
+; PAUSE-PAGE
+
 (define PAUSE-PAGE
   (overlay/align/offset
-   "middle" "middle" (text/font "press 'r' to restart" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
+   "middle" "middle" (text/font "press 'esc' to resume" 30 "Light Turquoise" #f 'swiss 'normal 'bold #f)
    +15 -50
+   (overlay/align/offset
+   "middle" "middle" (text/font "press 'r' to restart" 30 PINK #f 'swiss 'normal 'bold #f)
+   +15 -100
    (overlay/align/offset
     "middle" "middle"
     (text/font "GAME IS PAUSED" 50 "Light Blue" #f 'swiss 'normal 'bold #f)
     +15 100
-    BACKGROUND)))
+    BACKGROUND))))
 
 ;; --------------------------------------------------------------------------
 
@@ -808,7 +813,7 @@
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
-    [(key=? key "r") (if (world-state-game-over world-state) INITIAL-STATE world-state)]
+    [(key=? key "r") (if (or (world-state-game-over world-state) (world-state-is-paused world-state)) INITIAL-STATE world-state)]
     [(key=? key "escape") (if (world-state-game-over world-state) world-state (update-is-paused world-state (not (world-state-is-paused world-state))))]
     [(key=? key "q") (update-should-quit world-state #true)]
     [else world-state]
@@ -838,6 +843,8 @@
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
+(define (quit? world-state)
+  (world-state-should-quit world-state))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -849,7 +856,7 @@
     [to-draw draw]
     [on-key handle-key]
     [on-release handle-release]
-    ;[stop-when quit?]
+    [stop-when quit?]
     ))
 
 ;(tetris INITIAL-STATE)
