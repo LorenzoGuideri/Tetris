@@ -1,4 +1,4 @@
-;#lang htdp/asl
+#lang htdp/asl
 
 (require 2htdp/universe)
 (require 2htdp/image)
@@ -418,9 +418,9 @@
                  (omegaFunction world-state (random 7)))
                (if (check-new-posn-offset world-state 0 1)
                    (move-blocks-offset world-state 0 1)
-                   (if (world-state-game-over (loser world-state))
-                       (update-should-spawn (fb-to-nfb (loser world-state)) #false)
-                       (update-should-spawn (fb-to-nfb (loser world-state)) #true))
+                   (if (world-state-game-over (loser (any-full-rows world-state)))
+                       (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #false)
+                       (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #true))
                    ))
            )
        world-state)
