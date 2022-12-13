@@ -1010,6 +1010,11 @@
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; FAST-DROP FUNCTION
+(define (fast-drop world-state)
+  (update-score (update-tick-delay world-state 1) (+ 1 (world-state-score world-state))))
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 ; HANDLE-KEY FUNCTION
 
 ; takes a World-state and a key-event and returns an updated World-state in the following way:
@@ -1024,7 +1029,7 @@
   (cond
     [(key=? key "left") (move-x world-state -1)]
     [(key=? key "right") (move-x world-state 1)]
-    [(key=? key "down") (update-tick-delay world-state 1)]
+    [(key=? key "down") (fast-drop world-state)]
     [(key=? key "up") (if (or (= 0 (world-state-piece-index world-state)) (world-state-game-over world-state) (world-state-is-paused world-state)) world-state (rotate-cw world-state))]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
