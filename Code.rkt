@@ -50,13 +50,13 @@
    "middle" "middle" (text/font "press 'r' to restart" 30 ORANGE #f 'swiss 'normal 'bold #f)
    +15 -50
    (overlay/align/offset
-   "middle" "middle" (text/font "press 'q' to quit" 30 YELLOW #f 'swiss 'normal 'bold #f)
-   +15 -100
-   (overlay/align/offset
-    "middle" "middle"
-    (text/font "GAME OVER" 60 RED #f 'swiss 'normal 'bold #f)
-    +15 100
-    BACKGROUND))))
+    "middle" "middle" (text/font "press 'q' to quit" 30 YELLOW #f 'swiss 'normal 'bold #f)
+    +15 -100
+    (overlay/align/offset
+     "middle" "middle"
+     (text/font "GAME OVER" 60 RED #f 'swiss 'normal 'bold #f)
+     +15 100
+     BACKGROUND))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -67,20 +67,20 @@
    "middle" "middle" (text/font "press 'esc' to resume" 30 PINK #f 'swiss 'normal 'bold #f)
    +15 -50
    (overlay/align/offset
-   "middle" "middle" (text/font "press 'r' to restart" 30 LILAC #f 'swiss 'normal 'bold #f)
-   +15 -100
-   (overlay/align/offset
-    "middle" "middle"
-    (text/font "GAME IS PAUSED" 50 BLUE #f 'swiss 'normal 'bold #f)
-    +15 100
-    BACKGROUND))))
+    "middle" "middle" (text/font "press 'r' to restart" 30 LILAC #f 'swiss 'normal 'bold #f)
+    +15 -100
+    (overlay/align/offset
+     "middle" "middle"
+     (text/font "GAME IS PAUSED" 50 BLUE #f 'swiss 'normal 'bold #f)
+     +15 100
+     BACKGROUND))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; WELCOME
 
 (define WELCOME
-   (overlay/align/offset
+  (overlay/align/offset
    "middle" "middle" (text/font "press 'space' to start" 30 "white" #f 'swiss 'normal 'bold #f)
    +15 -50
    (overlay/align/offset
@@ -261,7 +261,7 @@
 ; (define (vector-set (vector 1 2 3) 3 4)) (vector 1 2 4)
 
 (check-expect (vector-set (vector 1 2 3 4 5) 3 4)
-(vector 1 2 3 4 5))
+              (vector 1 2 3 4 5))
 
 (define (vector-set vec pos value)
   (local (
@@ -400,7 +400,7 @@
 ;
 ;
 (define (score-to-image world-state)
-   (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 SCORE-COLOR #f 'swiss 'normal 'bold #f))
+  (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 SCORE-COLOR #f 'swiss 'normal 'bold #f))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -415,24 +415,27 @@
 
 (define (draw world-state)
   (cond
-    [(world-state-game-over world-state) GAME-OVER-PAGE]
-    [(world-state-is-paused world-state) PAUSE-PAGE]
-    [else (overlay/offset
-           (text/font "press 'q' to quit"  15 GREY
-                      #f 'swiss 'normal 'bold #f)
-           0
-           -360
-           (overlay/offset
-           (text/font "press 'esc' to pause"  15 "white"
-                      #f 'swiss 'normal 'bold #f)
-           0
-           -330
-           (overlay/offset (score-to-image world-state)
-                           150
-                           350
-                           (overlay (grid-to-image (world-state-grid world-state))
-                                    (rectangle 302 602 "solid" "black")
-                                    (world-state-background world-state)))))]))
+    [(if (= 0 (world-state-tick world-state))
+         WELCOME
+         (cond [(world-state-game-over world-state) GAME-OVER-PAGE]
+               [(world-state-is-paused world-state) PAUSE-PAGE]
+               [else (overlay/offset
+                      (text/font "press 'q' to quit"  15 GREY
+                                 #f 'swiss 'normal 'bold #f)
+                      0
+                      -360
+                      (overlay/offset
+                       (text/font "press 'esc' to pause"  15 "white"
+                                  #f 'swiss 'normal 'bold #f)
+                       0
+                       -330
+                       (overlay/offset (score-to-image world-state)
+                                       150
+                                       350
+                                       (overlay (grid-to-image (world-state-grid world-state))
+                                                (rectangle 302 602 "solid" "black")
+                                                (world-state-background world-state)))))]))]
+    ))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -447,27 +450,30 @@
 
 
 (define (tick world-state)
-  (update-tick
-   (if (= 0 (modulo (world-state-tick world-state) (world-state-tick-delay world-state)))
-       (if (or (world-state-is-paused world-state) (world-state-game-over world-state))
-           world-state
-           (if (world-state-should-spawn world-state)
-               (local (
-                       (define (omegaFunction world-state num)
-                         (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
-                                                                                               (vector-ref PIECES num))
-                                                                     #false)
-                                                (vector-ref FALLING-BLOCKS-POSITIONS num))))
-                 (omegaFunction world-state (random 7)))
-               (if (check-new-posn-offset world-state 0 1)
-                   (move-blocks-offset world-state 0 1)
-                   (if (world-state-game-over (loser (any-full-rows world-state)))
-                       (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #false)
-                       (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #true))
-                   ))
-           )
-       world-state)
-   (add1 (world-state-tick world-state)))
+  (if (= 0 (world-state-tick world-state))
+      world-state
+      (update-tick
+       (if (= 0 (modulo (world-state-tick world-state) (world-state-tick-delay world-state)))
+           (if (or (world-state-is-paused world-state) (world-state-game-over world-state))
+               world-state
+               (if (world-state-should-spawn world-state)
+                   (local (
+                           (define (omegaFunction world-state num)
+                             (update-falling-blocks (update-should-spawn (add-piece-to-world-state world-state
+                                                                                                   (vector-ref PIECES num))
+                                                                         #false)
+                                                    (vector-ref FALLING-BLOCKS-POSITIONS num))))
+                     (omegaFunction world-state (random 7)))
+                   (if (check-new-posn-offset world-state 0 1)
+                       (move-blocks-offset world-state 0 1)
+                       (if (world-state-game-over (loser (any-full-rows world-state)))
+                           (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #false)
+                           (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #true))
+                       ))
+               )
+           world-state)
+       (add1 (world-state-tick world-state)))
+      )
   )
 
 
@@ -827,9 +833,10 @@
     ;[(key=? key "up") (rotate-front world-state)]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
-    [(key=? key "r") (if (or (world-state-game-over world-state) (world-state-is-paused world-state)) INITIAL-STATE world-state)]
+    [(key=? key "r") (if (or (world-state-game-over world-state) (world-state-is-paused world-state)) (update-tick INITIAL-STATE (world-state-tick-delay INITIAL-STATE)) world-state)]
     [(key=? key "escape") (if (world-state-game-over world-state) world-state (update-is-paused world-state (not (world-state-is-paused world-state))))]
     [(key=? key "q") (update-should-quit world-state #true)]
+    [(key=? key " ") (if (= 0 (world-state-tick world-state)) (update-tick world-state (world-state-tick-delay world-state)) world-state)]
     [else world-state]
     ))
 
@@ -875,7 +882,7 @@
     ))
 
 (define (run funct arg) (if (funct arg) (display "Bye bye!\n") (display "Bye bye!\n")))
-;(tetris INITIAL-STATE)
+(run tetris INITIAL-STATE)
 
 ;;; TO DO:
 
@@ -886,5 +893,5 @@
 
 
 ;;; * README
-;;; * user guide
+;;; * user guide - almost done
 ;;; * developer guide
