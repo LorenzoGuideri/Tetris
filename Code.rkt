@@ -219,10 +219,10 @@
 ; Examples
 (define DEFAULT-TICK-DELAY 10)
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 10 0 0 #F))
-(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false 0 10 0 0 #F))
-(define GAME-OVER-STATE (make-world-state GAME-OVER-PAGE EMPTY-GRID 0 #false #false #false (make-vector 0) #true 0 10 0 0 #F))
-(define PAUSED-STATE (make-world-state PAUSE-PAGE EMPTY-GRID 0 #false #false #true (make-vector 0) #false 0 10 0 0 #F))
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 DEFAULT-TICK-DELAY 0 0 #F))
+(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false 0 DEFAULT-TICK-DELAY 0 0 #F))
+(define GAME-OVER-STATE (make-world-state GAME-OVER-PAGE EMPTY-GRID 0 #false #false #false (make-vector 0) #true 0 DEFAULT-TICK-DELAY 0 0 #F))
+(define PAUSED-STATE (make-world-state PAUSE-PAGE EMPTY-GRID 0 #false #false #true (make-vector 0) #false 0 DEFAULT-TICK-DELAY 0 0 #F))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1170,7 +1170,7 @@
 ; (define (handle-release world-state key) CIPPI-WORLD-STATE)
 
 (define (handle-release world-state key)
-  (if (equal? key "down") (update-tick-delay (update-down-pressed world-state #F) 10) world-state))
+  (if (equal? key "down") (update-tick-delay (update-down-pressed world-state #F) DEFAULT-TICK-DELAY) world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
