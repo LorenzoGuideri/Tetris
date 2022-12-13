@@ -479,7 +479,7 @@
   (cond
     [(if (= 0 (world-state-tick world-state))
          WELCOME
-         (cond [(world-state-game-over world-state) GAME-OVER-PAGE]
+         (cond [(world-state-game-over world-state) (overlay/align/offset "middle" "middle" (text/font ( string-append "SCORE: " (number->string (world-state-score world-state))) 40 LILAC #f 'swiss 'normal 'bold #f) +15 +20 GAME-OVER-PAGE)]
                [(world-state-is-paused world-state) PAUSE-PAGE]
                [else (overlay/offset
                       (text/font "press 'q' to quit"  15 GREY
