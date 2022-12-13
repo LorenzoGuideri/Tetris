@@ -646,6 +646,16 @@
                 )
             )
           ) (if (< x-offset 0) (block-falls-down-int world-state 3) (block-falls-down-int world-state 0))))
+
+
+; MOVE-BLOCKS-AFTER-ROTATION
+; Takes a World-state and returns a World-state in the following way:
+; Applies what is written in the vector falling-blocks in world-state to the actual blocks in the grid.
+; It's important that the order of swaps of the blocks is well defined, otherwise blocks will overwrite 
+; their block-neighbours 
+; move-blocks-after-rotation: World-state -> World-state 
+; (define (move-blocks-after-rotation world-state) CIPPI-WORLD-STATE)
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 (define (move-blocks-after-rotation world-state)
   (local (
