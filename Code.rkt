@@ -647,7 +647,87 @@
             )
           ) (if (< x-offset 0) (block-falls-down-int world-state 3) (block-falls-down-int world-state 0))))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+(define (move-blocks-after-rotation world-state)
+  (local (
+          (define BLOCKS-LENGTH (vector-length (world-state-falling-blocks world-state)))
+          (define FALLING-BLOCKS (world-state-falling-blocks world-state))
+          (define PIECE-INDEX (world-state-piece-index world-state))
+  
+          (define (add-blocks world-state x)
+            (cond
+              [(= x (sub1 BLOCKS-LENGTH))
+               (update-grid world-state 
+                            (set-grid-block 
+                             (cond 
+                               [(= PIECE-INDEX 1) FOB]
+                               [(= PIECE-INDEX 2) FRB]
+                               [(= PIECE-INDEX 3) FPB]
+                               [(= PIECE-INDEX 4) FLB]
+                               [(= PIECE-INDEX 5) FBB]
+                               [(= PIECE-INDEX 6) FGB]
+                               ) 
+                             (world-state-grid world-state)
+                             (vector-ref FALLING-BLOCKS x)
+                             ))
+               ]
+              [else
+               (update-grid (add-blocks world-state (add1 x))
+                            (set-grid-block 
+                             (cond 
+                               [(= PIECE-INDEX 1) FOB]
+                               [(= PIECE-INDEX 2) FRB]
+                               [(= PIECE-INDEX 3) FPB]
+                               [(= PIECE-INDEX 4) FLB]
+                               [(= PIECE-INDEX 5) FBB]
+                               [(= PIECE-INDEX 6) FGB]
+                               ) 
+                             (world-state-grid world-state)
+                             (vector-ref FALLING-BLOCKS x)
+                             ))
+               ]
+              )
+            )
 
+          ) (add-blocks (remove-blocks-rotation world-state) 0))
+  )
+
+
+(define (remove-blocks-rotation world-state)
+  (local (
+          (define BLOCKS-LENGTH (vector-length (world-state-falling-blocks world-state)))
+          (define FALLING-BLOCKS (world-state-falling-blocks world-state))
+  
+          (define (remove-blocks world-state x)
+            (cond
+              [(= x (sub1 BLOCKS-LENGTH))
+               (update-grid world-state 
+                            (set-grid-block 
+                             NFEB 
+                             (world-state-grid world-state)
+                             (make-posn (- (posn-x (vector-ref (world-state-falling-blocks world-state) x))
+                                           (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) x)))
+                                        (- (posn-y (vector-ref (world-state-falling-blocks world-state) x))
+                                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) x))))
+                             ))
+               ]
+              [else
+               (update-grid (remove-blocks world-state (add1 x))
+                            (set-grid-block 
+                             NFEB 
+                             (world-state-grid world-state) 
+                             (make-posn (- (posn-x (vector-ref (world-state-falling-blocks world-state) x))
+                                           (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) x)))
+                                        (- (posn-y (vector-ref (world-state-falling-blocks world-state) x))
+                                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) x))))
+                             ))
+               ]
+              )
+            )
+
+          ) (remove-blocks world-state 0))
+  )
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; MOVE-BLOCKS-OFFSET
 (define (move-blocks-offset world-state x-offset y-offset)
@@ -955,26 +1035,26 @@
 (define (rotate-cw world-state)
   (if (can-blocks-rotate? world-state)
       ; can rotate
-      (update-rotation-index (update-falling-blocks world-state
-                             (vector
-                              (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
-                                            (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 0)))
-                                         (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
-                                            (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 0))))
-                              (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
-                                            (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 1)))
-                                         (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
-                                            (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 1))))
-                              (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
-                                            (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 2)))
-                                         (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
-                                            (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 2))))
-                              (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
-                                            (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 3)))
-                                         (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
-                                            (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 3))))
-                              )
-                             ) (if (< (world-state-rotation-index world-state) 3) (add1 (world-state-rotation-index world-state)) 0))
+      (move-blocks-after-rotation (update-rotation-index (update-falling-blocks world-state
+                                                                                (vector
+                                                                                 (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
+                                                                                               (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 0)))
+                                                                                            (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
+                                                                                               (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 0))))
+                                                                                 (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
+                                                                                               (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 1)))
+                                                                                            (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
+                                                                                               (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 1))))
+                                                                                 (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
+                                                                                               (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 2)))
+                                                                                            (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
+                                                                                               (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 2))))
+                                                                                 (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
+                                                                                               (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 3)))
+                                                                                            (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
+                                                                                               (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (add1 (world-state-rotation-index world-state))) 3))))
+                                                                                 )
+                                                                                ) (if (< (world-state-rotation-index world-state) 3) (add1 (world-state-rotation-index world-state)) 0)))
 
       ; can-t rotate
       world-state
