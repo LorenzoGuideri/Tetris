@@ -527,10 +527,10 @@
                                                     (vector-ref FALLING-BLOCKS-POSITIONS num))))
                      (omegaFunction world-state (random 7)))
                    (if (check-new-posn-offset world-state 0 1)
-                       (move-blocks-offset world-state 0 1)
+                       (move-blocks-offset (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0 1)
                        (if (world-state-game-over (loser (any-full-rows world-state)))
-                           (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #false)
-                           (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #true))
+                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state)))) #false)
+                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state)))) #true))
                        ))
                )
            world-state)
@@ -852,8 +852,8 @@
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
                     (world-state-tick-delay world-state) (world-state-rotation-index world-state) number (world-state-down-pressed world-state)))
-; UPDATE-DOWN-FALLING
-(define (update-down-falling world-state bool)
+; UPDATE-DOWN-PRESSED
+(define (update-down-pressed world-state bool)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
@@ -1030,7 +1030,7 @@
   (cond
     [(key=? key "left") (move-x world-state -1)]
     [(key=? key "right") (move-x world-state 1)]
-    [(key=? key "down") (update-tick-delay world-state 1)]
+    [(key=? key "down") (update-tick-delay (update-down-pressed world-state #T) 1)]
     [(key=? key "up") (if (or (= 0 (world-state-piece-index world-state)) (world-state-game-over world-state) (world-state-is-paused world-state)) world-state (rotate-cw world-state))]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
@@ -1199,7 +1199,7 @@
 ; (define (handle-release world-state key) CIPPI-WORLD-STATE)
 
 (define (handle-release world-state key)
-  (if (equal? key "down") (update-tick-delay world-state 10) world-state))
+  (if (equal? key "down") (update-tick-delay (update-down-pressed world-state #F) 10) world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
