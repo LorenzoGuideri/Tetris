@@ -834,7 +834,8 @@
 
 ; UPDATE-TICK-DELAY
 (define (update-tick-delay world-state number)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (if (and (world-state-down-pressed world-state)
+                    (not (world-state-game-over world-state))) (add1 (world-state-score world-state)) (world-state-score world-state)) 
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) number
                     (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
@@ -852,8 +853,8 @@
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
                     (world-state-tick-delay world-state) (world-state-rotation-index world-state) number (world-state-down-pressed world-state)))
-; UPDATE-DOWN-FALLING
-(define (update-down-falling world-state bool)
+; UPDATE-DOWN-PRESSED
+(define (update-down-pressed world-state bool)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
@@ -1030,7 +1031,7 @@
   (cond
     [(key=? key "left") (move-x world-state -1)]
     [(key=? key "right") (move-x world-state 1)]
-    [(key=? key "down") (update-tick-delay world-state 1)]
+    [(key=? key "down") (update-tick-delay (update-down-pressed world-state #T) 1)]
     [(key=? key "up") (if (or (= 0 (world-state-piece-index world-state)) (world-state-game-over world-state) (world-state-is-paused world-state)) world-state (rotate-cw world-state))]
     ;[(key=? key "z") (rotate-back world-state)]
     ;[(key=? key "h") (hard-drop world-state)]
@@ -1199,7 +1200,7 @@
 ; (define (handle-release world-state key) CIPPI-WORLD-STATE)
 
 (define (handle-release world-state key)
-  (if (equal? key "down") (update-tick-delay world-state 10) world-state))
+  (if (equal? key "down") (update-tick-delay (update-down-pressed world-state #T) 10) world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
