@@ -479,7 +479,7 @@
   (cond
     [(if (= 0 (world-state-tick world-state))
          WELCOME
-         (cond [(world-state-game-over world-state) GAME-OVER-PAGE]
+         (cond [(world-state-game-over world-state) (overlay/align/offset "middle" "middle" (text/font ( string-append "SCORE: " (number->string (world-state-score world-state))) 40 LILAC #f 'swiss 'normal 'bold #f) +15 +20 GAME-OVER-PAGE)]
                [(world-state-is-paused world-state) PAUSE-PAGE]
                [else (overlay/offset
                       (text/font "press 'q' to quit"  15 GREY
@@ -527,10 +527,10 @@
                                                     (vector-ref FALLING-BLOCKS-POSITIONS num))))
                      (omegaFunction world-state (random 7)))
                    (if (check-new-posn-offset world-state 0 1)
-                       (move-blocks-offset world-state 0 1)
+                       (move-blocks-offset (update-score world-state (+ 1 (world-state-score world-state))) 0 1)
                        (if (world-state-game-over (loser (any-full-rows world-state)))
-                           (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #false)
-                           (update-should-spawn (fb-to-nfb (loser (any-full-rows world-state))) #true))
+                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (update-score world-state (+ 1 (world-state-score world-state)))))) #false)
+                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (update-score world-state (+ 1 (world-state-score world-state)))))) #true))
                        ))
                )
            world-state)
