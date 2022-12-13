@@ -844,7 +844,7 @@
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) number (world-state-down-pressed world-state)))
+                    (world-state-tick-delay world-state) number (world-state-piece-index world-state) (world-state-down-pressed world-state)))
 
 ; UPDATE-PIECE-INDEX
 (define (update-piece-index world-state number)
