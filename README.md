@@ -41,10 +41,10 @@ NEW FUNCTIONS:
   - takes a World-state and moves a Piece down every second
 - AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
   - all take a world-state and a value and insert the new value in the world-state
-    - should-quit
-    - should-spawn
-    - is-paused
-    - falling-blocks
+    - update-should-quit
+    - update-should-spawn
+    - updsate-is-paused
+    - updsate-falling-blocks
 - CAN-BLOCK-FALL? FUNCTION
   - takes a World-state, x and y coordinates and returns true if the Block (add1 y) at the coordinates x y in the Grid can fall
 - AUXILIARY FUNCTION: IS-BLOCK-EMPTY?
@@ -53,37 +53,42 @@ NEW FUNCTIONS:
 FINAL DEADLINE 
 -----------------------------
 NEW FUNCTIONS:
- - add-blocks-to-grid
- - any-full-rows
- - can-blocks-rotate?
- - check-if-valid
- - check-new-posn-offset
- - fb-to-nfb
- - grid-row-to-image
- - grid-to-image-inner
- - handle-key
- - handle-release
- - intra
- - is-block-nonempty?
- - loser
- - move-blocks-offset
- - move-blocks-to-falling-blocks
- - move-x
- - omegaFunction
- - push-down-rows
- - quit?
- - remove-blocks
- - remove-blocks-in-posn
- - rotate-cw
- - row-full
- - row-full-int
- - run
- - set-rotation-posns
- - set-value
- - tick-function
- - update-down-pressed
- - update-game-over
- - update-piece-index
- - update-rotation-index
- - update-tick
- - update-tick-delay
+
+- Functions to manipulate world-state data that has been added to the world-state structure
+  - update-score
+  - update-grid
+  - update-game-over
+  - update-tick
+  - update-tick-delay
+  - update-rotation-index
+  - update-piece-index
+  - update-down-pressed
+
+- vector-set
+- grid-block RENAMED get-grid-block
+- grid-row RENAMED get-grid-row
+- add-piece-to-grid CHANGED TO add-piece-to-world-state
+- move-blocks-offset needed to move and rotate blocks
+- spawn-piece to add pieces 
+- fb-to-nfb edits blocks
+- is-new-destination-in-grid? needed to move and rotate blocks
+- update-posns-in-falling-blocks needed to move and rotate blocks
+- can-block-fall? needed to move and rotate blocks
+- is-block-empty? needed to move and rotate blocks
+- can-block-rotate? needed to move and rotate blocks
+- update-posns-for-rotation needed to move and rotate blocks
+- add-blocks-to-falling-blocks-posns needed to move and rotate blocks
+- remove-blocks-in-posn needed to move and rotate blocks
+- rotate-cw needed to rotate
+- row-full used for score and to advance in the game
+- push-down-rows needed to manipulate grid and blocks 
+- any-full-rows needed for score and to advance in the game
+- loser needed to manipulate render and world-state
+- is-block-nonempty?
+- move-x needed for movement
+- tick-function handles the tick
+- handle-key
+- handle-relase
+- quit? manipulates world-state
+- score-to-image render
+
