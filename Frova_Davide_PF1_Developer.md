@@ -37,16 +37,37 @@ TICK-FUNCTION this function is divided in 2 main parts:
       - add-blocks-to-falling-blocks-posns
     )
 
-HANDLE-KEY
+HANDLE-KEY this function handles all the key presses that can happen during the game
+the keys that can be pressed are:
+- left arrow: move the piece to the left
+- right arrow: move the piece to the right
+- up arrow: rotate the piece
+- down arrow: move the piece down faster (this function increments the score by 1 each tick, the tick-delay is set to 1)
+- space: start the game
+- escape: pause the game
+- r: restart the game while it is paused or after the game is over
+- q: quit the game
 
+This function uses the move and rotate functions to handle the movements and rotations of the pieces, update- functions to update the world-state values
 
-ROTATE
+ROTATE-CW This function handles the rotation of the piece that is falling
+The function checks if the new position of the blocks is available, if it is, the blocks are removed from the grid, the blocks posns are rotated and then added to the grid in the new position 
 
 MOVE
+This function handles the movement of the piece that is falling
+It checks if the new position of the blocks is available, if it is, the blocks are removed from the grid, the blocks posns are updated with the offset of the movement required and then added to the grid in the new position
 
 ANY-FULL-ROWS
+This function checks if there are any full rows in the grid, if there are, the function removes each full row and pushes down all the rows above it
+It keeps truck of the number of rows removed and uses it to update the score with a special factor
 
 LOSER
+This function checks if the ceiling of the grid is reached by the falling blocks, if it is, the game is over and the player lost
+Then the game over page is rendered with the score and the keys to restart or quit the game.
 
-
-
+The main constants are the following:
+- grid-width: the width of the grid in blocks
+- grid-height: the height of the grid in blocks
+- PIECES : a vector of all the pieces that can be spawned
+- PIECES-POSITIONS : a vector of all the initial positions of the pieces
+- INITIAL-STATE : the initial state of the world-state
