@@ -52,3 +52,38 @@ NEW FUNCTIONS:
 
 FINAL DEADLINE 
 -----------------------------
+NEW FUNCTIONS:
+ - add-blocks-to-grid
+ - any-full-rows
+ - can-blocks-rotate?
+ - check-if-valid
+ - check-new-posn-offset
+ - fb-to-nfb
+ - grid-row-to-image
+ - grid-to-image-inner
+ - handle-key
+ - handle-release
+ - intra
+ - is-block-nonempty?
+ - loser
+ - move-blocks-offset
+ - move-blocks-to-falling-blocks
+ - move-x
+ - omegaFunction
+ - push-down-rows
+ - quit?
+ - remove-blocks
+ - remove-blocks-in-posn
+ - rotate-cw
+ - row-full
+ - row-full-int
+ - run
+ - set-rotation-posns
+ - set-value
+ - tick-function
+ - update-down-pressed
+ - update-game-over
+ - update-piece-index
+ - update-rotation-index
+ - update-tick
+ - update-tick-delay
