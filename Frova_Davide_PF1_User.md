@@ -1,6 +1,3 @@
-What the program does, how to run it, and how to use it.
-Maximum length: 1000 words of text.
-
 USER GUIDE
 
 When the game starts, a new piece will appear at the top of the grid and it will begin to fall down.
@@ -25,13 +22,13 @@ AIM OF THE GAME
 
 The aim of the game is to never leave empty spaces between the pieces in order to complete the horizontal lines.
 
-In fact, when a horizontal line of the grid is completed, therefore there are no empty spaces between the blocks, the line will be deleted and everything above will fall down by one block.
+In fact, when a horizontal line of the grid is completed, which means there are no empty spaces between the blocks, the line will be deleted and everything above will fall down by one block.
 
 ---
 
 SCORE
 
-Every time a line is completed and deleted, your score will be increased by 100 points. If you delete more lines together at the same time (up to four), your score will be increased by a special factor.
+Every time a line is completed and deleted, your score will be increased by 100 points. If you delete more lines together at the same time (up to four), your score will be increased by a special factor. When you press the bottom arrow to move the piece down quickly, the score will increase.
 
 ---
 
