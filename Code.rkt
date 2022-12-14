@@ -576,9 +576,9 @@ Course: Programming Fundamentals 1
                      (omegaFunction world-state (random 7)))
                    (if (check-new-posn-offset world-state 0 1)
                        (move-blocks-offset (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0 1)
-                       (if (world-state-game-over (loser (any-full-rows world-state)))
-                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state)))) #false)
-                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state)))) #true))
+                       (if (world-state-game-over (loser (any-full-rows world-state 0)))
+                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0))) #false)
+                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0))) #true))
                        ))
                )
            world-state)
@@ -956,10 +956,15 @@ Course: Programming Fundamentals 1
 ; any-full-rows: World-state -> World-state
 ; (define (any-full-rows world-state) CIPPI-WORLD-STATE)
 
-(define (any-full-rows world-state)
+(define (any-full-rows world-state deleted-until-now)
   (cond
-    [(boolean? (row-full world-state)) world-state]
-    [else (any-full-rows (push-down-rows world-state (row-full world-state)))]))
+    [(boolean? (row-full world-state)) (cond
+                                         [(= 0 deleted-until-now) world-state]
+                                         [(= 1 deleted-until-now) (update-score world-state (+ (world-state-score world-state) 100))]
+                                         [(= 2 deleted-until-now) (update-score world-state (+ (world-state-score world-state) 300))]
+                                         [(= 3 deleted-until-now) (update-score world-state (+ (world-state-score world-state) 500))]
+                                         [(= 4 deleted-until-now) (update-score world-state (+ (world-state-score world-state) 800))])]
+    [else (any-full-rows (push-down-rows world-state (row-full world-state)) (add1 deleted-until-now))]))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
