@@ -74,7 +74,7 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; BACKGROUND
+; BACKGROUND IMAGE
 
 (define WIDTH-BG 560)
 (define HEIGHT-BG 800)
@@ -82,14 +82,14 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; BLOCKS IN GRID
+; NUMBER OF BLOCKS IN GRID
 
 (define BLOCKS-IN-WIDTH 10)
 (define BLOCKS-IN-HEIGHT 24)
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; GAME-OVER-PAGE
+; GAME-OVER-PAGE IMAGE
 
 (define GAME-OVER-PAGE
   (overlay/align/offset
@@ -106,7 +106,7 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; PAUSE-PAGE
+; PAUSE-PAGE IMAGE
 
 (define PAUSE-PAGE
   (overlay/align/offset
@@ -123,7 +123,7 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; WELCOME
+; WELCOME IMAGE
 
 (define WELCOME
   (overlay/align/offset
@@ -172,8 +172,8 @@ Course: Programming Fundamentals 1
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; a Piece is a Vector<Vector<Block>> where there the first Vector contains 4 Vectors of 10 Blocks each
-;        - A piece is the combination of various blocks to form the well known tetromin
-;        - This pieces will be spawned on top of the playing field and will fall down until they reach the bottom or another piece
+;        - A piece is the combination of 4 blocks to form a tetromino
+;        - This pieces will be spawned on top of the playing field and will fall down until it reaches the bottom or another piece
 ;        - The pieces are predefined
 
 ; PREDEFINED PIECES
@@ -188,6 +188,11 @@ Course: Programming Fundamentals 1
 
 
 ; PREDEFINED FALLING-BLOCKS-POSITIONS
+; When it's spawned, every piece has a predefined initial position. 
+; This is used to then move the blocks forming the piece to the left/right or to rotate them
+; We predefined the blocks positions in order to avoid screening the whole grid to find the falling blocks that
+; needed to be rotated. This way we can keep track of every falling block and its positions and we can use this
+; information to move it around.
 
 (define O-PIECE-POSITIONS (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)))
 (define L-PIECE-POSITIONS (vector (make-posn 6 1) (make-posn 5 1) (make-posn 4 1) (make-posn 6 0)))
@@ -207,58 +212,25 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; a Score is a Natural
-;        - It represents the number of lines completed by the user (1 line = 100 points)
-;        - If the user completes more then one line at the same time,
-;          the score will be increased by a special factor (All the way up to 4 lines at the same time)
-; Examples
-
-(define INITIAL-SCORE 0)
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; a Grid is a Vector<Vector<Block>> (make-vector 10 (make-vector 40 Block))
-;     - It represent a grid of width = 10 blocks, height = 40 blocks (of which only 20 visible)
+; a Grid is a Vector<Vector<Block>> (make-vector 10 (make-vector 24 Block))
+;     - It represent a grid of width = 10 blocks, height = 24 blocks (of which only 20 visible)
 ;     - The grid is the playing field where the pieces will fall
-;     - The main list will be the rows of the grid, each row is a list of blocks
+;     - The main vector will be the rows of the grid, each row is a vector of blocks
 ;
 ; Examples
 
-(define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
+(define INITIAL-GRID (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
 (define FULL-ROW-EXAMPLE (make-vector BLOCKS-IN-WIDTH FPB))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; WORLD-STATE
-; A World-state is a Structure with the followings elements inside:
-;      background:   Image that contains the grid, score and all the visual elements
-;      grid:         The Grid containing all the blocks. empty or not
-;      score:        The score is a non-negative integer which represents the score of the player
-;      should-quit:  Boolean value that represents if the application should quit or not
-;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
-;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
-;      falling-blocks: Vector of Posn that represents the position of the falling blocks in the grid
-;      game-over:    Boolean value that represents if the player lost (#true) or not (#false)
-;      tick:         Number that represents the number of times the function "tick" has been called
-;      tick-delay:   Number that represents how many ticks need to happen until the functions inside of the function "tick" are called
-;      rotation-index: Number that represents the current rotation of the falling piece (0 = starting point, 1 = left, 2 = up, 3 = right)
-;      piece-index:  Number that represents which piece is currently falling:
-;                       0 = O-PIECE
-;                       1 = L-PIECE
-;                       2 = Z-PIECE
-;                       3 = T-PIECE
-;                       4 = J-PIECE
-;                       5 = I-PIECE
-;                       6 = S-PIECE
-;      down-pressed:   Boolean that represents whether the down key is pressed or not (necessary for updating score)
+; a Score is a Non-Negative-Integer
+;        - It represents the number of lines completed by the user (1 line = 100 points)
+;        - If the user completes more then one line at the same time,
+;          the score will be increased by a special factor (All the way up to 4 lines at the same time)
+;        - The score also increases while fast-dropping a piece
 
-(define-struct world-state [background grid score should-quit should-spawn is-paused falling-blocks game-over tick tick-delay rotation-index piece-index down-pressed] #:transparent)
-
-; Examples
-(define DEFAULT-TICK-DELAY 10)
-
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 DEFAULT-TICK-DELAY 0 0 #false))
-(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false 0 DEFAULT-TICK-DELAY 0 0 #false))
+(define INITIAL-SCORE 0)
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -307,9 +279,147 @@ Course: Programming Fundamentals 1
                            (vector (make-posn 1 1) (make-posn 0 2) (make-posn 1 -1) (make-posn 0 0)))
                           ))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; WORLD-STATE
+; A World-state is a Structure with the followings elements inside:
+;      background:   Image that contains the grid, score and all the visual elements
+;      grid:         The Grid containing all the blocks. Empty or not
+;      score:        The score is a non-negative integer which represents the score of the player
+;      should-quit:  Boolean value that represents if the application should quit or not
+;      should-spawn: Boolean value that represents if a Piece should be generated at the top of the grid
+;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
+;      falling-blocks: Vector of Posn that represents the position of the falling blocks in the grid
+;      game-over:    Boolean value that represents if the player lost (#true) or not (#false)
+;      tick:         Number that represents the number of times the function "tick-function" has been called
+;                    This way we can keep track of how much time has passed (since time is measured in ticks).
+;                    In order to define our personalized tick so that the game moves at a certain speed. 
+;                    It's only set to 0 once the game starts (or re-starts: press 'r'), 
+;                    to show the WELCOME PAGE (nothing happens in the game).
+;                    When we press 'space' the tick is incremtented and the game starts.
+;      tick-delay:   Number that represents how many ticks need to happen until the functions inside of the 
+;                    function "tick-function" are called. (Which means: until something happens in the game)
+;      rotation-index: Number that represents the current rotation of the falling piece 
+;                      (0 = starting point, 1 = left, 2 = up, 3 = right)
+;      piece-index:  Number that represents which piece is currently falling:
+;                       0 = O-PIECE
+;                       1 = L-PIECE
+;                       2 = Z-PIECE
+;                       3 = T-PIECE
+;                       4 = J-PIECE
+;                       5 = I-PIECE
+;                       6 = S-PIECE
+;      down-pressed:   Boolean that represents whether the down key is pressed or not (necessary for updating score)
+
+(define-struct world-state [background grid score should-quit should-spawn is-paused falling-blocks game-over tick tick-delay rotation-index piece-index down-pressed] #:transparent)
+
+; Examples
+(define DEFAULT-TICK-DELAY 10)
+
+(define INITIAL-STATE (make-world-state BACKGROUND INITIAL-GRID INITIAL-SCORE #false #true #false (make-vector 0) #false 0 DEFAULT-TICK-DELAY 0 0 #false))
+(define EXAMPLE-STATE (make-world-state BACKGROUND INITIAL-GRID 100 #false #false #false O-PIECE-POSITIONS #false 0 DEFAULT-TICK-DELAY 0 0 #false))
+
 ;; -------------------------------------------------------------------------------------------------------------------
 
 ;; FUNCTIONS
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
+
+; All the functions take a World-state and a value return a World-state
+; The element of the world-state the function is named after is updated with the value given as input.
+; Value can be: Boolean, Number, Vector<Posn> (vopsn) or Vector<Vector<Block>>(vovob)
+; update-xx: World-state
+; (define (update-score 100) (make-world-state BACKGROUND INITIAL-GRID 100 #false #false #false #false))
+
+; UPDATE-SCORE
+(define (update-score world-state number)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) number
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
+
+; UPDATE-SHOULD-QUIT
+(define (update-should-quit world-state boolean)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    boolean (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
+
+; UPDATE-SHOULD-SPAWN
+(define (update-should-spawn world-state boolean)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) boolean (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
+
+; UPDATE-IS-PAUSED
+(define (update-is-paused world-state boolean)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) boolean
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
+
+; UPDATE-FALLING-BLOCKS
+(define (update-falling-blocks world-state vopsn)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    vopsn (world-state-game-over world-state) (world-state-tick world-state) (world-state-tick-delay world-state)
+                    (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+
+; UPDATE-GRID
+(define (update-grid world-state vovob)
+  (make-world-state (world-state-background world-state) vovob (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
+
+; UPDATE-GAME-OVER
+(define (update-game-over world-state boolean)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) boolean (world-state-tick world-state) (world-state-tick-delay world-state)
+                    (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+
+; UPDATE-TICK
+(define (update-tick world-state number)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) number (world-state-tick-delay world-state)
+                    (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+
+; UPDATE-TICK-DELAY
+(define (update-tick-delay world-state number)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) number
+                    (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+
+; UPDATE-ROTATION-INDEX
+(define (update-rotation-index world-state number)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
+                    (world-state-tick-delay world-state) number (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+
+; UPDATE-PIECE-INDEX
+(define (update-piece-index world-state number)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) number (world-state-down-pressed world-state)))
+; UPDATE-DOWN-PRESSED
+(define (update-down-pressed world-state boolean)
+  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
+                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
+                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) boolean))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -322,7 +432,7 @@ Course: Programming Fundamentals 1
 ;  (set-grid-row grid (... posn)
 ;                (... (get-grid-row grid (... posn)) (... posn) block)))
 
-(check-expect (set-grid-block FPB GRID-EXAMPLE (make-posn 9 9))
+(check-expect (set-grid-block FPB INITIAL-GRID (make-posn 9 9))
               (shared ((-1- (vector -2- -2- -2- -2- -2- -2- -2- -2- -2- -2-))
                        (-2- (make-block (make-color 30 30 30 255) #false)))
                 (vector -1- -1- -1- -1- -1- -1- -1- -1- -1-
@@ -518,7 +628,7 @@ Course: Programming Fundamentals 1
 ; Every tick increments the world-state tick by 1. After world-state-tick-delay ticks the game advances once.
 
 
-(define (tick world-state)
+(define (tick-function world-state)
   (if (= 0 (world-state-tick world-state))
       world-state
       (update-tick
@@ -702,104 +812,6 @@ Course: Programming Fundamentals 1
    (change-posn-in-world-state (remove-blocks-in-posn world-state) x-offset y-offset)
    ))
 
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
-
-; All the functions take a World-state and a value return a World-state
-; The element of the world-state the function is named after is updated with the value given as input.
-; Value can be: Boolean, Number, Vector<Posn> (vopsn) or Vector<Vector<Block>>(vovob)
-; update-xx: World-state
-; (define (update-score 100) (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false #false))
-
-; UPDATE-SCORE
-(define (update-score world-state number)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) number
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
-                    (world-state-down-pressed world-state)))
-
-; UPDATE-SHOULD-QUIT
-(define (update-should-quit world-state boolean)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    boolean (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
-                    (world-state-down-pressed world-state)))
-
-; UPDATE-SHOULD-SPAWN
-(define (update-should-spawn world-state boolean)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) boolean (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
-                    (world-state-down-pressed world-state)))
-
-; UPDATE-IS-PAUSED
-(define (update-is-paused world-state boolean)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) boolean
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
-                    (world-state-down-pressed world-state)))
-
-; UPDATE-FALLING-BLOCKS
-(define (update-falling-blocks world-state vopsn)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    vopsn (world-state-game-over world-state) (world-state-tick world-state) (world-state-tick-delay world-state)
-                    (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
-
-; UPDATE-GRID
-(define (update-grid world-state vovob)
-  (make-world-state (world-state-background world-state) vovob (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
-                    (world-state-down-pressed world-state)))
-
-; UPDATE-GAME-OVER
-(define (update-game-over world-state boolean)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) boolean (world-state-tick world-state) (world-state-tick-delay world-state)
-                    (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
-
-; UPDATE-TICK
-(define (update-tick world-state number)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) number (world-state-tick-delay world-state)
-                    (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
-
-; UPDATE-TICK-DELAY
-(define (update-tick-delay world-state number)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state) number
-                    (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
-
-; UPDATE-ROTATION-INDEX
-(define (update-rotation-index world-state number)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) number (world-state-piece-index world-state) (world-state-down-pressed world-state)))
-
-; UPDATE-PIECE-INDEX
-(define (update-piece-index world-state number)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) number (world-state-down-pressed world-state)))
-; UPDATE-DOWN-PRESSED
-(define (update-down-pressed world-state boolean)
-  (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
-                    (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
-                    (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) boolean))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1149,12 +1161,12 @@ Course: Programming Fundamentals 1
 
 (define (tetris initial-state)
   (big-bang initial-state
-    [on-tick tick]
-    [to-draw draw]
+    [on-tick tick-function]
     [on-key handle-key]
     [on-release handle-release]
     [stop-when quit?]
     [close-on-stop #true]
+    [to-draw draw]
     ))
 
 (define (run funct arg) (if (funct arg) (display "Bye bye!\n") (display "Bye bye!\n")))
