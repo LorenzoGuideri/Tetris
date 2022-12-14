@@ -8,7 +8,7 @@
 
 #|
 
-(///////////////////**/*********,***,,,,,,,,,,,,,,,,,,,,,..................     
+(///////////////////**/*********,***,,,,,,,,,,,,,,,,,,,,,..................
 (...............................................................................
 (..,                                                                         ,..
 (,,,  *//////////*.(##########.&%%%%%%%%%%#,((((((((((*  ((((/  *////////.   ,,,
@@ -21,15 +21,15 @@
 (**,......////*......(####(((((//,/%%%%,...*##((,.....*/.#((//.///////*,.....,**
 (**,.........................................................................***
 (***************************,.......................,***************************
-                         ***,.......................,**,                        
-                         ***,.......................,**,                        
-                         ***,,,,,,,,,,,,,,,,,,,,,,,,,**,                        
-                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,                        
-                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,                        
-                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,                        
-                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,                        
-                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,                        
-                         *//*,,,,,,,,,,,,,,,,,,,,,,,,//,                        
+                         ***,.......................,**,
+                         ***,.......................,**,
+                         ***,,,,,,,,,,,,,,,,,,,,,,,,,**,
+                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,
+                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,
+                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,
+                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,
+                         *//,,,,,,,,,,,,,,,,,,,,,,,,,//,
+                         *//*,,,,,,,,,,,,,,,,,,,,,,,,//,
                          */////////////////////////////,
 
 
@@ -188,7 +188,7 @@ Course: Programming Fundamentals 1
 
 
 ; PREDEFINED FALLING-BLOCKS-POSITIONS
-; When it's spawned, every piece has a predefined initial position. 
+; When it's spawned, every piece has a predefined initial position.
 ; This is used to then move the blocks forming the piece to the left/right or to rotate them
 ; We predefined the blocks positions in order to avoid screening the whole grid to find the falling blocks that
 ; needed to be rotated. This way we can keep track of every falling block and its positions and we can use this
@@ -293,13 +293,13 @@ Course: Programming Fundamentals 1
 ;      game-over:    Boolean value that represents if the player lost (#true) or not (#false)
 ;      tick:         Number that represents the number of times the function "tick-function" has been called
 ;                    This way we can keep track of how much time has passed (since time is measured in ticks).
-;                    In order to define our personalized tick so that the game moves at a certain speed. 
-;                    It's only set to 0 once the game starts (or re-starts: press 'r'), 
+;                    In order to define our personalized tick so that the game moves at a certain speed.
+;                    It's only set to 0 once the game starts (or re-starts: press 'r'),
 ;                    to show the WELCOME PAGE (nothing happens in the game).
 ;                    When we press 'space' the tick is incremtented and the game starts.
-;      tick-delay:   Number that represents how many ticks need to happen until the functions inside of the 
+;      tick-delay:   Number that represents how many ticks need to happen until the functions inside of the
 ;                    function "tick-function" are called. (Which means: until something happens in the game)
-;      rotation-index: Number that represents the current rotation of the falling piece 
+;      rotation-index: Number that represents the current rotation of the falling piece
 ;                      (0 = starting point, 1 = left, 2 = up, 3 = right)
 ;      piece-index:  Number that represents which piece is currently falling:
 ;                       0 = O-PIECE
@@ -338,7 +338,7 @@ Course: Programming Fundamentals 1
   (make-world-state (world-state-background world-state) (world-state-grid world-state) number
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state)
                     (world-state-down-pressed world-state)))
 
 ; UPDATE-SHOULD-QUIT
@@ -346,7 +346,7 @@ Course: Programming Fundamentals 1
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     boolean (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state)
                     (world-state-down-pressed world-state)))
 
 ; UPDATE-SHOULD-SPAWN
@@ -354,7 +354,7 @@ Course: Programming Fundamentals 1
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) boolean (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state)
                     (world-state-down-pressed world-state)))
 
 ; UPDATE-IS-PAUSED
@@ -362,7 +362,7 @@ Course: Programming Fundamentals 1
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) boolean
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state)
                     (world-state-down-pressed world-state)))
 
 ; UPDATE-FALLING-BLOCKS
@@ -377,7 +377,7 @@ Course: Programming Fundamentals 1
   (make-world-state (world-state-background world-state) vovob (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state)
                     (world-state-down-pressed world-state)))
 
 ; UPDATE-GAME-OVER
@@ -423,29 +423,6 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; SET-GRID-BLOCK FUNCTION
-
-; takes a Block, a Grid and a Posn and edits the Grid with a Block at the coordinates given as inputs in the Posn
-; set-grid-block: Block Grid Posn -> Grid
-; (define (set-grid-block FGB CIPPI-GRID (make-posn 3 2) CIPPI-GRID2)
-;(define (set-grid-block block grid posn)
-;  (set-grid-row grid (... posn)
-;                (... (get-grid-row grid (... posn)) (... posn) block)))
-
-(check-expect (set-grid-block FPB INITIAL-GRID (make-posn 9 9))
-              (shared ((-1- (vector -2- -2- -2- -2- -2- -2- -2- -2- -2- -2-))
-                       (-2- (make-block (make-color 30 30 30 255) #false)))
-                (vector -1- -1- -1- -1- -1- -1- -1- -1- -1-
-                        (vector -2- -2- -2- -2- -2- -2- -2- -2- -2-
-                                (make-block (make-color 246 207 250 255) #true)) -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1-)))
-
-(define (set-grid-block block grid posn)
-  (set-grid-row grid (posn-y posn)
-                (vector-set (get-grid-row grid (posn-y posn)) (posn-x posn) block)))
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 ; VECTOR-SET
 
 ; takes a vector, a position (Number) and a value (Number) and returns a Vector with the new value at the indicated position
@@ -467,6 +444,27 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; SET-GRID-BLOCK FUNCTION
+
+; takes a Block, a Grid and a Posn and edits the Grid with a Block at the coordinates given as inputs in the Posn
+; set-grid-block: Block Grid Posn -> Grid
+; (define (set-grid-block FGB CIPPI-GRID (make-posn 3 2) CIPPI-GRID2)
+; (define (set-grid-block block grid posn)
+
+(check-expect (set-grid-block FPB INITIAL-GRID (make-posn 9 9))
+              (shared ((-1- (vector -2- -2- -2- -2- -2- -2- -2- -2- -2- -2-))
+                       (-2- (make-block (make-color 30 30 30 255) #false)))
+                (vector -1- -1- -1- -1- -1- -1- -1- -1- -1-
+                        (vector -2- -2- -2- -2- -2- -2- -2- -2- -2-
+                                (make-block (make-color 246 207 250 255) #true)) -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1- -1-)))
+
+(define (set-grid-block block grid posn)
+  (set-grid-row grid (posn-y posn)
+                (vector-set (get-grid-row grid (posn-y posn)) (posn-x posn) block)))
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 ; SET-GRID-ROW FUNCTION
 
 ; Takes a Vector, a Number and a Grid. At the position Number of the Grid it inserts the Vector given as input
@@ -481,9 +479,32 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+; GET-GRID-BLOCK FUNCTION
+
+; takes a Grid, x and y and returns the block at those coordinates
+; get-grid-block: Grid Number Number -> Block
+; (define (get-grid-block Grid Number Number) FEB)
+
+(define (get-grid-block grid x y)
+  (vector-ref (vector-ref grid y) x))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; GET-GRID-ROW FUNCTION
+
+; takes a Grid and a y coordinate and returns a Vector representing the row of the grid at that coordinate
+; get-grid-row: Grid Number -> Vector
+; (define (get-grid-row Grid Number) (make-vector ..))
+
+(define (get-grid-row grid y)
+  (vector-ref grid y))
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 ; ADD-PIECE-TO-WORLD-STATE FUNCTION
 
-; Receives a World-state and a Piece as inputs and adds the Piece at the top of the Grid
+; Receives a World-state and a Piece as inputs and adds the Piece at the top of the Grid (in the center)
 ; add-piece-to-world-state: World-state Piece -> World-state
 ; (define (add-piece-to-world-state world-state piece) INITIAL-STATE)
 
@@ -497,171 +518,52 @@ Course: Programming Fundamentals 1
                  (vector-ref piece 3))
                 (vector-take-right (world-state-grid world-state) (- BLOCKS-IN-HEIGHT 4)))))
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; MOVE-BLOCKS-OFFSET FUNCTION
+
+; Takes a World-state and 2 coordinates and:
+; - removes from the grid the blocks at coordinates in falling-block (in the world-state)
+; - updates the new posns (in falling-blocks) with the coordinates in inputs 
+; - calls add-blocks-to-falling-blocks-posns that adds the blocks to the grid in the posn coordinates in falling-blocks
+; it's necessary to move the blocks left, right, down (move-x calls it)
+; move-blocks-offset: World-state Number Number -> World-state
+; (define (move-blocks-offset world-state x-offset y-offset) INITIAL-STATE)
+
+(define (move-blocks-offset world-state x-offset y-offset)
+  (add-blocks-to-falling-blocks-posns
+   (update-posns-in-falling-blocks (remove-blocks-in-posn world-state) x-offset y-offset)
+   ))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; GET-GRID-BLOCK FUNCTION
+; SPAWN-PIECE FUNCTION
 
-; takes a Grid, x and y and returns the block
-; get-grid-block: Grid Number Number -> Block
-; (define (get-grid-block Grid Number Number) FEB)
+; Takes a World-state and does this:
+; Set rotation-index to 0 and update piece-index with a random number between 0 and 7.
+; Then add the corresponding piece with add-piece-to-worldstate.
+; Then update-should-spawn (to false) and update-falling-blocks with the new positions (found in FALLING-BLOCKS-POSITIONS).
+; spawn-piece: World-state -> World-state
+; (define (spawn-piece world-state) INITIAL-STATE)
 
-(define (get-grid-block grid x y)
-  (vector-ref (vector-ref grid y) x))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; GET-GRID-ROW FUNCTION
-
-; takes a Grid and a y coordinate and returns a Vector representing the row of the grid
-; get-grid-row: Grid Number -> Vector
-; (define (get-grid-row Grid Number) (make-vector ..))
-
-(define (get-grid-row grid y)
-  (vector-ref grid y))
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; BLOCK-TO-IMAGE FUNCTION
-
-; renders a single Block with a black outline
-; block-to-image: Block -> Image
-; (define (block-to-image block) (rectangle 28 28 "solid" "black")
-
-(define (block-to-image block)
-  (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; GRID-ROW-TO-IMAGE FUNCTION
-
-; Returns the requested row of the given grid as an image
-; grid-row-to-image: Grid Number -> Image
-; (define (grid-row-to-image Grid Number) (rectangle 28 28 "solid" "black"))
-
-(define (grid-row-image grid y)
+(define (spawn-piece world-state)
   (local (
-          (define (grid-row-to-image grid x y)
-            (if (< x (sub1 BLOCKS-IN-WIDTH))
-                (beside (block-to-image (get-grid-block grid x y)) (grid-row-to-image grid (add1 x) y))
-                (block-to-image (get-grid-block grid x y))
-                )
-            )
-          ) (grid-row-to-image grid 0 y)))
+          (define (omegaFunction world-state num)
+            (update-falling-blocks (update-should-spawn (add-piece-to-world-state (update-piece-index (update-rotation-index world-state 0) num)
+                                                                                  (vector-ref PIECES num))
+                                                        #false)
+                                   (vector-ref FALLING-BLOCKS-POSITIONS num))))
+    (omegaFunction world-state (random 7)))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; GRID-TO-IMAGE FUNCTION
-
-; Renders the grid in the world state as an Image
-; Grid-to-image: Grid -> Image
-; (define (grid-to-image grid) (rectangle 28 28 "solid" "black"))
-
-(define (grid-to-image grid)
-  (local (
-          (define (grid-to-image-inner grid y)
-            (if (< y (sub1 BLOCKS-IN-HEIGHT))
-                (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
-                (grid-row-image grid y))))
-    (grid-to-image-inner grid 4)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 4
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; SCORE-TO-IMAGE FUNCTION
-
-; takes a Score and turns it into an Image
-; score-to-image: WorldState -> Image
-; (define (score-to-image (world-state-score world-state) (rectangle 28 28 "solid" "black"))
-;
-;
-(define (score-to-image world-state)
-  (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 SCORE-COLOR #f 'swiss 'normal 'bold #f))
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-; DRAW FUNCTION
-
-; takes a WorldState and renders the background and the grid
-; * if game over is true: render game over page
-; * if is-paused is true: render pause page
-; * else: regular game page
-; draw: WorldState -> Image
-; (define (draw world-state) (rectangle 28 28 "solid" "black"))
-
-
-
-(define (draw world-state)
-  (cond
-    [(if (= 0 (world-state-tick world-state))
-         WELCOME
-         (cond [(world-state-game-over world-state) (overlay/align/offset "middle" "middle" (text/font ( string-append "SCORE: " (number->string (world-state-score world-state))) 40 LILAC #f 'swiss 'normal 'bold #f) +15 +20 GAME-OVER-PAGE)]
-               [(world-state-is-paused world-state) PAUSE-PAGE]
-               [else (overlay/offset
-                      (text/font "press 'q' to quit"  15 GREY
-                                 #f 'swiss 'normal 'bold #f)
-                      0
-                      -360
-                      (overlay/offset
-                       (text/font "press 'esc' to pause"  15 "white"
-                                  #f 'swiss 'normal 'bold #f)
-                       0
-                       -330
-                       (overlay/offset (score-to-image world-state)
-                                       150
-                                       350
-                                       (overlay (grid-to-image (world-state-grid world-state))
-                                                (rectangle 302 602 "solid" "black")
-                                                (world-state-background world-state)))))]))]
-    ))
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; TICK FUNCTION
-
-; takes a World-state and, if flag should-spawn is true adds a Piece to the Grid:
-;     - add-piece-to-world-state with a random piece
-;     - turns to #false should-spawn
-;     - update-falling-blocks with the predefined position of the random piece that was selected
-; Every tick increments the world-state tick by 1. After world-state-tick-delay ticks the game advances once.
-
-
-(define (tick-function world-state)
-  (if (= 0 (world-state-tick world-state))
-      world-state
-      (update-tick
-       (if (= 0 (modulo (world-state-tick world-state) (world-state-tick-delay world-state)))
-           (if (or (world-state-is-paused world-state) (world-state-game-over world-state))
-               world-state
-               (if (world-state-should-spawn world-state)
-                   (local (
-                           (define (omegaFunction world-state num)
-                             (update-falling-blocks (update-should-spawn (add-piece-to-world-state (update-piece-index (update-rotation-index world-state 0) num)
-                                                                                                   (vector-ref PIECES num))
-                                                                         #false)
-                                                    (vector-ref FALLING-BLOCKS-POSITIONS num))))
-                     (omegaFunction world-state (random 7)))
-                   (if (check-new-posn-offset world-state 0 1)
-                       (move-blocks-offset (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0 1)
-                       (if (world-state-game-over (loser (any-full-rows world-state 0)))
-                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0))) #false)
-                           (update-should-spawn (fb-to-nfb (loser (any-full-rows (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0))) #true))
-                       ))
-               )
-           world-state)
-       (add1 (world-state-tick world-state)))
-      )
   )
-
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; FB-TO-NFB
+
 ; takes a World-state and returns a World-state where the falling blocks that reach the bottom of the grid
 ; are turned into non falling blocks
-; FB-TO-NFB World-state -> World-state
+; fb-to-nfb: World-state -> World-state
 ; (define (fb-to-nfb world-state) CIPPI-WORLD-STATE)
 
 (define (fb-to-nfb world-state)
@@ -686,131 +588,54 @@ Course: Programming Fundamentals 1
                                                  (world-state-grid (intra world-state (add1 x))) (vector-ref FALLING-BLOCKS x)
                                                  ))]
               ))) (intra world-state 0) ))
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; CHECK-NEW-POSN-OFFSET
-; Takes a World-state and returns a Boolean in the following way:
-; 
+; IS-NEW-DESTINATION-IN-GRID? FUNCTION
 
-(define (check-new-posn-offset world-state x-offset y-offset)
+; Takes a World-state and returns a Boolean in the following way:
+; Controlla se la posizione di arrivo (ovvero la posizione attuale + gli offset) è nei limiti della grid
+; is-new-destination-in-grid?: World-state -> Boolean
+; (define (is-new-destination-in-grid? world-state) #true)
+
+(define (is-new-destination-in-grid? world-state x-offset y-offset)
   (local (
           (define FALLING-BLOCKS-TEMP (world-state-falling-blocks world-state))
           (define POSN-LEN (vector-length FALLING-BLOCKS-TEMP))
           (define (check-if-valid x)
             (cond
-              [(= x (sub1 POSN-LEN)) (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) BLOCKS-IN-WIDTH) (>= (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) 0) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) BLOCKS-IN-HEIGHT) (> (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) 0) (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset)))]
-              [else (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) BLOCKS-IN-WIDTH) (>= (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) 0) (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) BLOCKS-IN-HEIGHT) (> (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) 0) (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset)) (check-if-valid (add1 x)))]
+              [(= x (sub1 POSN-LEN)) (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) BLOCKS-IN-WIDTH)
+                                          (>= (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) 0)
+                                          (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) BLOCKS-IN-HEIGHT)
+                                          (> (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) 0)
+                                          (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset)
+                                                           (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset)))]
+              
+              
+              [else (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) BLOCKS-IN-WIDTH)
+                         (>= (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) 0)
+                         (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) BLOCKS-IN-HEIGHT)
+                         (> (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) 0)
+                         (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset)
+                                          (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset))
+                         (check-if-valid (add1 x)))]
               ))
           ) (check-if-valid 0)))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; CHANGE-POSN-IN-WORLD-STATE FUNCTION
+; UPDATE-POSNS-IN-FALLING-BLOCKS FUNCTION
 
 ; Takes a World-state and returns a World-state where the posn-x and posn-x of the Posns in vector of Posn are shifted by offSet
-; change-posn-in-world-state: World-state Number Number -> World-state
-; (define (change-posn-in-world-state world-state 0 1) INITIAL-STATE)
+; update-posns-in-falling-blocks: World-state Number Number -> World-state
+; (define (update-posns-in-falling-blocks world-state 0 1) INITIAL-STATE)
 
-(define (change-posn-in-world-state world-state x-offset y-offset)
+(define (update-posns-in-falling-blocks world-state x-offset y-offset)
   (update-falling-blocks world-state
                          (vector-map
                           (lambda (posn) (make-posn (+ (posn-x posn) x-offset) (+ (posn-y posn) y-offset)))
                           (world-state-falling-blocks world-state))))
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; MOVE-BLOCKS-TO-FALLING-BLOCKS FUNCTION
-
-; Takes a World-state and returns a World-state with grid updated in the following way:
-; the falling blocks in the grid have been moved to the position listen in falling-blocks (in the world-state)
-; block-falls-down: World-state -> World-state
-; (define (block-falls-down world-state) EXAMPLE-STATE)
-
-
-(define (move-blocks-to-falling-blocks world-state)
-  (local (
-          (define BLOCKS-LENGTH (vector-length (world-state-falling-blocks world-state)))
-          (define PIECE-INDEX (world-state-piece-index world-state))
-          
-          (define (add-blocks-to-grid world-state x)
-            (cond
-              [(= x (sub1 BLOCKS-LENGTH)) (update-grid world-state
-                                                       (set-grid-block
-                                                        (cond
-                                                          [(= PIECE-INDEX 0) FYB]
-                                                          [(= PIECE-INDEX 1) FOB]
-                                                          [(= PIECE-INDEX 2) FRB]
-                                                          [(= PIECE-INDEX 3) FPB]
-                                                          [(= PIECE-INDEX 4) FLB]
-                                                          [(= PIECE-INDEX 5) FBB]
-                                                          [(= PIECE-INDEX 6) FGB]
-                                                          )
-                                     
-                                                        (world-state-grid world-state)
-                                                        (vector-ref (world-state-falling-blocks world-state) x)
-                                                        )
-                                                       )
-                                          ] 
-              [else
-               (update-grid world-state
-                            (set-grid-block
-                             (cond
-                               [(= PIECE-INDEX 0) FYB]
-                               [(= PIECE-INDEX 1) FOB]
-                               [(= PIECE-INDEX 2) FRB]
-                               [(= PIECE-INDEX 3) FPB]
-                               [(= PIECE-INDEX 4) FLB]
-                               [(= PIECE-INDEX 5) FBB]
-                               [(= PIECE-INDEX 6) FGB]
-                               )
-                             
-                             (world-state-grid (add-blocks-to-grid world-state (add1 x)))
-                             (vector-ref (world-state-falling-blocks world-state) x)
-                             )
-                            )
-               ]
-              )
-            )
-          ) (add-blocks-to-grid world-state 0)))
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-(define (remove-blocks-in-posn world-state)
-  (local (
-          (define BLOCKS-LENGTH (vector-length (world-state-falling-blocks world-state)))
-  
-          (define (remove-blocks world-state x)
-            (cond
-              [(= x (sub1 BLOCKS-LENGTH))
-               (update-grid world-state 
-                            (set-grid-block 
-                             NFEB 
-                             (world-state-grid world-state)
-                             (vector-ref (world-state-falling-blocks world-state) x)
-                             ))
-               ]
-              [else
-               (update-grid world-state
-                            (set-grid-block 
-                             NFEB 
-                             (world-state-grid (remove-blocks world-state (add1 x))) 
-                             (vector-ref (world-state-falling-blocks world-state) x)
-                             ))
-               ]
-              )
-            )
-
-          ) (remove-blocks world-state 0))
-  )
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; MOVE-BLOCKS-OFFSET
-(define (move-blocks-offset world-state x-offset y-offset)
-  (move-blocks-to-falling-blocks
-   (change-posn-in-world-state (remove-blocks-in-posn world-state) x-offset y-offset)
-   ))
 
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -833,6 +658,279 @@ Course: Programming Fundamentals 1
 
 (define (is-block-empty? block)
   (equal? (block-color block) EMPTY-COLOR))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; CAN-BLOCKS-ROTATE? FUNCTION
+
+; Takes a World-state and returns #true if the blocks can rotate, otherwise returns #false
+; can-blocks-rotate?: World-state -> Boolean
+; (define (can-blocks-rotate? world-state) #true)
+
+(define (can-blocks-rotate? world-state)
+  (if (and
+
+; checks if the coordinates are in the grid
+       (>= (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
+              (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
+           0
+           )
+       (< (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
+             (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
+          BLOCKS-IN-WIDTH
+          )
+       (>= (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
+              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
+           1
+           )
+       (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
+             (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
+          (sub1 BLOCKS-IN-HEIGHT)
+          )
+
+
+       (>= (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
+              (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
+           0
+           )
+       (< (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
+             (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
+          BLOCKS-IN-WIDTH
+          )
+       (>= (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
+              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
+           1
+           )
+       (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
+             (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
+          (sub1 BLOCKS-IN-HEIGHT)
+          )
+
+
+       (>= (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
+              (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
+           0
+           )
+       (< (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
+             (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
+          BLOCKS-IN-WIDTH
+          )
+       (>= (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
+              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
+           1
+           )
+       (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
+             (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
+          (sub1 BLOCKS-IN-HEIGHT)
+          )
+
+
+
+       (>= (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
+              (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
+           0
+           )
+       (< (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
+             (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
+          BLOCKS-IN-WIDTH
+          )
+       (>= (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
+              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
+           1
+           )
+       (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
+             (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
+          (sub1 BLOCKS-IN-HEIGHT)
+          )
+
+
+; is the destination free?
+       (can-block-fall? world-state (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
+                                       (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
+                        (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
+                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) 0) 0))))
+       (can-block-fall? world-state (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
+                                       (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
+                        (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
+                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) 1) 1))))
+       (can-block-fall? world-state (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
+                                       (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
+                        (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
+                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) 2) 2))))
+       (can-block-fall? world-state (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
+                                       (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
+                        (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
+                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3))))
+
+       )
+      ; can rotate
+      #true
+
+      ; can-t rotate
+      #false
+      ))
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; UPDATE-POSNS-FOR-ROTATION FUNCTION
+
+; Takes a WOrld-state and returns a World-state with the falling-blocks updated in the following way:
+; it adds the posns in the falling-blocks vector and the posns in the rotation-offsets for every block in the piece
+; (which piece? the one in piece-index!)
+; update-posns-for-rotation: World-state -> World-state
+; (define (update-posns-for-rotation world-state) INITIAL-STATE)
+
+(define (update-posns-for-rotation world-state)
+  (update-falling-blocks world-state
+                         (vector
+                          (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
+                                        (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
+                                     (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
+                                        (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0))))
+                          (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
+                                        (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
+                                     (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
+                                        (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1))))
+                          (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
+                                        (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
+                                     (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
+                                        (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2))))
+                          (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
+                                        (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
+                                     (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
+                                        (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3))))
+                          )
+                         )
+  )
+
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+; ADD-BLOCKS-TO-FALLING-BLOCKS-POSNS FUNCTION
+
+; Takes a World-state and returns a World-state updated in the following way:
+; the falling blocks in the grid have been added to the position listed in falling-blocks (in the world-state). Needed for move-blocks-offset and rotate-cw.
+; add-blocks-to-falling-blocks-posns: World-state -> World-state
+; (define (add-blocks-to-falling-blocks-posns world-state) EXAMPLE-STATE)
+
+
+(define (add-blocks-to-falling-blocks-posns world-state)
+  (local (
+          (define BLOCKS-LENGTH (vector-length (world-state-falling-blocks world-state)))
+          (define PIECE-INDEX (world-state-piece-index world-state))
+
+          (define (add-blocks-to-grid world-state x)
+            (cond
+              [(= x (sub1 BLOCKS-LENGTH)) (update-grid world-state
+                                                       (set-grid-block
+                                                        (cond
+                                                          [(= PIECE-INDEX 0) FYB]
+                                                          [(= PIECE-INDEX 1) FOB]
+                                                          [(= PIECE-INDEX 2) FRB]
+                                                          [(= PIECE-INDEX 3) FPB]
+                                                          [(= PIECE-INDEX 4) FLB]
+                                                          [(= PIECE-INDEX 5) FBB]
+                                                          [(= PIECE-INDEX 6) FGB]
+                                                          )
+
+                                                        (world-state-grid world-state)
+                                                        (vector-ref (world-state-falling-blocks world-state) x)
+                                                        )
+                                                       )
+                                          ]
+              [else
+               (update-grid world-state
+                            (set-grid-block
+                             (cond
+                               [(= PIECE-INDEX 0) FYB]
+                               [(= PIECE-INDEX 1) FOB]
+                               [(= PIECE-INDEX 2) FRB]
+                               [(= PIECE-INDEX 3) FPB]
+                               [(= PIECE-INDEX 4) FLB]
+                               [(= PIECE-INDEX 5) FBB]
+                               [(= PIECE-INDEX 6) FGB]
+                               )
+
+                             (world-state-grid (add-blocks-to-grid world-state (add1 x)))
+                             (vector-ref (world-state-falling-blocks world-state) x)
+                             )
+                            )
+               ]
+              )
+            )
+          ) (add-blocks-to-grid world-state 0)))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; REMOVE-BLOCKS-IN-POSN
+
+; takes a World-state and returns a World-state with the blocks that were falling removed. Needed for move-blocks-offset and rotate-cw
+; remove-blocks-in-posn: World-state -> World-state
+; (define (remove-blocks-in-posn world-state) INITIAL-STATE)
+
+(define (remove-blocks-in-posn world-state)
+  (local (
+          (define BLOCKS-LENGTH (vector-length (world-state-falling-blocks world-state)))
+
+          (define (remove-blocks world-state x)
+            (cond
+
+              [(= x (sub1 BLOCKS-LENGTH))
+               (update-grid world-state
+                            (set-grid-block
+                             NFEB
+                             (world-state-grid world-state)
+                             (vector-ref (world-state-falling-blocks world-state) x)
+                             ))]
+              
+              [else
+               (update-grid world-state
+                            (set-grid-block
+                             NFEB
+                             (world-state-grid (remove-blocks world-state (add1 x)))
+                             (vector-ref (world-state-falling-blocks world-state) x)
+                             ))]
+              ))) 
+
+        (remove-blocks world-state 0))
+  )
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; ROTATE-CW FUNCTION
+
+; Takes a world-state and returns the same world-state, but the falling blocks are rotated clock-wise
+; rotate-cw : World-state -> World-state
+; (define (rotate-cw world-state) INITIAL-STATE)
+
+(define (rotate-cw world-state)
+  (if (can-blocks-rotate? (update-rotation-index world-state
+                                                 (if (= (world-state-rotation-index world-state) 3)
+                                                     0
+                                                     (add1 (world-state-rotation-index world-state))
+                                                     )))
+
+      ; can rotate
+
+      (add-blocks-to-falling-blocks-posns
+      ; update coordinates in falling-blocks with the added offset (using update-posns-for-rotation)
+       (update-posns-for-rotation
+        (update-rotation-index
+        ; delete the blocks at coordinates old world-state-fallin-blocks
+         (remove-blocks-in-posn world-state)
+        ; update rotation index
+         (if (= (world-state-rotation-index world-state) 3)
+             0
+             (add1 (world-state-rotation-index world-state))
+             )
+          )
+        ))
+
+      ; can-t rotate: do nothing
+      world-state
+      )
+
+  )
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -879,6 +977,7 @@ Course: Programming Fundamentals 1
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; PUSH-DOWN-ROWS
+
 ; take a World-state and a y and returns a World-state where the whole grid, from y upwards, has been
 ; pushed down by one
 ; push-down-rows: World-state -> World-state
@@ -903,6 +1002,7 @@ Course: Programming Fundamentals 1
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; ANY-FULL-ROWS
+
 ; takes a World-state and returns a World-state in the following way:
 ; if there are full rows in the grid, deletes them and pushes all the rows above down by 1
 ; and checks again if there are full rows in the grid
@@ -929,10 +1029,6 @@ Course: Programming Fundamentals 1
 ; loser: World-state -> World-state
 ; (define (loser world-state) EXAMPLE-STATE)
 ; (define (loser world-state)
-; (if
-; (... (get-grid-row (world-state-grid world-state) ... )
-; (update-game-over world-state #true)
-; world-state))
 
 (define (loser world-state)
   (if
@@ -949,12 +1045,70 @@ Course: Programming Fundamentals 1
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; MOVE-X
+
+; Takes a World-state, checks if the new destination is valid and then calls move-blocks-offset to move the blocks.
+; IMPORTANT: direction = 1 moves right, direction = -1 moves left
+; move-x: World-state Number -> World-state
+; (define (move-x world-state direction) CIPPI-WORLD-STATE)
+
 (define (move-x world-state direction) ;1 right, -1 left
-  (if (check-new-posn-offset world-state direction 0)
+  (if (is-new-destination-in-grid? world-state direction 0)
       (move-blocks-offset world-state direction 0)
       world-state)
   )
 
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; TICK-FUNCTION
+
+; takes a World-state and, if flag should-spawn is true adds a Piece to the Grid:
+;     - add-piece-to-world-state with a random piece
+;     - turns to #false should-spawn
+;     - update-falling-blocks with the predefined position of the random piece that was selected
+; Every tick increments the world-state tick by 1. After world-state-tick-delay ticks the game advances once.
+; tick-function: World-state -> World-state
+; (define (tick-function world-state) CIPPI-WORLD-STATE)
+
+
+(define (tick-function world-state)
+  (if (= 0 (world-state-tick world-state))
+      world-state
+      ; increment tick
+      (update-tick
+       ; if we reach the necessary amount of ticks in order for something to happen in the game the modulo of the tick and the tick-delay is 0
+       (if (= 0 (modulo (world-state-tick world-state) (world-state-tick-delay world-state)))
+           ; if game is paused or over return world-state
+           (if (or (world-state-is-paused world-state) (world-state-game-over world-state))
+               ; return world-state (nothing happens)
+               world-state
+               ; if should-spawn is true
+               (if (world-state-should-spawn world-state)
+               ; spawn a piece
+                   (spawn-piece world-state)
+                ; else move-falling-blocks-down-by-1
+                    ; if the new positions with the offset applied are available to be filled with blocks
+                   (if (is-new-destination-in-grid? world-state 0 1)
+                    ; move the blocks to the new positions
+                       (move-blocks-offset (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0 1)
+                       ; else: check if you lost after getting rid of possible full rows
+                         
+                       (if (world-state-game-over (loser (any-full-rows world-state 0)))
+                          ; if you lost: turns should-spawn to false, turns the falling blocks in non falling blocks, 
+                          ; sets game-over to true and deletes full rows, if down-key is pressed updates score
+                           (update-should-spawn (fb-to-nfb (update-game-over (any-full-rows 
+                              (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0) #true)) #false)
+                          ; if you didn't lose, a new block will spawn at the top in the next cycle
+                           (update-should-spawn (fb-to-nfb (any-full-rows 
+                              (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0)) #true)
+                        )
+                       )
+                   )
+               )
+           world-state)
+       (add1 (world-state-tick world-state)))
+      )
+  )
+  
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; HANDLE-KEY FUNCTION
@@ -982,167 +1136,8 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; ROTATE-FRONT FUNCTION
-; Takes a world-state and returns the same world-state, but the falling blocks are rotated clock-wise
-; rotate-cw : World-state -> World-state
-; (define (rotate-cw world-state) INITIAL-STATE)
-
-(define (rotate-cw world-state)
-  (if (can-blocks-rotate? (update-rotation-index world-state
-                                                 (if (= (world-state-rotation-index world-state) 3)
-                                                     0
-                                                     (add1 (world-state-rotation-index world-state))
-                                                     )))
-
-      ; can rotate
-     
-      (move-blocks-to-falling-blocks
-       (set-rotation-posns
-        (update-rotation-index
-         (remove-blocks-in-posn world-state)
-         (if (= (world-state-rotation-index world-state) 3)
-             0
-             (add1 (world-state-rotation-index world-state))
-             ))
-        ))
-
-      ; can-t rotate
-      world-state
-      )
-
-  )
-
-
-(define (set-rotation-posns world-state)
-  (update-falling-blocks world-state
-                         (vector
-                          (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
-                                        (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
-                                     (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
-                                        (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0))))
-                          (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
-                                        (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
-                                     (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
-                                        (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1))))
-                          (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
-                                        (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
-                                     (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
-                                        (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2))))
-                          (make-posn (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
-                                        (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
-                                     (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
-                                        (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3))))
-                          )
-                         )
-  )
-
-
-(define (can-blocks-rotate? world-state)
-  (if (and 
-
-       (>= (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
-              (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
-           0
-           )
-       (< (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
-             (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
-          BLOCKS-IN-WIDTH
-          )
-       (>= (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
-              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
-           0
-           )
-       (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
-             (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
-          (sub1 BLOCKS-IN-HEIGHT)
-          )
-          
-
-       (>= (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
-              (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
-           0
-           )
-       (< (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
-             (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
-          BLOCKS-IN-WIDTH
-          )
-       (>= (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
-              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
-           0
-           )
-       (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
-             (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
-          (sub1 BLOCKS-IN-HEIGHT)
-          )
-
-          
-       (>= (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
-              (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
-           0
-           )
-       (< (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
-             (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
-          BLOCKS-IN-WIDTH
-          )
-       (>= (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
-              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
-           0
-           )
-       (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
-             (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
-          (sub1 BLOCKS-IN-HEIGHT)
-          )
-                                           
-
-
-       (>= (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
-              (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
-           0
-           )
-       (< (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
-             (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
-          BLOCKS-IN-WIDTH
-          )
-       (>= (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
-              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
-           0
-           )
-       (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
-             (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
-          (sub1 BLOCKS-IN-HEIGHT)
-          )                              
-                                           
-                                           
-                                           
-       (can-block-fall? world-state (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 0))
-                                       (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
-                        (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
-                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) 0) 0))))
-       (can-block-fall? world-state (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 1))
-                                       (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
-                        (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
-                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) 1) 1))))
-       (can-block-fall? world-state (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 2))
-                                       (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
-                        (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
-                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) 2) 2))))
-       (can-block-fall? world-state (+ (posn-x (vector-ref (world-state-falling-blocks world-state) 3))
-                                       (posn-x (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
-                        (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
-                           (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3))))
-
-       )
-      ; can rotate
-      #true
-
-      ; can-t rotate
-      #false
-      )
-  )
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 ; HANDLE-RELEASE
+
 ; takes a World-state and a String and returns the world-state with the tick-delay updated to 1
 ; handle-release: World-state String -> World-state
 ; (define (handle-release world-state key) CIPPI-WORLD-STATE)
@@ -1152,8 +1147,105 @@ Course: Programming Fundamentals 1
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
+
+; Takes a world-state and determines if the game has been quit
+; quit?: World-state -> Boolean
+; (define (quit? world-state) #false)
 (define (quit? world-state)
   (world-state-should-quit world-state))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; BLOCK-TO-IMAGE FUNCTION
+
+; Renders a single Block with a black outline
+; block-to-image: Block -> Image
+; (define (block-to-image block) (rectangle 28 28 "solid" "black")
+
+(define (block-to-image block)
+  (overlay (rectangle 28 28 "solid" (block-color block)) (rectangle 30 30 "solid" "black")))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; GRID-ROW-TO-IMAGE FUNCTION
+
+; Returns the requested row of the given grid as an image
+; grid-row-to-image: Grid Number -> Image
+; (define (grid-row-to-image Grid Number) (rectangle 28 28 "solid" "black"))
+
+(define (grid-row-image grid y)
+  (local (
+          (define (grid-row-to-image grid x y)
+            (if (< x (sub1 BLOCKS-IN-WIDTH))
+                (beside (block-to-image (get-grid-block grid x y)) (grid-row-to-image grid (add1 x) y))
+                (block-to-image (get-grid-block grid x y))
+                )
+            )
+          ) (grid-row-to-image grid 0 y)))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; GRID-TO-IMAGE FUNCTION
+
+; Renders the grid in the world state as an Image
+; Grid-to-image: Grid -> Image
+; (define (grid-to-image grid) (rectangle 28 28 "solid" "black"))
+
+(define (grid-to-image grid)
+  (local (
+          (define (grid-to-image-inner grid y)
+            (if (< y (sub1 BLOCKS-IN-HEIGHT))
+                (above (grid-row-image grid y) (grid-to-image-inner grid (add1 y)))
+                (grid-row-image grid y))))
+    (grid-to-image-inner grid 4)))                         ; CHANGE THIS TO 0 TO SEE THE TOP PART, OTHERWISE PUT 4
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; SCORE-TO-IMAGE FUNCTION
+
+; Takes a Score and turns it into an Image
+; score-to-image: WorldState -> Image
+; (define (score-to-image (world-state-score world-state) (rectangle 28 28 "solid" "black"))
+;
+;
+(define (score-to-image world-state)
+  (text/font (string-append "SCORE: " (number->string (world-state-score world-state))) 30 SCORE-COLOR #f 'swiss 'normal 'bold #f))
+
+; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+; DRAW FUNCTION
+
+; Takes a WorldState and renders the background and the grid
+; * if game over is true: render game over page
+; * if is-paused is true: render pause page
+; * else: regular game page
+; draw: WorldState -> Image
+; (define (draw world-state) (rectangle 28 28 "solid" "black"))
+
+(define (draw world-state)
+  (cond
+    [(if (= 0 (world-state-tick world-state))
+         WELCOME
+         (cond [(world-state-game-over world-state) (overlay/align/offset "middle" "middle" (text/font ( string-append "SCORE: " (number->string (world-state-score world-state))) 40 LILAC #f 'swiss 'normal 'bold #f) +15 +20 GAME-OVER-PAGE)]
+               [(world-state-is-paused world-state) PAUSE-PAGE]
+               [else (overlay/offset
+                      (text/font "press 'q' to quit"  15 GREY
+                                 #f 'swiss 'normal 'bold #f)
+                      0
+                      -360
+                      (overlay/offset
+                       (text/font "press 'esc' to pause"  15 "white"
+                                  #f 'swiss 'normal 'bold #f)
+                       0
+                       -330
+                       (overlay/offset (score-to-image world-state)
+                                       150
+                                       350
+                                       (overlay (grid-to-image (world-state-grid world-state))
+                                                (rectangle 302 602 "solid" "black")
+                                                (world-state-background world-state)))))]))]
+    ))
+
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1173,10 +1265,6 @@ Course: Programming Fundamentals 1
 (run tetris INITIAL-STATE)
 
 ;;; TO DO:
-
-;;; * check-expect COSTANZA
-
-
+;;; * check-expect 
 ;;; * README
-;;; * user guide - almost done (Greta)
 ;;; * developer guide
