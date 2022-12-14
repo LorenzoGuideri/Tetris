@@ -481,8 +481,8 @@ Course: Programming Fundamentals 1
 ; (define (set-grid-row grid y vect) )
 
 (check-expect (set-grid-row INITIAL-GRID 3 FULL-ROW-EXAMPLE) (vector
-                                                              (vector 
-                                                               (block (color 30 30 30 255) #f) 
+                                                              (vector
+                                                               (block (color 30 30 30 255) #f)
                                                                (block (color 30 30 30 255) #f)
                                                                (block (color 30 30 30 255) #f)
                                                                (block (color 30 30 30 255) #f)
@@ -1078,7 +1078,7 @@ Course: Programming Fundamentals 1
                0
                #f))
 
- 
+
 (define (add-piece-to-world-state world-state piece)
   (update-grid world-state
                (vector-append
@@ -1095,7 +1095,7 @@ Course: Programming Fundamentals 1
 
 ; Takes a World-state and 2 coordinates and:
 ; - removes from the grid the blocks at coordinates in falling-block (in the world-state)
-; - updates the new posns (in falling-blocks) with the coordinates in inputs 
+; - updates the new posns (in falling-blocks) with the coordinates in inputs
 ; - calls add-blocks-to-falling-blocks-posns that adds the blocks to the grid in the posn coordinates in falling-blocks
 ; it's necessary to move the blocks left, right, down (move-x calls it)
 ; move-blocks-offset: World-state Number Number -> World-state
@@ -1214,8 +1214,8 @@ Course: Programming Fundamentals 1
                                           (> (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) 0)
                                           (can-block-fall? world-state (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset)
                                                            (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset)))]
-              
-              
+
+
               [else (and (< (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) BLOCKS-IN-WIDTH)
                          (>= (+ (posn-x (vector-ref FALLING-BLOCKS-TEMP x)) x-offset) 0)
                          (< (+ (posn-y (vector-ref FALLING-BLOCKS-TEMP x)) y-offset) BLOCKS-IN-HEIGHT)
@@ -1533,7 +1533,7 @@ Course: Programming Fundamentals 1
                              (world-state-grid world-state)
                              (vector-ref (world-state-falling-blocks world-state) x)
                              ))]
-              
+
               [else
                (update-grid world-state
                             (set-grid-block
@@ -1541,7 +1541,7 @@ Course: Programming Fundamentals 1
                              (world-state-grid (remove-blocks world-state (add1 x)))
                              (vector-ref (world-state-falling-blocks world-state) x)
                              ))]
-              ))) 
+              )))
 
     (remove-blocks world-state 0))
   )
@@ -1787,14 +1787,14 @@ Course: Programming Fundamentals 1
                        ; move the blocks to the new positions
                        (move-blocks-offset (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0 1)
                        ; else: check if you lost after getting rid of possible full rows
-                         
+
                        (if (world-state-game-over (loser (any-full-rows world-state 0)))
-                           ; if you lost: turns should-spawn to false, turns the falling blocks in non falling blocks, 
+                           ; if you lost: turns should-spawn to false, turns the falling blocks in non falling blocks,
                            ; sets game-over to true and deletes full rows, if down-key is pressed updates score
-                           (update-should-spawn (fb-to-nfb (update-game-over (any-full-rows 
+                           (update-should-spawn (fb-to-nfb (update-game-over (any-full-rows
                                                                               (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0) #true)) #false)
                            ; if you didn't lose, a new block will spawn at the top in the next cycle
-                           (update-should-spawn (fb-to-nfb (any-full-rows 
+                           (update-should-spawn (fb-to-nfb (any-full-rows
                                                             (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0)) #true)
                            )
                        )
