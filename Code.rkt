@@ -318,6 +318,15 @@ Course: Programming Fundamentals 1
 
 (define INITIAL-STATE (make-world-state BACKGROUND INITIAL-GRID INITIAL-SCORE #false #true #false (make-vector 0) #false 0 DEFAULT-TICK-DELAY 0 0 #false))
 (define EXAMPLE-STATE (make-world-state BACKGROUND INITIAL-GRID 100 #false #false #false O-PIECE-POSITIONS #false 0 DEFAULT-TICK-DELAY 0 0 #false))
+(define TEST-STATE (shared ((-15- (make-block (make-color 253 207 179 255) #true))
+                            (-18- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)) (-4- (make-block (make-color 30 30 30 255) #false)))
+                     (make-world-state BACKGROUND (vector (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                          (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                          (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                          (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                          (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -15- -4- -4- -4-)
+                                                          (vector -4- -4- -4- -4- -15- -15- -15- -4- -4- -4-) -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18-)
+                                       0 #false #false #false (vector (make-posn 6 10) (make-posn 5 10) (make-posn 4 10) (make-posn 6 9)) #false 109 10 0 1 #false)))
 
 ;; -------------------------------------------------------------------------------------------------------------------
 
@@ -661,11 +670,15 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
 ; CAN-BLOCKS-ROTATE? FUNCTION
 
 ; Takes a World-state and returns #true if the blocks can rotate, otherwise returns #false
 ; can-blocks-rotate?: World-state -> Boolean
 ; (define (can-blocks-rotate? world-state) #true)
+
+(check-expect (can-blocks-rotate? TEST-STATE) #true)
+
 
 (define (can-blocks-rotate? world-state)
   (if (and
@@ -769,15 +782,22 @@ Course: Programming Fundamentals 1
       ; can-t rotate
       #false
       ))
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 ; UPDATE-POSNS-FOR-ROTATION FUNCTION
 
-; Takes a WOrld-state and returns a World-state with the falling-blocks updated in the following way:
+; Takes a World-state and returns a World-state with the falling-blocks updated in the following way:
 ; it adds the posns in the falling-blocks vector and the posns in the rotation-offsets for every block in the piece
 ; (which piece? the one in piece-index!)
 ; update-posns-for-rotation: World-state -> World-state
 ; (define (update-posns-for-rotation world-state) INITIAL-STATE)
+
+;(check-expect (update-posns-for-rotation EXAMPLE-STATE)
+;              )
+
 
 (define (update-posns-for-rotation world-state)
   (update-falling-blocks world-state
@@ -812,6 +832,13 @@ Course: Programming Fundamentals 1
 ; the falling blocks in the grid have been added to the position listed in falling-blocks (in the world-state). Needed for move-blocks-offset and rotate-cw.
 ; add-blocks-to-falling-blocks-posns: World-state -> World-state
 ; (define (add-blocks-to-falling-blocks-posns world-state) EXAMPLE-STATE)
+
+(check-expect (add-blocks-to-falling-blocks-posns EXAMPLE-STATE)
+              (shared ((-4- (make-block (make-color 30 30 30 255) #false))
+                       (-6- (make-block (make-color 242 240 184 255) #true)) (-9- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)))
+                (make-world-state BACKGROUND (vector (vector -4- -4- -4- -4- -6- -6- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -6- -6- -4- -4- -4- -4-)
+                                                     -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9- -9-)
+                                  100 #false #false #false (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)) #false 0 10 0 0 #false)))
 
 
 (define (add-blocks-to-falling-blocks-posns world-state)
@@ -868,6 +895,15 @@ Course: Programming Fundamentals 1
 ; remove-blocks-in-posn: World-state -> World-state
 ; (define (remove-blocks-in-posn world-state) INITIAL-STATE)
 
+(check-expect (remove-blocks-in-posn EXAMPLE-STATE)
+              (shared ((-4- (make-block (make-color 30 30 30 255) #false))
+                       (-7- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)))
+                (make-world-state BACKGROUND (vector (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7- -7-)
+                                  100 #false #false #false (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)) #false 0 10 0 0 #false)))
+
+
 (define (remove-blocks-in-posn world-state)
   (local (
           (define BLOCKS-LENGTH (vector-length (world-state-falling-blocks world-state)))
@@ -894,6 +930,8 @@ Course: Programming Fundamentals 1
 
         (remove-blocks world-state 0))
   )
+
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; ROTATE-CW FUNCTION
@@ -901,6 +939,9 @@ Course: Programming Fundamentals 1
 ; Takes a world-state and returns the same world-state, but the falling blocks are rotated clock-wise
 ; rotate-cw : World-state -> World-state
 ; (define (rotate-cw world-state) INITIAL-STATE)
+
+;(check-expect (rotate-cw CIPPI-WORLD-STATE)
+;              )
 
 (define (rotate-cw world-state)
   (if (can-blocks-rotate? (update-rotation-index world-state
@@ -928,7 +969,6 @@ Course: Programming Fundamentals 1
       ; can-t rotate: do nothing
       world-state
       )
-
   )
 
 
@@ -954,6 +994,7 @@ Course: Programming Fundamentals 1
 (check-expect (row-full CIPPI-WORLD-STATE) 17)
 (check-expect (row-full CIPPI-WORLD-STATE2) 4)
 (check-expect (row-full INITIAL-STATE) #false)
+
 
 (define (row-full world-state)
 
@@ -998,7 +1039,6 @@ Course: Programming Fundamentals 1
                                       (vector-copy (world-state-grid world-state) (add1 y) BLOCKS-IN-HEIGHT)
                                       )])))
 
-
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; ANY-FULL-ROWS
@@ -1006,9 +1046,17 @@ Course: Programming Fundamentals 1
 ; takes a World-state and returns a World-state in the following way:
 ; if there are full rows in the grid, deletes them and pushes all the rows above down by 1
 ; and checks again if there are full rows in the grid
+; deleted-until-now is needed to keep track of the deleted lines in order to update the score
 ; if there aren't any full rows, returns the World-state given as input
-; any-full-rows: World-state -> World-state
+; any-full-rows: World-state Number -> World-state
 ; (define (any-full-rows world-state) CIPPI-WORLD-STATE)
+
+(check-expect (any-full-rows EXAMPLE-STATE 2)
+              (shared ((-3- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-))
+                       (-4- (make-block (make-color 30 30 30 255) #false)))
+                (make-world-state BACKGROUND (vector -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3-)
+                                  400 #false #false #false (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)) #false 0 10 0 0 #false)))
+
 
 (define (any-full-rows world-state deleted-until-now)
   (cond
@@ -1030,12 +1078,21 @@ Course: Programming Fundamentals 1
 ; (define (loser world-state) EXAMPLE-STATE)
 ; (define (loser world-state)
 
+(check-expect (loser EXAMPLE-STATE)
+              (shared ((-3- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-))
+                       (-4- (make-block (make-color 30 30 30 255) #false)))
+                (make-world-state BACKGROUND (vector -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3-)
+                                  100 #false #false #false (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)) #false 0 10 0 0 #false)))
+
+
+
 (define (loser world-state)
   (if
    (vector-member #true (vector-map is-block-nonempty?
                                     (get-grid-row (world-state-grid world-state) 3)))
    (update-game-over world-state #true)
    world-state))
+
 
 ; AUX IS-BLOCK-NONEMPTY?
 
@@ -1050,6 +1107,13 @@ Course: Programming Fundamentals 1
 ; IMPORTANT: direction = 1 moves right, direction = -1 moves left
 ; move-x: World-state Number -> World-state
 ; (define (move-x world-state direction) CIPPI-WORLD-STATE)
+
+(check-expect (move-x EXAMPLE-STATE 1)
+              (shared ((-3- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-))
+                       (-4- (make-block (make-color 30 30 30 255) #false)))
+                (make-world-state BACKGROUND (vector -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3-)
+                                  100 #false #false #false (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)) #false 0 10 0 0 #false)))
+
 
 (define (move-x world-state direction) ;1 right, -1 left
   (if (is-new-destination-in-grid? world-state direction 0)
@@ -1068,6 +1132,12 @@ Course: Programming Fundamentals 1
 ; Every tick increments the world-state tick by 1. After world-state-tick-delay ticks the game advances once.
 ; tick-function: World-state -> World-state
 ; (define (tick-function world-state) CIPPI-WORLD-STATE)
+
+(check-expect (tick-function EXAMPLE-STATE)
+               (shared ((-3- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-))
+                        (-4- (make-block (make-color 30 30 30 255) #false)))
+                 (make-world-state BACKGROUND (vector -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3-)
+                                   100 #false #false #false (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)) #false 0 10 0 0 #false)))
 
 
 (define (tick-function world-state)
@@ -1108,7 +1178,7 @@ Course: Programming Fundamentals 1
        (add1 (world-state-tick world-state)))
       )
   )
-  
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; HANDLE-KEY FUNCTION
@@ -1120,6 +1190,13 @@ Course: Programming Fundamentals 1
 ; if key-event is up, rotates FALLING PIECE clock-wise
 ; handle-key: World-state -> World-state
 ; (define (handle-key world-state) CIPPI-WORLD-STATE)
+
+(check-expect (handle-key EXAMPLE-STATE "right")
+              (shared ((-3- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-))
+                       (-4- (make-block (make-color 30 30 30 255) #false)))
+                (make-world-state BACKGROUND (vector -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3- -3-)
+                                  100 #false #false #false (vector (make-posn 5 1) (make-posn 4 1) (make-posn 5 0) (make-posn 4 0)) #false 0 10 0 0 #false)))
+
 
 (define (handle-key world-state key)
   (cond
@@ -1143,7 +1220,9 @@ Course: Programming Fundamentals 1
 ; (define (handle-release world-state key) CIPPI-WORLD-STATE)
 
 (define (handle-release world-state key)
-  (if (equal? key "down") (update-tick-delay (update-down-pressed world-state #false) DEFAULT-TICK-DELAY) world-state))
+  (if (equal? key "down") (update-tick-delay (update-down-pressed world-state #false) DEFAULT-TICK-DELAY)
+      world-state))
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
@@ -1151,6 +1230,10 @@ Course: Programming Fundamentals 1
 ; Takes a world-state and determines if the game has been quit
 ; quit?: World-state -> Boolean
 ; (define (quit? world-state) #false)
+
+(check-expect (quit? EXAMPLE-STATE) #false)
+
+
 (define (quit? world-state)
   (world-state-should-quit world-state))
 
@@ -1262,7 +1345,7 @@ Course: Programming Fundamentals 1
     ))
 
 (define (run funct arg) (if (funct arg) (display "Bye bye!\n") (display "Bye bye!\n")))
-(run tetris INITIAL-STATE)
+;(run tetris INITIAL-STATE)
 
 ;;; TO DO:
 ;;; * check-expect 
