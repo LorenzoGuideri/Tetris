@@ -2208,8 +2208,8 @@ Course: Programming Fundamentals 1
 ; update-posns-for-rotation: World-state -> World-state
 ; (define (update-posns-for-rotation world-state) INITIAL-STATE)
 
-;(check-expect (update-posns-for-rotation EXAMPLE-STATE)
-;              )
+(check-expect (update-posns-for-rotation TEST-STATE)
+              (shared ((-15- (make-block (make-color 253 207 179 255) #true)) (-18- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)) (-4- (make-block (make-color 30 30 30 255) #false))) (make-world-state BACKGROUND (vector (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -15- -4- -4- -4-) (vector -4- -4- -4- -4- -15- -15- -15- -4- -4- -4-) -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18-) 0 #false #false #false (vector (make-posn 7 11) (make-posn 5 10) (make-posn 3 9) (make-posn 8 9)) #false 109 10 0 1 #false)))
 
 
 (define (update-posns-for-rotation world-state)
@@ -2300,7 +2300,9 @@ Course: Programming Fundamentals 1
             )
           ) (add-blocks-to-grid world-state 0)))
 
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 ; REMOVE-BLOCKS-IN-POSN
 
@@ -2353,8 +2355,19 @@ Course: Programming Fundamentals 1
 ; rotate-cw : World-state -> World-state
 ; (define (rotate-cw world-state) INITIAL-STATE)
 
-;(check-expect (rotate-cw CIPPI-WORLD-STATE)
-;              )
+(check-expect (rotate-cw TEST-STATE)
+              (shared ((-15- (make-block (make-color 253 207 179 255) #true))
+                       (-17- (make-block (make-color 30 30 30 255) #false)) (-21- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-))
+                       (-4- (make-block (make-color 30 30 30 255) #false)))
+                (make-world-state BACKGROUND (vector (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -15- -17- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -17- -15- -17- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -15- -15- -4- -4- -4-)
+                                                     -21- -21- -21- -21- -21- -21- -21- -21- -21- -21- -21- -21-)
+                                  0 #false #false #false (vector (make-posn 5 11) (make-posn 5 10) (make-posn 5 9) (make-posn 6 11)) #false 109 10 1 1 #false)))
+
 
 (define (rotate-cw world-state)
   (if (can-blocks-rotate? (update-rotation-index world-state
