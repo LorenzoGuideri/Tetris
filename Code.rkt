@@ -2212,7 +2212,17 @@ Course: Programming Fundamentals 1
 ; (define (update-posns-for-rotation world-state) INITIAL-STATE)
 
 (check-expect (update-posns-for-rotation TEST-STATE)
-              (shared ((-15- (make-block (make-color 253 207 179 255) #true)) (-18- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)) (-4- (make-block (make-color 30 30 30 255) #false))) (make-world-state BACKGROUND (vector (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -15- -4- -4- -4-) (vector -4- -4- -4- -4- -15- -15- -15- -4- -4- -4-) -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18-) 0 #false #false #false (vector (make-posn 7 11) (make-posn 5 10) (make-posn 3 9) (make-posn 8 9)) #false 109 10 0 1 #false)))
+              (shared ((-15- (make-block (make-color 253 207 179 255) #true))
+                       (-18- (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-))
+                       (-4- (make-block (make-color 30 30 30 255) #false)))
+                (make-world-state BACKGROUND (vector (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-) (vector -4- -4- -4- -4- -4- -4- -4- -4- -4- -4-)
+                                                     (vector -4- -4- -4- -4- -4- -4- -15- -4- -4- -4-) (vector -4- -4- -4- -4- -15- -15- -15- -4- -4- -4-)
+                                                     -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18- -18-)
+                                  0 #false #false #false (vector (make-posn 7 11) (make-posn 5 10) (make-posn 3 9) (make-posn 8 9)) #false 109 10 0 1 #false)))
 
 
 (define (update-posns-for-rotation world-state)
