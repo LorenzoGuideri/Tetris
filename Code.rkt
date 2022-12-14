@@ -1115,7 +1115,7 @@ Course: Programming Fundamentals 1
            )
        (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 0))
              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 0)))
-          BLOCKS-IN-HEIGHT
+          (sub1 BLOCKS-IN-HEIGHT)
           )
           
 
@@ -1133,7 +1133,7 @@ Course: Programming Fundamentals 1
            )
        (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 1))
              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 1)))
-          BLOCKS-IN-HEIGHT
+          (sub1 BLOCKS-IN-HEIGHT)
           )
 
           
@@ -1151,7 +1151,7 @@ Course: Programming Fundamentals 1
            )
        (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 2))
              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 2)))
-          BLOCKS-IN-HEIGHT
+          (sub1 BLOCKS-IN-HEIGHT)
           )
                                            
 
@@ -1170,7 +1170,7 @@ Course: Programming Fundamentals 1
            )
        (< (+ (posn-y (vector-ref (world-state-falling-blocks world-state) 3))
              (posn-y (vector-ref (vector-ref (vector-ref ROTATION-OFFSETS (sub1 (world-state-piece-index world-state))) (world-state-rotation-index world-state)) 3)))
-          BLOCKS-IN-HEIGHT
+          (sub1 BLOCKS-IN-HEIGHT)
           )                              
                                            
                                            
