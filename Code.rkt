@@ -1777,12 +1777,19 @@ Course: Programming Fundamentals 1
            (if (or (world-state-is-paused world-state) (world-state-game-over world-state))
                ; return world-state (nothing happens)
                world-state
+
+
+            
                ; if should-spawn is true
                (if (world-state-should-spawn world-state)
                    ; spawn a piece
                    (spawn-piece world-state)
                    ; else move-falling-blocks-down-by-1
                    ; if the new positions with the offset applied are available to be filled with blocks
+                   
+                   
+                   
+                   ; else: move the piece
                    (if (is-new-destination-in-grid? world-state 0 1)
                        ; move the blocks to the new positions
                        (move-blocks-offset (if (world-state-down-pressed world-state) (update-score world-state (add1 (world-state-score world-state))) world-state) 0 1)
