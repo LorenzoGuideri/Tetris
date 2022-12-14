@@ -2008,7 +2008,7 @@ Course: Programming Fundamentals 1
 ; IS-NEW-DESTINATION-IN-GRID? FUNCTION
 
 ; Takes a World-state and returns a Boolean in the following way:
-; Controlla se la posizione di arrivo (ovvero la posizione attuale + gli offset) è nei limiti della grid
+; Checks if the destination position (the current position + the offsets) is in the grid
 ; is-new-destination-in-grid?: World-state -> Boolean
 ; (define (is-new-destination-in-grid? world-state) #true)
 
@@ -2689,7 +2689,7 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; GRID-ROW-TO-IMAGE FUNCTION
+; GRID-ROW-IMAGE FUNCTION
 
 ; Returns the requested row of the given grid as an image
 ; grid-row-to-image: Grid Number -> Image
@@ -2785,8 +2785,3 @@ Course: Programming Fundamentals 1
 
 (define (run funct arg) (if (funct arg) (display "Bye bye!\n") (display "Bye bye!\n")))
 (run tetris INITIAL-STATE)
-
-;;; TO DO:
-;;; * check-expect 
-;;; * README
-;;; * developer guide
