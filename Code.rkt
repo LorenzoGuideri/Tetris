@@ -71,7 +71,6 @@ Course: Programming Fundamentals 1
 (define GREY (make-color 200 200 200))
 (define SCORE-COLOR (make-color 249 140 182))
 
-(define COLORS (vector YELLOW ORANGE RED PINK LILAC BLUE GREEN))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -160,7 +159,6 @@ Course: Programming Fundamentals 1
 
 ; Examples
 
-(define FEB (make-block EMPTY-COLOR #true)) ; Falling Empty Block
 (define FYB (make-block YELLOW #true)) ; Falling Yellow Bloc
 (define FOB (make-block ORANGE #true)) ; Falling Orange Block
 (define FRB (make-block RED #true)) ; Falling Red Block
@@ -170,13 +168,6 @@ Course: Programming Fundamentals 1
 (define FGB (make-block GREEN #true)) ; Falling Green Block
 
 (define NFEB (make-block EMPTY-COLOR #false)) ;Non-Falling Empty Block
-(define NFYB (make-block YELLOW #false)) ; Non-Falling Yellow Bloc
-(define NFOB (make-block ORANGE #false)) ; Non-Falling Orange Block
-(define NFRB (make-block RED #false)) ; Non-Falling Red Block
-(define NFPB (make-block PINK #false)) ; Non-Falling Pink Block
-(define NFLB (make-block LILAC #false)) ; Non-Falling Lilac Block
-(define NFBB (make-block BLUE #false)) ; Non-Falling Blue Block
-(define NFGB (make-block GREEN #false)) ; Non-Falling Green Block
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -235,14 +226,14 @@ Course: Programming Fundamentals 1
 
 (define GRID-EXAMPLE (make-vector BLOCKS-IN-HEIGHT (make-vector BLOCKS-IN-WIDTH NFEB)))
 (define FULL-ROW-EXAMPLE (make-vector BLOCKS-IN-WIDTH FPB))
-(define EMPTY-GRID (make-vector 0 (make-vector 0)))
+
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; WORLD-STATE
 ; A World-state is a Structure with the followings elements inside:
 ;      background:   Image that contains the grid, score and all the visual elements
 ;      grid:         The Grid containing all the blocks. empty or not
-;      Score:        The score is a non-negative integer which represents the score of the player
+;      score:        The score is a non-negative integer which represents the score of the player
 ;      should-quit:  Boolean value that represents if the application should quit or not
 ;      should-spawn: Boolean value that represents if a Piece should be generetated at the top of the grid
 ;      is-paused:    Boolean value that represents if the game should be paused or not (Show pause menu)
@@ -259,18 +250,15 @@ Course: Programming Fundamentals 1
 ;                       4 = J-PIECE
 ;                       5 = I-PIECE
 ;                       6 = S-PIECE
-; Header
+;      down-pressed:   Boolean that represents whether the down key is pressed or not (necessary for updating score)
 
 (define-struct world-state [background grid score should-quit should-spawn is-paused falling-blocks game-over tick tick-delay rotation-index piece-index down-pressed] #:transparent)
 
 ; Examples
 (define DEFAULT-TICK-DELAY 10)
 
-(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 DEFAULT-TICK-DELAY 0 0 #F))
-(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false 0 DEFAULT-TICK-DELAY 0 0 #F))
-(define GAME-OVER-STATE (make-world-state GAME-OVER-PAGE EMPTY-GRID 0 #false #false #false (make-vector 0) #true 0 DEFAULT-TICK-DELAY 0 0 #F))
-(define PAUSED-STATE (make-world-state PAUSE-PAGE EMPTY-GRID 0 #false #false #true (make-vector 0) #false 0 DEFAULT-TICK-DELAY 0 0 #F))
-
+(define INITIAL-STATE (make-world-state BACKGROUND GRID-EXAMPLE 0 #false #true #false (make-vector 0) #false 0 DEFAULT-TICK-DELAY 0 0 #false))
+(define EXAMPLE-STATE (make-world-state BACKGROUND GRID-EXAMPLE 100 #false #false #false O-PIECE-POSITIONS #false 0 DEFAULT-TICK-DELAY 0 0 #false))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -322,19 +310,6 @@ Course: Programming Fundamentals 1
 ;; -------------------------------------------------------------------------------------------------------------------
 
 ;; FUNCTIONS
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; RANDOM PIECE FUNCTION
-;
-; Retrive a random piece from the Pieces Vector
-; random-piece: Void -> Piece
-; (define (random-piece) O-PIECE)
-; (define (random-piece)
-;  (vector-ref ... (random ...))
-
-(define (random-piece)
-  (vector-ref PIECES (random 0 6)))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -435,22 +410,6 @@ Course: Programming Fundamentals 1
 (define (get-grid-row grid y)
   (vector-ref grid y))
 
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; GET-GRID-COLUMN FUNCTION
-
-; takes a Grid and an x coordinate and returns a Vector representing the column of the Grid
-; grid-column; Grid Number -> Vector
-; (define (get-grid-columns Grid Number) (make-vector ..))
-
-(define (get-grid-columns grid x)
-  (local (
-          (define y 0)
-          (define (get-grid-column grid x y)
-            (if (= y BLOCKS-IN-HEIGHT)
-                '()
-                (cons (get-grid-block grid x y) (get-grid-column grid x (add1 y))))
-            )) (list->vector (get-grid-column grid x y))))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -652,10 +611,10 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; move-blocks-to-falling-blocks FUNCTION
+; MOVE-BLOCKS-TO-FALLING-BLOCKS FUNCTION
 
 ; Takes a World-state and returns a World-state with grid updated in the following way:
-; the falling blocks in the grid have been moved to the position of falling-blocks
+; the falling blocks in the grid have been moved to the position listen in falling-blocks (in the world-state)
 ; block-falls-down: World-state -> World-state
 ; (define (block-falls-down world-state) EXAMPLE-STATE)
 
@@ -746,28 +705,6 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-
-; SWAP-BLOCK FUNCTION
-
-; Takes a World-state and a Posn and returns a World-state in which the grid's block
-; at Posn-src coordinates is swapped with the block in the other coordinates
-; swap-block: World-state Posn Posn -> World-state
-; (define (swap-block world-state posn-src posn-dst) EXAMPLE-STATE)
-
-(define (swap-block world-state posn-src posn-dst)
-  (local (
-          (define SRC-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posn-src) (posn-y posn-src)))
-          (define DST-BLOCK (get-grid-block (world-state-grid world-state) (posn-x posn-dst) (posn-y posn-dst)))
-          (define (swap)
-            (update-grid
-             world-state
-             (set-grid-block DST-BLOCK (world-state-grid (update-grid world-state (set-grid-block SRC-BLOCK (world-state-grid world-state) posn-dst))) posn-src) ; Block Grid Posn
-             ))
-          ) (swap))
-  )
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 ; AUXILIARY FUNCTIONS TO UPDATE WORLD-STATE DATA
 
 ; All the functions take a World-state and a value return a World-state
@@ -781,28 +718,32 @@ Course: Programming Fundamentals 1
   (make-world-state (world-state-background world-state) (world-state-grid world-state) number
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
 
 ; UPDATE-SHOULD-QUIT
 (define (update-should-quit world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     boolean (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
 
 ; UPDATE-SHOULD-SPAWN
 (define (update-should-spawn world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) boolean (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
 
 ; UPDATE-IS-PAUSED
 (define (update-is-paused world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) boolean
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
 
 ; UPDATE-FALLING-BLOCKS
 (define (update-falling-blocks world-state vopsn)
@@ -816,7 +757,8 @@ Course: Programming Fundamentals 1
   (make-world-state (world-state-background world-state) vovob (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) (world-state-down-pressed world-state)))
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) 
+                    (world-state-down-pressed world-state)))
 
 ; UPDATE-GAME-OVER
 (define (update-game-over world-state boolean)
@@ -853,11 +795,11 @@ Course: Programming Fundamentals 1
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
                     (world-state-tick-delay world-state) (world-state-rotation-index world-state) number (world-state-down-pressed world-state)))
 ; UPDATE-DOWN-PRESSED
-(define (update-down-pressed world-state bool)
+(define (update-down-pressed world-state boolean)
   (make-world-state (world-state-background world-state) (world-state-grid world-state) (world-state-score world-state)
                     (world-state-should-quit world-state) (world-state-should-spawn world-state) (world-state-is-paused world-state)
                     (world-state-falling-blocks world-state) (world-state-game-over world-state) (world-state-tick world-state)
-                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) bool))
+                    (world-state-tick-delay world-state) (world-state-rotation-index world-state) (world-state-piece-index world-state) boolean))
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -989,24 +931,6 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; IF-GAME-OVER-DONT-SPAWN
-
-; takes a World-state and checks if the user lost, if they did
-; it returns a World-state with the should-spawn flag changed to #false
-; if-game-over-dont-spawn: World-state -> World-state
-; (define (if-game-over-dont-spawn) CIPPI-WORLD-STATE)
-; (define (if-game-over-dont-spawn)
-;    (if
-;     (world-state-game-over)... (update-should-spawn) world-state))
-
-(define (if-game-over-dont-spawn world-state)
-  (if (world-state-game-over world-state)
-      (update-should-spawn world-state #false)
-      world-state))
-
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 ; MOVE-X
 (define (move-x world-state direction) ;1 right, -1 left
   (if (check-new-posn-offset world-state direction 0)
@@ -1032,8 +956,6 @@ Course: Programming Fundamentals 1
     [(key=? key "right") (move-x world-state 1)]
     [(key=? key "down") (update-tick-delay (update-down-pressed world-state #T) 1)]
     [(key=? key "up") (if (or (= 0 (world-state-piece-index world-state)) (world-state-game-over world-state) (world-state-is-paused world-state)) world-state (rotate-cw world-state))]
-    ;[(key=? key "z") (rotate-back world-state)]
-    ;[(key=? key "h") (hard-drop world-state)]
     [(key=? key "r") (if (or (world-state-game-over world-state) (world-state-is-paused world-state)) (update-tick INITIAL-STATE (world-state-tick-delay INITIAL-STATE)) world-state)]
     [(key=? key "escape") (if (world-state-game-over world-state) world-state (update-is-paused world-state (not (world-state-is-paused world-state))))]
     [(key=? key "q") (update-should-quit world-state #true)]
@@ -1203,21 +1125,13 @@ Course: Programming Fundamentals 1
 
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-; ROTATE-BACK FUNCTION
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-; HARD-DROP FUNCTION
-
-; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 ; HANDLE-RELEASE
 ; takes a World-state and a String and returns the world-state with the tick-delay updated to 1
 ; handle-release: World-state String -> World-state
 ; (define (handle-release world-state key) CIPPI-WORLD-STATE)
 
 (define (handle-release world-state key)
-  (if (equal? key "down") (update-tick-delay (update-down-pressed world-state #F) DEFAULT-TICK-DELAY) world-state))
+  (if (equal? key "down") (update-tick-delay (update-down-pressed world-state #false) DEFAULT-TICK-DELAY) world-state))
 ; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ; QUIT? FUNCTION
@@ -1239,14 +1153,10 @@ Course: Programming Fundamentals 1
     ))
 
 (define (run funct arg) (if (funct arg) (display "Bye bye!\n") (display "Bye bye!\n")))
-;(tetris INITIAL-STATE)
 (run tetris INITIAL-STATE)
 
 ;;; TO DO:
 
-;;; * handle-key:
-;;;   rotate
-;;; * la situa dello score LORENZO
 ;;; * check-expect COSTANZA
 
 
